@@ -1,0 +1,137 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "944ef3fe3762399741b898a31f53fb8b",
+    "entities": [
+      {
+        "tableName": "CustomerTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`custId` TEXT NOT NULL, `custName` TEXT, `custCode` TEXT, `custType` TEXT, `division` TEXT, `connectedDepo` TEXT, `mobile` TEXT, `primaryID` TEXT, `salesDistrict` TEXT, `zone` TEXT, PRIMARY KEY(`custId`))",
+        "fields": [
+          {
+            "fieldPath": "custId",
+            "columnName": "custId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "custName",
+            "columnName": "custName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "custCode",
+            "columnName": "custCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "custType",
+            "columnName": "custType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "division",
+            "columnName": "division",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "connectedDepo",
+            "columnName": "connectedDepo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mobile",
+            "columnName": "mobile",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "primaryID",
+            "columnName": "primaryID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "salesDistrict",
+            "columnName": "salesDistrict",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "zone",
+            "columnName": "zone",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "custId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ItemTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`iid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `itemid` TEXT, `itemname` TEXT, `itemdesc` TEXT, `imageurl` TEXT, `price` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "iid",
+            "columnName": "iid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "itemid",
+            "columnName": "itemid",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "itemname",
+            "columnName": "itemname",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "itemdesc",
+            "columnName": "itemdesc",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imageurl",
+            "columnName": "imageurl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "iid"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"944ef3fe3762399741b898a31f53fb8b\")"
+    ]
+  }
+}

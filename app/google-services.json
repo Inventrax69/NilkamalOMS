@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "297804993075",
+    "firebase_url": "https://nilkamaloms.firebaseio.com",
+    "project_id": "nilkamaloms",
+    "storage_bucket": "nilkamaloms.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297804993075:android:962ee83192d73045",
+        "android_client_info": {
+          "package_name": "com.example.inventrax.falconOMS"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297804993075-oll9iv0d464is6lduj9sp7kgvbm79m21.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.inventrax.falconOMS",
+            "certificate_hash": "259969de86eaca41226b299a88f8ebdd9d7fd02e"
+          }
+        },
+        {
+          "client_id": "297804993075-e1v5i1mqar0uhmmrdbtd5vpl0udo0knr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKnxD5dei6XQDyRUIKx-CHPHIDPU32fNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297804993075-e1v5i1mqar0uhmmrdbtd5vpl0udo0knr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

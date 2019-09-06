@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/cust_action_search"
+        android:title="adad"
+        android:orderInCategory="100"
+        android:visible="false"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_profile"
+        android:orderInCategory="100"
+        android:title="@string/action_profile"
+        app:showAsAction="never"
+
+        />
+
+
+
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="100"
+        android:title="@string/action_logout"
+        app:showAsAction="never"
+
+        />
+
+    <item
+        android:id="@+id/action_notification"
+        android:title="notification"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:visible="true"
+        android:icon="@drawable/notification"
+        />
+
+    <item
+        android:id="@+id/action_cart"
+        android:title="cart"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:visible="true"
+        android:icon="@drawable/cart"
+        />
+
+
+
+
+
+    <item
+        android:id="@+id/action_pack_spinner"
+
+        android:orderInCategory="100"
+        android:visible="false"
+        app:actionViewClass="android.widget.Spinner"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_spinner"
+        android:orderInCategory="100"
+        android:visible="false"
+        app:actionViewClass="android.widget.Spinner"
+        app:showAsAction="never"/>
+
+
+</menu>
