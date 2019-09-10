@@ -40,6 +40,9 @@ public interface ApiInterface {
     @POST("Master/GetItemList")
     Call<OMSCoreMessage> GetItemList(@Body OMSCoreMessage oRequest);
 
+    @POST("Master/GetProductCatalog")
+    Call<OMSCoreMessage> GetProductCatalog(@Body OMSCoreMessage oRequest);
+
     @POST("Master/GetCustomerList")
     Call<OMSCoreMessage> GetCustomerList(@Body OMSCoreMessage oRequest);
 

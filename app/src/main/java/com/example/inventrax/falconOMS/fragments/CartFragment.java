@@ -26,12 +26,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.R;
+import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.adapters.CartAdapter;
-import com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner;
 import com.example.inventrax.falconOMS.util.DateUtils;
 import com.example.inventrax.falconOMS.util.FragmentUtils;
+import com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
