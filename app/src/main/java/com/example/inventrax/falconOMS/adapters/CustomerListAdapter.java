@@ -45,17 +45,17 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
     @Override
     public void onBindViewHolder(CustomerListAdapter.ViewHolder viewHolder, int i) {
 
-        CustomerTable itemList = (CustomerTable) items.get(i);
-        viewHolder.txtCustmerName.setText((itemList.custName));
-        viewHolder.txtPersonName.setText((itemList.custId));
-        viewHolder.txtPersonName.setText((itemList.custType));
+        CustomerTable custList = (CustomerTable) items.get(i);
+        viewHolder.txtCustmerName.setText((custList.custName));
+        viewHolder.txtPersonName.setText((custList.customerId));
+        viewHolder.txtPersonName.setText((custList.custType));
 
         ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
         // generate random color
         int color = generator.getRandomColor();
 
         TextDrawable drawable = TextDrawable.builder()
-                .buildRound(itemList.custName.substring(0, 1), color);
+                .buildRound(custList.custName.substring(0, 1), color);
 
         viewHolder.CustImg.setImageDrawable(drawable);
     }

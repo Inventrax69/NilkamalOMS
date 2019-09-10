@@ -79,6 +79,9 @@ public abstract class DateUtils {
     public static final String DDMMMYYYYHHMMSS_DATE_FORMAT = "dd-MMM-yyyy hh:mm:ss aa";
 
 
+    public static final String DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH = "MM/dd/yyyy hh:mm:ss aa";
+
+
     /**
      * Date format like 2010-10-25 21:30:00.123
      */
@@ -774,6 +777,9 @@ public abstract class DateUtils {
         }*/
         return result;
     }
+
+
+
 
 
     }

@@ -11,12 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.R;
-import com.example.inventrax.falconOMS.adapters.OrderCheckoutAdapter;
+import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.util.FragmentUtils;
-
-import java.util.ArrayList;
 
 public class OrderCheckoutFragment extends Fragment implements View.OnClickListener {
 
@@ -58,7 +55,6 @@ public class OrderCheckoutFragment extends Fragment implements View.OnClickListe
 
         txtBack.setOnClickListener(this);
 
-        loadJSON();
     }
 
 
@@ -78,30 +74,7 @@ public class OrderCheckoutFragment extends Fragment implements View.OnClickListe
     }
 
 
-    private void loadJSON() {
 
-        final ArrayList<String> items = new ArrayList<>();
-        items.add("Item 1");
-        items.add("Item 2");
-        items.add("Item 3");
-
-        OrderCheckoutAdapter mAdapter = new OrderCheckoutAdapter(getContext(), items, new OrderCheckoutAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int pos) {
-                //Toast.makeText(getContext(), String.valueOf(items.get(pos) + "" + "Item"), Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onCartClick(int pos) {
-
-            }
-
-        });
-
-        rvItemsList.setAdapter(mAdapter);
-
-    }
 
 
     @Override

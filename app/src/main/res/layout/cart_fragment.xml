@@ -237,12 +237,12 @@
 
             </com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner>
 
-            <CheckBox
+            <!--<CheckBox
                 android:id="@+id/cbBlancketOrder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/blanket_order_for_phased_deliveries" />
-
+-->
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btnProceed"

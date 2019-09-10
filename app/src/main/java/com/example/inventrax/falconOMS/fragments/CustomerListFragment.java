@@ -110,6 +110,8 @@ public class CustomerListFragment extends Fragment {
 
         loadCustomers();
 
+
+
     }
 
     private void loadCustomers() {

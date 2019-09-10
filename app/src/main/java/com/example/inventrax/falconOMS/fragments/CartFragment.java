@@ -54,7 +54,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
     TextView txtContinueShopping, txtAvailableCL, txtTotal, txtOrderFulfilment, txtConfirmOrder;
 
     BottomSheetBehavior behavior;
-    private CheckBox cbPartialFulfilment, cbSingleDelivery, cbVehicleTypePreference, cbBlancketOrder;
+    private CheckBox cbPartialFulfilment, cbSingleDelivery, cbVehicleTypePreference;
     private Button btnProceed;
     private EditText deliveryDatePicker;
     private SearchableSpinner selectVehicleType;
@@ -105,7 +105,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
         cbPartialFulfilment = (CheckBox) rootView.findViewById(R.id.cbPartialFulfilment);
         cbSingleDelivery = (CheckBox) rootView.findViewById(R.id.cbSingleDelivery);
         cbVehicleTypePreference = (CheckBox) rootView.findViewById(R.id.cbVehicleTypePreference);
-        cbBlancketOrder = (CheckBox) rootView.findViewById(R.id.cbBlancketOrder);
+
 
         btnProceed = (Button) rootView.findViewById(R.id.btnProceed);
 
@@ -142,7 +142,6 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
         cbSingleDelivery.setOnCheckedChangeListener(this);
         cbPartialFulfilment.setOnCheckedChangeListener(this);
         cbVehicleTypePreference.setOnCheckedChangeListener(this);
-        cbBlancketOrder.setOnCheckedChangeListener(this);
 
 
         // Date Picker Dailog integration and validation
@@ -316,45 +315,19 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
             three = 3;
             total = three;
         }
-        if (cbBlancketOrder.isChecked()) {
-            four = 4;
-            total = four;
-        }
+
         if (cbPartialFulfilment.isChecked() && cbSingleDelivery.isChecked()) {
-            total = 5;
+            total = 4;
         }
         if (cbPartialFulfilment.isChecked() && cbVehicleTypePreference.isChecked()) {
-            total = 6;
+            total = 5;
         }
-        if (cbPartialFulfilment.isChecked() && cbBlancketOrder.isChecked()) {
-            total = 7;
-        }
-        if (cbSingleDelivery.isChecked() && cbVehicleTypePreference.isChecked()) {
-            total = 8;
-        }
-        if (cbSingleDelivery.isChecked() && cbBlancketOrder.isChecked()) {
-            total = 9;
-        }
-        if (cbVehicleTypePreference.isChecked() && cbBlancketOrder.isChecked()) {
-            total = 10;
-        }
+
         if (cbPartialFulfilment.isChecked() && cbSingleDelivery.isChecked()
                 && cbVehicleTypePreference.isChecked()) {
             total = 12;
         }
-        if (cbSingleDelivery.isChecked() && cbVehicleTypePreference.isChecked()
-                && cbBlancketOrder.isChecked()) {
-            total = 13;
-        }
 
-        if (cbVehicleTypePreference.isChecked() && cbBlancketOrder.isChecked()
-                && cbPartialFulfilment.isChecked()) {
-            total = 14;
-        }
-        if (cbPartialFulfilment.isChecked() && cbSingleDelivery.isChecked()
-                && cbVehicleTypePreference.isChecked() && cbBlancketOrder.isChecked()) {
-            total = 11;
-        }
         switch (total) {
             case 1:
                 Toast.makeText(getActivity(), "cbPartialFulfilment", Toast.LENGTH_SHORT).show();
@@ -365,41 +338,10 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
             case 4:
                 Toast.makeText(getActivity(), "cbVehicleTypePreference", Toast.LENGTH_SHORT).show();
                 break;
-            case 3:
-                Toast.makeText(getActivity(), "cbBlancketOrder", Toast.LENGTH_SHORT).show();
-                break;
             case 5:
                 Toast.makeText(getActivity(), "cbPartialFulfilment && cbSingleDelivery", Toast.LENGTH_SHORT).show();
                 break;
-            case 6:
-                Toast.makeText(getActivity(), "cbPartialFulfilment && cbVehicleTypePreference", Toast.LENGTH_SHORT).show();
-                break;
-            case 7:
-                Toast.makeText(getActivity(), "cbPartialFulfilment && cbBlancketOrder", Toast.LENGTH_SHORT).show();
-                break;
-            case 8:
-                Toast.makeText(getActivity(), "cbSingleDelivery && cbVehicleTypePreference", Toast.LENGTH_SHORT).show();
-                break;
-            case 9:
-                Toast.makeText(getActivity(), "cbSingleDelivery && cbBlancketOrder", Toast.LENGTH_SHORT).show();
-                break;
-            case 10:
-                Toast.makeText(getActivity(), "cbVehicleTypePreference && cbBlancketOrder", Toast.LENGTH_SHORT).show();
-                break;
 
-            case 11:
-                Toast.makeText(getActivity(), "All four", Toast.LENGTH_SHORT).show();
-                break;
-
-            case 12:
-                Toast.makeText(getActivity(), "cbPartialFulfilment && cbSingleDelivery && cbVehicleTypePreference", Toast.LENGTH_SHORT).show();
-                break;
-            case 13:
-                Toast.makeText(getActivity(), "cbSingleDelivery && cbVehicleTypePreference && cbBlancketOrder", Toast.LENGTH_SHORT).show();
-                break;
-            case 14:
-                Toast.makeText(getActivity(), "cbVehicleTypePreference && cbBlancketOrder && cbPartialFulfilment", Toast.LENGTH_SHORT).show();
-                break;
         }
     }
 

@@ -26,6 +26,12 @@ public class ItemListResponse {
     @SerializedName("MaterialPath")
     private String materialPath;
 
+    @SerializedName("CreatedOn")
+    private String createdOn;
+
+    @SerializedName("Action")
+    private String action;
+
 
     public ItemListResponse() {
 
@@ -68,6 +74,17 @@ public class ItemListResponse {
                 case "MaterialPath":
                     if (entry.getValue() != null) {
                         this.setMaterialPath(entry.getValue().toString());
+                    }
+                    break;
+                case "CreatedOn":
+                    if (entry.getValue() != null) {
+                        this.setCreatedOn(entry.getValue().toString());
+                    }
+                    break;
+
+                case "Action":
+                    if (entry.getValue() != null) {
+                        this.setAction(entry.getValue().toString());
                     }
                     break;
 
@@ -125,5 +142,22 @@ public class ItemListResponse {
 
     public void setMaterialPath(String materialPath) {
         this.materialPath = materialPath;
+    }
+
+    public String getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(String createdOn) {
+        this.createdOn = createdOn;
+    }
+
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
     }
 }

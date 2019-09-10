@@ -21,7 +21,7 @@ public interface ItemDAO {
     List<ItemTable> getAllItems(int pagecount);
 
     @Query("SELECT * FROM ItemTable WHERE itemid=:itemid")
-    ItemTable getCustomer(String itemid);
+    ItemTable getItem(String itemid);
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<ItemTable> itemTables);
@@ -33,8 +33,12 @@ public interface ItemDAO {
     void delete(ItemTable itemTable);
 
     @Query("DELETE FROM ItemTable")
-    void delete();
+    void deleteAll();
 
     @Update
     void update(ItemTable itemTable);
+
+    @Query("SELECT * FROM ItemTable WHERE timeStamp = (SELECT MAX(timeStamp) FROM ItemTable)")
+    ItemTable getLastRecord ();
+
 }
