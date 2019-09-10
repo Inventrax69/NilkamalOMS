@@ -9,7 +9,7 @@ import android.arch.persistence.room.PrimaryKey;
 public class ItemTable {
 
     @PrimaryKey(autoGenerate = true)
-    public int iid;
+    public int id;
 
     @ColumnInfo(name = "itemid")
     public String itemid;
@@ -26,13 +26,30 @@ public class ItemTable {
     @ColumnInfo(name = "price")
     public String price;
 
+    @ColumnInfo(name="timeStamp")
+    public long timestamp;
+
+    public ItemTable(String itemid, String itemname, String itemdesc, String imageurl, String price, long timestamp) {
+        this.itemid = itemid;
+        this.itemname = itemname;
+        this.itemdesc = itemdesc;
+        this.imageurl = imageurl;
+        this.price = price;
+        this.timestamp = timestamp;
+    }
+
+    @Ignore
     public ItemTable(String itemid, String itemname, String itemdesc, String imageurl, String price) {
         this.itemid = itemid;
         this.itemname = itemname;
         this.itemdesc = itemdesc;
         this.imageurl = imageurl;
         this.price = price;
+
     }
+
+
+
 
     @Ignore
     public ItemTable(){

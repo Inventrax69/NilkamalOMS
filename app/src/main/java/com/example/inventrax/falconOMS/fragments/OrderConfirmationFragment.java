@@ -16,11 +16,11 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.R;
+import com.example.inventrax.falconOMS.activities.MainActivity;
+import com.example.inventrax.falconOMS.adapters.OrderCheckoutAdapter;
 import com.example.inventrax.falconOMS.adapters.OrderConfirmationAdapter;
 import com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner;
-import com.example.inventrax.falconOMS.util.FragmentUtils;
 
 import java.util.ArrayList;
 
@@ -111,7 +111,7 @@ public class OrderConfirmationFragment extends Fragment implements View.OnClickL
             }
         });
 
-        loadJSON();
+        loadJSONSample();
     }
 
 
@@ -127,17 +127,23 @@ public class OrderConfirmationFragment extends Fragment implements View.OnClickL
             case R.id.btnProceedDefault:
                 behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 frame.setVisibility(View.GONE);
-                FragmentUtils.replaceFragmentWithBackStack(getActivity(),R.id.container,new OrderCheckoutFragment());
+                rvItemsList.setAdapter(null);
+
+                loadJSONAfterFullfilment();
                 break;
             case R.id.btnProceedOptions:
                 behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 frame.setVisibility(View.GONE);
-                FragmentUtils.replaceFragmentWithBackStack(getActivity(),R.id.container,new OrderCheckoutFragment());
+
+                rvItemsList.setAdapter(null);
+
+                loadJSONAfterFullfilment();
+
                 break;
         }
     }
 
-    private void loadJSON() {
+    private void loadJSONSample() {
 
         final ArrayList<String> items = new ArrayList<>();
         items.add("Item 1");
@@ -145,6 +151,31 @@ public class OrderConfirmationFragment extends Fragment implements View.OnClickL
         items.add("Item 3");
 
         OrderConfirmationAdapter mAdapter = new OrderConfirmationAdapter(getContext(), items, new OrderConfirmationAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int pos) {
+                //Toast.makeText(getContext(), String.valueOf(items.get(pos) + "" + "Item"), Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onCartClick(int pos) {
+
+            }
+
+        });
+
+        rvItemsList.setAdapter(mAdapter);
+
+    }
+
+    private void loadJSONAfterFullfilment() {
+
+        final ArrayList<String> items = new ArrayList<>();
+        items.add("Item 1");
+        items.add("Item 2");
+        items.add("Item 3");
+
+        OrderCheckoutAdapter mAdapter = new OrderCheckoutAdapter(getContext(), items, new OrderCheckoutAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
                 //Toast.makeText(getContext(), String.valueOf(items.get(pos) + "" + "Item"), Toast.LENGTH_SHORT).show();

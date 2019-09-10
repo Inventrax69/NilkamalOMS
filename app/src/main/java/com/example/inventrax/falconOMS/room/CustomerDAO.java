@@ -17,7 +17,7 @@ public interface CustomerDAO {
     @Query("SELECT * FROM CustomerTable")
     List<CustomerTable> getAll();
 
-    @Query("SELECT * FROM CustomerTable WHERE custId=:custId")
+    @Query("SELECT * FROM CustomerTable WHERE customerId=:custId")
     CustomerTable getCustomer(String custId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -30,9 +30,19 @@ public interface CustomerDAO {
     void delete(CustomerTable customerTable);
 
     @Query("DELETE FROM CustomerTable")
-    void delete();
+    void deleteAll();
 
     @Update
     void update(CustomerTable customerTable);
+
+   /* @Query("SELECT timeStamp FROM ItemTable ORDER BY timeStamp DESC LIMIT 1")
+    CustomerListDTO[] getLastRecord ();*/
+
+   /* @Query("SELECT * FROM ItemTable WHERE ID = (SELECT MAX(ID) FROM ItemTable)")
+    void getLastRecord ();*/
+
+    @Query("SELECT * FROM CustomerTable WHERE timeStamp = (SELECT MAX(timeStamp) FROM CustomerTable)")
+    CustomerTable getLastRecord ();
+
 
 }

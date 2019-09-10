@@ -19,6 +19,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -163,6 +164,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
             recyclerView.setLayoutManager(layoutManager);
             // shows the items which are there in sqlite item table
             updateToRecyclerView(db.itemDAO().getAllItems(pagecount));
+            Log.v("ABCDE",new Gson().toJson(db.itemDAO().getAllItems(pagecount)));
         } else {
             layoutManager = new LinearLayoutManager(getContext());
             recyclerView.setLayoutManager(layoutManager);
@@ -222,6 +224,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             item.setVisible(true);
             final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+            searchView.setMaxWidth(android.R.attr.width);
             searchView.setOnQueryTextListener(this);
         }
 

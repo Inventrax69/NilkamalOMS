@@ -29,7 +29,7 @@ public class RestService {
                         .readTimeout(100,TimeUnit.SECONDS).build();
 
                          retrofit = new Retrofit.Builder()
-                        //.baseUrl("http://192.168.1.61/OMS_Storefront/API/").client(client)
+                        //.baseUrl("http://192.168.1.65/OMS_Masters/").client(client)
                         .baseUrl("http://192.168.1.20/OMS_StoreFront/api/").client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();

@@ -70,8 +70,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
 
-
-
         // to diaplay notification in DND Mode
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = mNotificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID);

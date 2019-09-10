@@ -43,6 +43,13 @@ public interface ApiInterface {
     @POST("Master/GetCustomerList")
     Call<OMSCoreMessage> GetCustomerList(@Body OMSCoreMessage oRequest);
 
+    @POST("Master/SyncItemData")
+    Call<OMSCoreMessage> SyncItemData(@Body OMSCoreMessage oRequest);
+
+    @POST("Master/SyncCustomerData")
+    Call<OMSCoreMessage> SyncCustomerData(@Body OMSCoreMessage oRequest);
+
+
     /*@GET("Master/Image")
     Call<String> Image();*/
 

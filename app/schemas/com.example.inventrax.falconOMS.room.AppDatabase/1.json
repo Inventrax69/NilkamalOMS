@@ -2,12 +2,18 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "944ef3fe3762399741b898a31f53fb8b",
+    "identityHash": "075cbfb04b214d3764ddea6d93055c89",
     "entities": [
       {
         "tableName": "CustomerTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`custId` TEXT NOT NULL, `custName` TEXT, `custCode` TEXT, `custType` TEXT, `division` TEXT, `connectedDepo` TEXT, `mobile` TEXT, `primaryID` TEXT, `salesDistrict` TEXT, `zone` TEXT, PRIMARY KEY(`custId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `custId` TEXT NOT NULL, `custName` TEXT, `custCode` TEXT, `custType` TEXT, `division` TEXT, `connectedDepo` TEXT, `mobile` TEXT, `primaryID` TEXT, `salesDistrict` TEXT, `zone` TEXT, `timeStamp` TEXT)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "custId",
             "columnName": "custId",
@@ -67,24 +73,30 @@
             "columnName": "zone",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timeStamp",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "custId"
+            "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
       },
       {
         "tableName": "ItemTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`iid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `itemid` TEXT, `itemname` TEXT, `itemdesc` TEXT, `imageurl` TEXT, `price` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `itemid` TEXT, `itemname` TEXT, `itemdesc` TEXT, `imageurl` TEXT, `price` TEXT, `timeStamp` TEXT)",
         "fields": [
           {
-            "fieldPath": "iid",
-            "columnName": "iid",
+            "fieldPath": "id",
+            "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -117,11 +129,17 @@
             "columnName": "price",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timeStamp",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "iid"
+            "id"
           ],
           "autoGenerate": true
         },
@@ -131,7 +149,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"944ef3fe3762399741b898a31f53fb8b\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"075cbfb04b214d3764ddea6d93055c89\")"
     ]
   }
 }

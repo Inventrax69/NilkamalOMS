@@ -4,19 +4,24 @@ import android.annotation.SuppressLint;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,6 +29,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -67,12 +73,17 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.example.inventrax.falconOMS.util.DateUtils.DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH;
 
 /**
  * Created by Padmaja on 04/07/2019.
@@ -104,12 +115,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private String encryptedPass = "";
     private Resources resources;
     ServiceURL serviceURL;
-    RelativeLayout  main_relative, login_tool_relative;
+    RelativeLayout main_relative, login_tool_relative;
     List<CustomerTable> customerTables;
     List<ItemTable> itemTables;
 
     ImageView ivNilkamal;
     AppDatabase db;
+
+    AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +133,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Log.d("ABCDE", "Refreshed token:" + FirebaseInstanceId.getInstance().getToken());
 
         FirebaseMessaging.getInstance().subscribeToTopic("all");
-
 
 
     }
@@ -279,7 +291,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
 
             case R.id.tvForgotPwd:
-                startActivity(new Intent(LoginActivity.this,ForgotPasswordActivty.class));
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivty.class));
                 break;
 
             case R.id.btnLogin:
@@ -297,13 +309,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     validateUserSession();
 
-                    /*llLogin.setVisibility(View.GONE);
-                    llForgotPwd.setVisibility(View.GONE);
-                    llOTPCapture.setVisibility(View.GONE);*/
+                    //getItemList();
 
-                        /*Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-*/
+                    //getCustomerList();
+
+                    /*Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);*/
 
 
                     //If User Clicks on remember me username,Password is stored in Shared preferences
@@ -347,6 +358,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // soundUtils.alertSuccess(LoginActivity.this,getBaseContext());
             return;
         }
+
+        setProgressDialog();
 
         OMSCoreMessage message = new OMSCoreMessage();
         message = common.SetAuthentication(EndpointConstants.ItemMaster_FPS_DTO, LoginActivity.this);
@@ -397,14 +410,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 LinkedTreeMap<?, ?> _lstItem = new LinkedTreeMap<String, String>();
                                 _lstItem = (LinkedTreeMap<String, String>) core.getEntityObject();
 
-                                itemTables =new ArrayList<>();
+                                itemTables = new ArrayList<>();
                                 ItemListDTO itemList;
 
                                 try {
 
                                     itemList = new ItemListDTO(_lstItem.entrySet());
                                     lstItem = itemList.getResults();
-
 
 
                                     executeItemAsyncTask();
@@ -507,21 +519,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                 itemList = new CustomerListDTO(_lstItem.entrySet());
 
-                                customerTables =new ArrayList<>();
+                                if (itemList.getResults() != null) {
+                                    customerTables = new ArrayList<>();
 
-                                for (CustomerListDTO dd : itemList.getResults()) {
+                                    for (CustomerListDTO dd : itemList.getResults()) {
 
-                                    lstDto.add(dd);
+                                        lstDto.add(dd);
 
-                                    customerTables.add(new CustomerTable(dd.getCustomerID(),dd.getCustomerName(),dd.getCustomerCode(),
-                                            dd.getCustomerType(),dd.getDivision(),dd.getConnectedDepot(),dd.getMobile(),
-                                            dd.getPrimaryID(),dd.getSalesDistrict(),dd.getZone()));
+                                        SimpleDateFormat sdf = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH);
+                                        Date date = null;
+                                        try {
+                                            date = sdf.parse(dd.getCreatedOn());
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
 
+                                        long startDate = date.getTime();
+
+                                        customerTables.add(new CustomerTable(dd.getCustomerID(), dd.getCustomerName(), dd.getCustomerCode(),
+                                                dd.getCustomerType(), dd.getDivision(), dd.getConnectedDepot(), dd.getMobile(),
+                                                dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(), startDate));
+
+                                    }
+
+                                    customerList = lstDto;
+
+                                    executeCustomerAsyncTask();
                                 }
 
-                                customerList = lstDto;
-
-                                executeCustomerAsyncTask();
 
                                 ProgressDialogUtils.closeProgressDialog();
 
@@ -559,15 +584,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             for (ItemListResponse dd : itemList) {
 
-                itemTables.add(new ItemTable(dd.getMaterialID(),dd.getMaterialCode(),dd.getMaterialDescription(),
-                        dd.getMaterialPath(),dd.getMaterialType()));
+                SimpleDateFormat sdf = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH);
+                Date date = null;
+                try {
+                    date = sdf.parse(dd.getCreatedOn());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                long startDate = date.getTime();
+
+                /*String s = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH).format(new Date(startDate));
+
+                Log.v("s",s);*/
+
+
+                itemTables.add(new ItemTable(dd.getMaterialID(), dd.getMaterialCode(), dd.getMaterialDescription(),
+                        dd.getMaterialPath(), dd.getMaterialType(), startDate));
             }
 
-            db.itemDAO().delete();
+            db.itemDAO().deleteAll();
 
             db.itemDAO().insertAll(itemTables);
 
         }
+
 
     }
 
@@ -575,7 +616,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (custList != null && custList.size() > 0) {
 
-            db.customerDAO().delete();
+            db.customerDAO().deleteAll();
             db.customerDAO().insertAll(customerTables);
 
         }
@@ -680,6 +721,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                     }*/
                                     sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, false);
+
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
 
@@ -714,9 +756,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
-    public void executeItemAsyncTask()
-    {
+    public void executeItemAsyncTask() {
         @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
             @Override
             protected void onPreExecute() {
@@ -731,22 +771,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 saveItemListTolocalDB(lstItem);
                 return msg;
             }
+
             @Override
             protected void onPostExecute(String msg) {
                 sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
-                Log.v("opi","onPost");
+
+                dialog.dismiss();
+
             }
         };
 
-        if(Build.VERSION.SDK_INT >= 11/*HONEYCOMB*/) {
+        if (Build.VERSION.SDK_INT >= 11/*HONEYCOMB*/) {
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
             task.execute();
         }
     }
 
-    public void executeCustomerAsyncTask()
-    {
+    public void executeCustomerAsyncTask() {
         @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
             @Override
             protected void onPreExecute() {
@@ -759,23 +801,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String msg = "";
 
                 // stores the data into local data base
-               saveCustomerListTolocalDB(customerList);
+                saveCustomerListTolocalDB(customerList);
 
                 return msg;
             }
+
             @Override
             protected void onPostExecute(String msg) {
 
             }
         };
 
-        if(Build.VERSION.SDK_INT >= 11/*HONEYCOMB*/) {
+        if (Build.VERSION.SDK_INT >= 11/*HONEYCOMB*/) {
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
             task.execute();
         }
     }
-
 
 
     private class LoginViewTextWatcher implements TextWatcher {
@@ -796,7 +838,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void afterTextChanged(Editable editable) {
-            switch (view.getId()){
+            switch (view.getId()) {
                 case R.id.etUsername:
                     //validateUserId();
                     break;
@@ -811,11 +853,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // Do something for lollipop and above versions
         } else {
-            //Toast.makeText(getApplicationContext(), "You are running on lower versions of Android version, Some features may not work on your device", Toast.LENGTH_LONG).show();
-            //finish();
 
             Toast.makeText(getApplicationContext(), "You are running on lower versions of Android version, Some features may not work on your device", Toast.LENGTH_LONG).show();
-
+            //finish();
         }
     }
 
@@ -850,4 +890,52 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onDestroy() {
         super.onDestroy();
     }
+
+
+    public void setProgressDialog() {
+
+        int llPadding = 30;
+        LinearLayout ll = new LinearLayout(this);
+        ll.setOrientation(LinearLayout.HORIZONTAL);
+        ll.setPadding(llPadding, llPadding, llPadding, llPadding);
+        ll.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams llParam = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        llParam.gravity = Gravity.CENTER;
+        ll.setLayoutParams(llParam);
+
+        ProgressBar progressBar = new ProgressBar(this);
+        progressBar.setIndeterminate(true);
+        progressBar.setPadding(0, 0, llPadding, 0);
+        progressBar.setLayoutParams(llParam);
+
+        llParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        llParam.gravity = Gravity.CENTER;
+        TextView tvText = new TextView(this);
+        tvText.setText("Please wait, It takes few minutes to download the data, please do not close the app untill it launches main screen");
+        tvText.setTextColor(Color.parseColor("#000000"));
+        tvText.setTextSize(20);
+        tvText.setLayoutParams(llParam);
+
+        ll.addView(progressBar);
+        ll.addView(tvText);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setView(ll);
+
+        dialog = builder.create();
+        dialog.show();
+        Window window = dialog.getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+            layoutParams.copyFrom(dialog.getWindow().getAttributes());
+            layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            dialog.getWindow().setAttributes(layoutParams);
+        }
+    }
+
 }

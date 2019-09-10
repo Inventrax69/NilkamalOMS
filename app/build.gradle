@@ -17,6 +17,8 @@ android {
         //vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
 
+        javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [
