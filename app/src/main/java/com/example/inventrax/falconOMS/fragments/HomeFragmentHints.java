@@ -151,7 +151,7 @@ public class HomeFragmentHints extends Fragment implements View.OnClickListener 
 
         customerTimeStamp = "2019-08-27 19:08:18.630";
 
-        syncItemData();
+        //syncItemData();
 
        // syncCustomerData();
 

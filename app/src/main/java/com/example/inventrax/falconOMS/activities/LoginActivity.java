@@ -285,6 +285,112 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
+
+    public void getProductCatalog() {
+
+        if (NetworkUtils.isInternetAvailable(LoginActivity.this)) {
+        } else {
+            DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0007);
+            // soundUtils.alertSuccess(LoginActivity.this,getBaseContext());
+            return;
+        }
+
+        setProgressDialog();
+
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.ItemMaster_FPS_DTO, LoginActivity.this);
+        ItemListDTO itemListDTO = new ItemListDTO();
+        itemListDTO.setPageIndex(0);
+        itemListDTO.setPageSize(0);
+        message.setEntityObject(itemListDTO);
+
+
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService =
+                RestService.getClient().create(ApiInterface.class);
+
+
+        call = apiService.GetProductCatalog(message);
+        ProgressDialogUtils.showProgressDialog("Please Wait");
+
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+                    ProgressDialogUtils.closeProgressDialog();
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if (core != null) {
+
+                            if ((core.getType().toString().equals("Exception"))) {
+
+                                OMSExceptionMessage omsExceptionMessage = null;
+
+                                for (OMSExceptionMessage oms : core.getOMSMessages()) {
+
+                                    omsExceptionMessage = oms;
+                                    ProgressDialogUtils.closeProgressDialog();
+                                    common.showAlertType(omsExceptionMessage, LoginActivity.this, getApplicationContext());
+                                }
+
+
+                            } else {
+
+                                ProgressDialogUtils.closeProgressDialog();
+
+                                LinkedTreeMap<?, ?> _lstItem = new LinkedTreeMap<String, String>();
+                                _lstItem = (LinkedTreeMap<String, String>) core.getEntityObject();
+
+                                itemTables = new ArrayList<>();
+                                ItemListDTO itemList;
+
+                                try {
+
+                                    itemList = new ItemListDTO(_lstItem.entrySet());
+                                    lstItem = itemList.getResults();
+
+
+                                    executeItemAsyncTask();
+
+
+                                } catch (Exception e) {
+                                    common.showUserDefinedAlertType("No items found", LoginActivity.this, getApplicationContext(), "Warning");
+                                    // logException();
+                                }
+                                ProgressDialogUtils.closeProgressDialog();
+                            }
+                            ProgressDialogUtils.closeProgressDialog();
+                        }
+                        ProgressDialogUtils.closeProgressDialog();
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    Toast.makeText(LoginActivity.this, throwable.toString(), Toast.LENGTH_LONG).show();
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+            });
+        } catch (Exception ex) {
+
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", LoginActivity.this);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0003);
+        }
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -307,15 +413,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         e.printStackTrace();
                     }
 
-                    validateUserSession();
+                    //validateUserSession();
 
                     //getItemList();
 
                     //getCustomerList();
 
-                    /*Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);*/
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
 
+
+                    getProductCatalog();
 
                     //If User Clicks on remember me username,Password is stored in Shared preferences
                     if (chkRememberPassword.isChecked()) {
