@@ -477,7 +477,6 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.toolbar_ItemList));
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayUseLogoEnabled(false);
 
-
     }
 
 

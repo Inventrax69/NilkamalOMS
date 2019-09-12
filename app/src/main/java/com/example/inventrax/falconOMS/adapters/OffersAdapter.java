@@ -43,6 +43,7 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
 
 
         viewHolder.label.setText((CharSequence) items.get(i));
+
         if (i == (items.size() - 1))
             nested.smoothScrollTo(0, 0);
 

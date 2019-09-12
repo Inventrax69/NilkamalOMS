@@ -120,4 +120,9 @@
         <item name="android:colorControlActivated" tools:targetApi="lollipop">#148E13</item>
     </style>
 
+    <style name="SearchViewStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:editTextColor">@color/white</item>
+        <item name="android:textColorHint">@android:color/white</item>
+    </style>
+
 </resources>

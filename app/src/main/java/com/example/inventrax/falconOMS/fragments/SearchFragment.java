@@ -26,6 +26,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private View rootView;
 
     SearchView.SearchAutoComplete searchAutoComplete;
+    ArrayList<String> sugg;
+    SearchView searchView;
 
 
     @Nullable
@@ -59,20 +61,25 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             final MenuItem item = menu.findItem(R.id.cust_action_search);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             item.setVisible(true);
-            final SearchView searchView = (SearchView) item.getActionView();
+
+            searchView = (SearchView) item.getActionView();
             searchView.setMaxWidth(android.R.attr.width);
             searchView.setOnQueryTextListener(this);
+            searchView.setIconifiedByDefault(true);
+            searchView.setFocusable(true);
+            searchView.setIconified(false);
 
-            final ArrayList<String> sugg = new ArrayList<>();
+            sugg = new ArrayList<>();
             sugg.add("ABC");
             sugg.add("ABF");
             sugg.add("GAB");
             sugg.add("BFL");
 
 
-            searchAutoComplete = (SearchView.SearchAutoComplete)  searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-
+            // Get SearchView autocomplete object.
+            searchAutoComplete = (SearchView.SearchAutoComplete)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
             searchAutoComplete.setTextColor(Color.WHITE);
+            searchAutoComplete.setDropDownBackgroundResource(R.color.white);
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
                     R.layout.support_simple_spinner_dropdown_item, sugg);
@@ -87,12 +94,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                                         long id) {
                     // TODO Auto-generated method stub
 
-                    String searchString=(String)parent.getItemAtPosition(position);
-                    searchAutoComplete.setText(""+searchString);
-                    Toast.makeText(getContext(), "you clicked "+searchString, Toast.LENGTH_LONG).show();
+                    String searchString = (String) parent.getItemAtPosition(position);
+                    searchAutoComplete.setText("" + searchString);
+                    Toast.makeText(getContext(), "you clicked " + searchString, Toast.LENGTH_LONG).show();
 
                 }
             });
+
 
         }
 
@@ -101,17 +109,33 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     }
 
 
-
     @Override
     public boolean onQueryTextSubmit(String query) {
+
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String searchText) {
 
+            if (searchText != null && !searchText.equals("")) {
 
+                if(!Character.isWhitespace(searchText.charAt(0))) {
 
+                String lastChar = searchText.substring(searchText.length() - 1);
+                if (lastChar.equals(" ")) {
+
+                    searchText.trim();
+
+                    Toast.makeText(getContext(), "space bar pressed" + "" + searchText,
+                            Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                    Toast.makeText(getContext(), "space at starting is not valid",
+                            Toast.LENGTH_SHORT).show();
+                    searchAutoComplete.setText("");
+                }
+        }
         return true;
     }
 
