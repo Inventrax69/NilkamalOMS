@@ -55,15 +55,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     public void onBindViewHolder(ItemAdapter.ViewHolder viewHolder, int i) {
 
         ItemTable itemList = (ItemTable) itemsList.get(i);
-        viewHolder.txtItemName.setText((itemList.itemname));
-        viewHolder.txtItemDesc.setText((itemList.itemdesc));
+        viewHolder.txtItemName.setText((itemList.modelCode));
+        viewHolder.txtItemDesc.setText((itemList.modelDescription));
        /* viewHolder.txtItemDesc.setText(items.get(i).getHtmlUrl());
         viewHolder.txtPrice.setText(items.get(i).getHtmlUrl());
         viewHolder.txtDiscount.setText(items.get(i).getHtmlUrl());*/
 
         Picasso.with(context)
-                .load(itemList.imageurl)
-                .placeholder(R.drawable.load)
+                .load(itemList.imgPath)
+                .placeholder(R.drawable.no_img)
                 .into(viewHolder.ivItem);
 
     }

@@ -20,8 +20,8 @@ public interface ItemDAO {
     @Query("SELECT * FROM ItemTable LIMIT (:pagecount*50)+50  OFFSET (:pagecount*50)")
     List<ItemTable> getAllItems(int pagecount);
 
-    @Query("SELECT * FROM ItemTable WHERE itemid=:itemid")
-    ItemTable getItem(String itemid);
+    @Query("SELECT * FROM ItemTable WHERE modelID=:mID")
+    ItemTable getItem(String mID);
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<ItemTable> itemTables);

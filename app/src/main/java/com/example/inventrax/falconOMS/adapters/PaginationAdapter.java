@@ -87,15 +87,21 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case ITEM:
                 final ItemListView itemListView = (ItemListView) holder;
 
-                itemListView.txtItemName.setText(result.itemname);
-                itemListView.txtItemDesc.setText(result.itemdesc);
+                itemListView.txtItemName.setText(result.modelCode);
+                itemListView.txtItemDesc.setText(result.modelDescription);
 
-                //itemListView.ivItem.setImageResource(R.drawable.load);
+                if(result.imgPath.equals("")){
+                    itemListView.ivItem.setImageResource(R.drawable.no_img);
+                }else {
+                    Picasso.with(context)
+                            .load(result.imgPath)
+                            .placeholder(R.drawable.no_img)
+                            .into(itemListView.ivItem);
+                }
 
-                Picasso.with(context)
-                        .load(result.imageurl)
-                        .placeholder(R.drawable.load)
-                        .into(itemListView.ivItem);
+
+
+
                 break;
 
             case LOADING:

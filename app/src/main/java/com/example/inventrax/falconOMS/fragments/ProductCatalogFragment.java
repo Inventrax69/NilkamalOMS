@@ -4,6 +4,7 @@ package com.example.inventrax.falconOMS.fragments;
  * Created by Padmaja on 04/07/2019.
  */
 
+import android.app.DatePickerDialog;
 import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,7 +20,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -40,9 +41,12 @@ import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.Log.Logger;
 import com.example.inventrax.falconOMS.common.constants.ErrorMessages;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
+import com.example.inventrax.falconOMS.pojos.VariantDTO;
 import com.example.inventrax.falconOMS.room.AppDatabase;
 import com.example.inventrax.falconOMS.room.ItemTable;
 import com.example.inventrax.falconOMS.services.RestService;
+import com.example.inventrax.falconOMS.util.Converters;
+import com.example.inventrax.falconOMS.util.DateUtils;
 import com.example.inventrax.falconOMS.util.ExceptionLoggerUtils;
 import com.example.inventrax.falconOMS.util.FragmentUtils;
 import com.example.inventrax.falconOMS.util.ProgressDialogUtils;
@@ -50,8 +54,13 @@ import com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ProductCatalogFragment extends Fragment implements SearchView.OnQueryTextListener {
 
@@ -70,7 +79,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
     CoordinatorLayout coordinatorLayout;
     private SearchableSpinner spinnerColorSelectionBottom;
     private TextView txtItemNameBottom;
-    private EditText etQtyBottom;
+    private EditText etQtyBottom,deliveryDatePicker;
 
     private PaginationAdapter mAdapter;
 
@@ -92,6 +101,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
     int pagecount = 0;
 
     AppDatabase db;
+    String myFormat = "dd/MMM/yyyy";
 
     @Nullable
     @Override
@@ -128,6 +138,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         ivItemBottom = (ImageView) rootView.findViewById(R.id.ivItemBottom);
         txtItemNameBottom = (TextView) rootView.findViewById(R.id.txtItemNameBottom);
         etQtyBottom = (EditText) rootView.findViewById(R.id.etQtyBottom);
+        deliveryDatePicker = (EditText) rootView.findViewById(R.id.deliveryDatePicker);
 
         spinnerColorSelectionBottom = (SearchableSpinner) rootView.findViewById(R.id.spinnerColorSelectionBottom);
 
@@ -164,7 +175,6 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
             recyclerView.setLayoutManager(layoutManager);
             // shows the items which are there in sqlite item table
             updateToRecyclerView(db.itemDAO().getAllItems(pagecount));
-            Log.v("ABCDE",new Gson().toJson(db.itemDAO().getAllItems(pagecount)));
         } else {
             layoutManager = new LinearLayoutManager(getContext());
             recyclerView.setLayoutManager(layoutManager);
@@ -205,6 +215,69 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
+
+
+        // Date Picker Dailog integration and validation
+        final Calendar myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
+
+                String date = sdf.format(myCalendar.getTime());
+
+                Date today = null;
+                Date selectedDate = null;
+
+                try {
+                    today = sdf.parse(DateUtils.getDate(myFormat));       // gets the current date
+                    selectedDate = sdf.parse(date);                       // gets the date from date picker
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                // shows err when selected date before the current date
+                if (selectedDate.before(today)) {
+                    deliveryDatePicker.setText("");
+                    deliveryDatePicker.setError("Please select valid date");
+                    Toast.makeText(getContext(),"Date specified [" + selectedDate + "] is before today [" + today + "]",Toast.LENGTH_SHORT).show();
+                } else {
+                    deliveryDatePicker.setError(null);
+                    deliveryDatePicker.setText(sdf.format(myCalendar.getTime()));
+                }
+
+            }
+
+        };
+
+        // onClick for edit text to popup the date picker
+        deliveryDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialog datePickerDialog =  new DatePickerDialog(getContext(), datePickerListener, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                String myDate = "2019/08/12";
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy");
+                Date date = null;
+                try {
+                    //date = sdf.parse(myDate);   // If a it requires selected date is mentioned
+                    date = sdf.parse(DateUtils.getDate(myFormat));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                long millis = date.getTime();
+                datePickerDialog.getDatePicker().setMinDate(millis);
+                datePickerDialog.show();
+
+            }
+        });
+
+
 
     }
 
@@ -269,7 +342,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
             for (ItemTable model : models) {
                 if (model != null) {
-                    if (model.itemname.toLowerCase().contains(query.trim()) || model.itemdesc.toLowerCase().contains(query.trim())) {
+                    if (model.modelCode.toLowerCase().contains(query.trim()) || model.modelDescription.toLowerCase().contains(query.trim())) {
                         filteredModelList.add(model);
                     }
                 }
@@ -294,7 +367,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         mAdapter = new PaginationAdapter(getContext(), new PaginationAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
-                Toast.makeText(getContext(), String.valueOf(items.get(pos).itemname), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), String.valueOf(items.get(pos).modelCode), Toast.LENGTH_SHORT).show();
                 behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
                 frame.setVisibility(View.GONE);
@@ -307,23 +380,31 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
                 behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 frame.setVisibility(View.VISIBLE);
-                txtItemNameBottom.setText(String.valueOf(items.get(pos).itemname));
+                txtItemNameBottom.setText(String.valueOf(items.get(pos).modelCode));
 
                 ArrayList<String> varient = new ArrayList<>();
-                varient.add("NA");
-                varient.add("NA");
-                varient.add("NA");
-                varient.add("NA");
-                varient.add("NA");
-                varient.add("NA");
+
+                List<VariantDTO> varients = Converters.fromString(items.get(pos).varientList);
+
+                for(VariantDTO var: varients){
+
+                   varient.add(var.getMcode());
+
+                }
 
                 ArrayAdapter adapter = new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, varient);
                 spinnerColorSelectionBottom.setAdapter(adapter);
 
-                Picasso.with(getContext())
-                        .load(items.get(pos).imageurl)
-                        .placeholder(R.drawable.load)
-                        .into(ivItemBottom);
+                if(!items.get(pos).imgPath.equals("")){
+                    Picasso.with(getContext())
+                            .load(items.get(pos).imgPath)
+                            .placeholder(R.drawable.no_img)
+                            .into(ivItemBottom);
+                }else {
+                    ivItemBottom.setImageResource(R.drawable.no_img);
+                }
+
+
 
                 ivAddToCartBottom.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -380,7 +461,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
     public void navigateToItemDetails(int pos) {
 
         Bundle bundle = new Bundle();
-        bundle.putString("itemName", String.valueOf(items.get(pos)));
+        bundle.putSerializable("modelItems", items.get(pos));
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         productDetailsFragment.setArguments(bundle);
         FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container, productDetailsFragment);

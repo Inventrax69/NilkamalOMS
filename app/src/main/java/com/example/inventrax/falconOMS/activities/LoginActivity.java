@@ -48,16 +48,18 @@ import com.example.inventrax.falconOMS.model.KeyValues;
 import com.example.inventrax.falconOMS.model.Selectedlanguage;
 import com.example.inventrax.falconOMS.pojos.CustomerListDTO;
 import com.example.inventrax.falconOMS.pojos.ItemListDTO;
-import com.example.inventrax.falconOMS.pojos.ItemListResponse;
 import com.example.inventrax.falconOMS.pojos.LoginDTO;
+import com.example.inventrax.falconOMS.pojos.ModelDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreAuthentication;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
+import com.example.inventrax.falconOMS.pojos.VariantDTO;
 import com.example.inventrax.falconOMS.room.AppDatabase;
 import com.example.inventrax.falconOMS.room.CustomerTable;
 import com.example.inventrax.falconOMS.room.ItemTable;
 import com.example.inventrax.falconOMS.services.RestService;
 import com.example.inventrax.falconOMS.util.AndroidUtils;
+import com.example.inventrax.falconOMS.util.Converters;
 import com.example.inventrax.falconOMS.util.DialogUtils;
 import com.example.inventrax.falconOMS.util.Encryption;
 import com.example.inventrax.falconOMS.util.ExceptionLoggerUtils;
@@ -108,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ErrorMessages errorMessages;
     private NotificationUtils notificationUtils;
     private Encryption encryption;
-    private List<ItemListResponse> lstItem;
+    private List<ModelDTO> lstItem;
     private List<CustomerListDTO> customerList;
     RestService restService;
 
@@ -183,7 +185,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             db = Room.databaseBuilder(LoginActivity.this,
                     AppDatabase.class, KeyValues.ROOM_DATA_BASE_NAME).allowMainThreadQueries().build();
 
-            lstItem = new ArrayList<ItemListResponse>();
+            lstItem = new ArrayList<ModelDTO>();
             customerList = new ArrayList<CustomerListDTO>();
 
             inputUserId = (EditText) findViewById(R.id.etUsername);
@@ -298,10 +300,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setProgressDialog();
 
         OMSCoreMessage message = new OMSCoreMessage();
-        message = common.SetAuthentication(EndpointConstants.ItemMaster_FPS_DTO, LoginActivity.this);
+        message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, LoginActivity.this);
         ItemListDTO itemListDTO = new ItemListDTO();
-        itemListDTO.setPageIndex(0);
-        itemListDTO.setPageSize(0);
+        itemListDTO.setPageIndex(1);
+        itemListDTO.setPageSize(10);
         message.setEntityObject(itemListDTO);
 
 
@@ -527,7 +529,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     lstItem = itemList.getResults();
 
 
-                                    executeItemAsyncTask();
+                                    //executeItemAsyncTask();
 
 
                                 } catch (Exception e) {
@@ -686,29 +688,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void saveItemListTolocalDB(List<ItemListResponse> itemList) {
+    public void saveItemListTolocalDB(List<ModelDTO> itemList) {
 
         if (itemList != null && itemList.size() > 0) {
 
-            for (ItemListResponse dd : itemList) {
+            for (ModelDTO dd : itemList) {
 
-                SimpleDateFormat sdf = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH);
+                /*SimpleDateFormat sdf = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH);
                 Date date = null;
                 try {
                     date = sdf.parse(dd.getCreatedOn());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
                 long startDate = date.getTime();
 
-                /*String s = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH).format(new Date(startDate));
-
+                String s = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH).format(new Date(startDate));
                 Log.v("s",s);*/
 
+                String varients = Converters.fromArrayList((ArrayList<VariantDTO>) dd.getVarientList());
 
-                itemTables.add(new ItemTable(dd.getMaterialID(), dd.getMaterialCode(), dd.getMaterialDescription(),
-                        dd.getMaterialPath(), dd.getMaterialType(), startDate));
+                itemTables.add(new ItemTable(dd.getModelID(), dd.getModelCode(), dd.getModelDescription(),
+                        dd.getImgPath(), varients));
             }
 
             db.itemDAO().deleteAll();

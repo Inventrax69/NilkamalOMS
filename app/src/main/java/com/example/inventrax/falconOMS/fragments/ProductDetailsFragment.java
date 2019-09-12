@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -30,12 +31,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.R;
+import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.adapters.ImagesAdapter;
 import com.example.inventrax.falconOMS.adapters.OffersAdapter;
 import com.example.inventrax.falconOMS.adapters.SlideImageAdapter;
 import com.example.inventrax.falconOMS.model.ImageModel;
+import com.example.inventrax.falconOMS.pojos.VariantDTO;
+import com.example.inventrax.falconOMS.room.ItemTable;
+import com.example.inventrax.falconOMS.util.Converters;
 import com.example.inventrax.falconOMS.util.DateUtils;
 import com.example.inventrax.falconOMS.util.FragmentUtils;
 import com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner;
@@ -64,10 +68,11 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
     private LinearLayoutManager linearLayoutManager;
 
     private static ViewPager mPager;
-    private static int currentPage = 0;
-    private static int NUM_PAGES = 0;
+    ArrayList<String> varient;
 
-
+    private String selectedVar = "";
+    ArrayList<VariantDTO> varientDtoLst;
+    String myFormat = "dd/MMM/yyyy";
 
 
     @Nullable
@@ -83,7 +88,22 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
     private void loadFormControls() {
 
-        String itemname = getArguments().getString("itemName");
+        ItemTable itemTable = new ItemTable();
+
+        itemTable = (ItemTable) getArguments().getSerializable("modelItems");
+
+        varient = new ArrayList<>();
+
+        varientDtoLst = new ArrayList<>();
+        varientDtoLst = Converters.fromString(itemTable.varientList);
+
+        for(VariantDTO v: varientDtoLst){
+
+            varient.add(v.getMcode());
+
+        }
+
+
 
         // To disable Bottom navigation bar
         ((MainActivity)getActivity()).SetNavigationVisibiltity(false);
@@ -121,7 +141,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                String myFormat = "dd/MMM/yyyy"; //In which you need put here
+                 //In which you need put here
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
 
                 String date = sdf.format(myCalendar.getTime());
@@ -158,10 +178,11 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH));
                 String myDate = "2019/08/12";
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy");
                 Date date = null;
                 try {
-                    date = sdf.parse(myDate);
+                    //date = sdf.parse(myDate);   // If a it requires selected date is mentioned
+                    date = sdf.parse(DateUtils.getDate(myFormat));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -173,21 +194,9 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         });
 
 
-
-        ArrayList<String> items = new ArrayList<>();
-        items.add("NA");
-        items.add("NA");
-        items.add("NA");
-        items.add("NA");
-
-
-        ArrayAdapter adapter = new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, items);
-        spinnerVariant.setAdapter(adapter);
-
-
         Picasso.with(getContext())
                 .load("https://avatars2.githubusercontent.com/u/8110201?v=4")
-                .placeholder(R.drawable.load)
+                .placeholder(R.drawable.no_img)
                 .into(ivItem);
 
 
@@ -206,8 +215,42 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         setDataListItems();
         initRecyclerView();
 
+        ArrayAdapter adapter = new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, varient);
+        spinnerVariant.setAdapter(adapter);
+
+        spinnerVariant.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedVar = spinnerVariant.getSelectedItem().toString();
+
+                if(!selectedVar.equals("")){
+
+                    for(int k= 0;i <= varientDtoLst.size();k++){
+
+                        if(varientDtoLst.get(k).getMcode().equals(selectedVar)){
+                            updateUI(varientDtoLst.get(k));
+                            return;
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+
+
     }
 
+    public void updateUI(VariantDTO varientDtoLst){
+        txtItemName.setText(varientDtoLst.getMcode());
+        txtDescreption.setText(varientDtoLst.getMDescriptionLong());
+    }
 
 
     @Override
@@ -234,6 +277,8 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
         }
     }
+
+
 
     private void setDataListItems() {
 
@@ -311,7 +356,6 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         lstoffers.setLayoutManager(linearLayoutManager);
         lstoffers.setHasFixedSize(true);
-        //NestedScrollView nestedScroll = (NestedScrollView) mDialog.findViewById(R.id.nestedScroll);
 
         ArrayList<String> items = new ArrayList<>();
         items.add("NA");
@@ -329,15 +373,6 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         items.add("NA");
         items.add("NA");
         items.add("NA");
-        items.add("NA");
-        items.add("NA");
-        items.add("re");
-        items.add("uy");
-        items.add("uyA");
-        items.add("NuyA");
-        items.add("yu");
-        items.add("uy");
-        items.add("uy");
 
 
         OffersAdapter adapter = new OffersAdapter(getContext(), items, nested);

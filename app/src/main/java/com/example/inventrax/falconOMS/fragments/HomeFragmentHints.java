@@ -138,12 +138,12 @@ public class HomeFragmentHints extends Fragment implements View.OnClickListener 
         if(sharedPreferencesUtils.loadPreferenceAsBoolean(KeyValues.IS_HINTS))
         showHints();
 
-        if(sharedPreferencesUtils.loadPreferenceAsBoolean(KeyValues.IS_ITEM_LOADED)){
+       /* if(sharedPreferencesUtils.loadPreferenceAsBoolean(KeyValues.IS_ITEM_LOADED)){
 
             String itemLastTime = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH).format(new Date(db.itemDAO().getLastRecord().timestamp));
             String custLastTime = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH).format(new Date(db.customerDAO().getLastRecord().timestamp));
             itemTimeStamp = itemLastTime;
-        }
+        }*/
 
 
 
@@ -356,7 +356,7 @@ public class HomeFragmentHints extends Fragment implements View.OnClickListener 
                                 try {
 
                                     itemList = new ItemListDTO(_lstItem.entrySet());
-                                    lstItem = itemList.getResults();
+                                    //lstItem = itemList.getResults();
 
 
 

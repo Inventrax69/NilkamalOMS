@@ -20,7 +20,7 @@ public class ItemListDTO  {
     private Double pageCount;
 
     @SerializedName("Results")
-    private List<ItemListResponse> results;
+    private List<ModelDTO> results;
 
     public ItemListDTO() {
 
@@ -42,9 +42,9 @@ public class ItemListDTO  {
                 case "Results":
                     if (entry.getValue() != null) {
                         List<LinkedTreeMap<?, ?>> treemapList = (List<LinkedTreeMap<?, ?>>) entry.getValue();
-                        List<ItemListResponse> lst = new ArrayList<ItemListResponse>();
+                        List<ModelDTO> lst = new ArrayList<ModelDTO>();
                         for (int i = 0; i < treemapList.size(); i++) {
-                            ItemListResponse dto = new ItemListResponse(treemapList.get(i).entrySet());
+                            ModelDTO dto = new ModelDTO(treemapList.get(i).entrySet());
                             lst.add(dto);
                         }
 
@@ -77,11 +77,11 @@ public class ItemListDTO  {
         this.pageIndex = pageIndex;
     }
 
-    public List<ItemListResponse> getResults() {
+    public List<ModelDTO> getResults() {
         return results;
     }
 
-    public void setResults(List<ItemListResponse> results) {
+    public void setResults(List<ModelDTO> results) {
         this.results = results;
     }
 

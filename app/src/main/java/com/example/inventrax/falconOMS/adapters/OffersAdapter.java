@@ -21,11 +21,10 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
     NestedScrollView nested;
 
 
-
     public OffersAdapter(Context applicationContext, ArrayList itemArrayList, NestedScrollView nested) {
         this.context = applicationContext;
         this.items = itemArrayList;
-        this.nested=nested;
+        this.nested = nested;
 
     }
 
@@ -44,8 +43,8 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
 
 
         viewHolder.label.setText((CharSequence) items.get(i));
-        if(i==(items.size()-1))
-            nested.smoothScrollTo(0,0);
+        if (i == (items.size() - 1))
+            nested.smoothScrollTo(0, 0);
 
 
     }
@@ -65,7 +64,6 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
 
             // Initializing views
             label = (TextView) view.findViewById(R.id.label);
-
 
 
         }

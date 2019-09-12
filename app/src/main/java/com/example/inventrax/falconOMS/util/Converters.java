@@ -2,6 +2,7 @@ package com.example.inventrax.falconOMS.util;
 
 import android.arch.persistence.room.TypeConverter;
 
+import com.example.inventrax.falconOMS.pojos.VariantDTO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -29,13 +30,13 @@ public class Converters {
 
 
     @TypeConverter
-    public static ArrayList<String> fromString(String value) {
-        Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+    public static ArrayList<VariantDTO> fromString(String value) {
+        Type listType = new TypeToken<ArrayList<VariantDTO>>() {}.getType();
         return new Gson().fromJson(value, listType);
     }
 
     @TypeConverter
-    public static String fromArrayList(ArrayList<String> list) {
+    public static String fromArrayList(ArrayList<VariantDTO> list) {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         return json;

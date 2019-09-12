@@ -5,6 +5,6 @@ package com.example.inventrax.falconOMS.common.constants;
  */
 
 public enum  EndpointConstants {
-    None,LoginDTO, LoginUserDTO, ProfileDTO,Inventory,Exception,ItemMaster_FPS_DTO,Customer_FPS_DTO;
+    None,LoginDTO, LoginUserDTO, ProfileDTO,Inventory,Exception,ItemMaster_FPS_DTO,Customer_FPS_DTO,ProductCatalog_FPS_DTO;
     public enum ScanType {  };
 }

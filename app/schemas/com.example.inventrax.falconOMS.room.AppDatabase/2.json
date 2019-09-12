@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "1f0478869e792699bd72bad836d6300d",
+    "identityHash": "35dde5d3dd62488a0664b7abbb3398e8",
     "entities": [
       {
         "tableName": "CustomerTable",
@@ -92,7 +92,7 @@
       },
       {
         "tableName": "ItemTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `itemid` TEXT, `itemname` TEXT, `itemdesc` TEXT, `imageurl` TEXT, `price` TEXT, `timeStamp` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `modelID` TEXT, `modelCode` TEXT, `modelDescription` TEXT, `imgPath` TEXT, `varientList` TEXT, `price` INTEGER NOT NULL, `discount` INTEGER NOT NULL, `timeStamp` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -101,34 +101,46 @@
             "notNull": true
           },
           {
-            "fieldPath": "itemid",
-            "columnName": "itemid",
+            "fieldPath": "modelID",
+            "columnName": "modelID",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "itemname",
-            "columnName": "itemname",
+            "fieldPath": "modelCode",
+            "columnName": "modelCode",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "itemdesc",
-            "columnName": "itemdesc",
+            "fieldPath": "modelDescription",
+            "columnName": "modelDescription",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "imageurl",
-            "columnName": "imageurl",
+            "fieldPath": "imgPath",
+            "columnName": "imgPath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "varientList",
+            "columnName": "varientList",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "price",
             "columnName": "price",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "discount",
+            "columnName": "discount",
+            "affinity": "INTEGER",
+            "notNull": true
           },
           {
             "fieldPath": "timestamp",
@@ -149,7 +161,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1f0478869e792699bd72bad836d6300d\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"35dde5d3dd62488a0664b7abbb3398e8\")"
     ]
   }
 }

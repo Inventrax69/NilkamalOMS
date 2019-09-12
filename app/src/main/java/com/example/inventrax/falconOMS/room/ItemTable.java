@@ -5,49 +5,58 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity
-public class ItemTable {
+public class ItemTable implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     public int id;
 
-    @ColumnInfo(name = "itemid")
-    public String itemid;
+    @ColumnInfo(name = "modelID")
+    public String modelID;
 
-    @ColumnInfo(name = "itemname")
-    public String itemname;
+    @ColumnInfo(name = "modelCode")
+    public String modelCode;
 
-    @ColumnInfo(name = "itemdesc")
-    public String itemdesc;
+    @ColumnInfo(name = "modelDescription")
+    public String modelDescription;
 
-     @ColumnInfo(name = "imageurl")
-    public String imageurl;
+     @ColumnInfo(name = "imgPath")
+    public String imgPath;
 
-    @ColumnInfo(name = "price")
-    public String price;
+    @ColumnInfo(name = "varientList")
+    public String varientList;
+
+    @ColumnInfo(name="price")
+    public long price;
+
+    @ColumnInfo(name="discount")
+    public long discount;
 
     @ColumnInfo(name="timeStamp")
     public long timestamp;
 
-    public ItemTable(String itemid, String itemname, String itemdesc, String imageurl, String price, long timestamp) {
-        this.itemid = itemid;
-        this.itemname = itemname;
-        this.itemdesc = itemdesc;
-        this.imageurl = imageurl;
-        this.price = price;
-        this.timestamp = timestamp;
+
+    public ItemTable(String modelID, String modelCode, String modelDescription, String imgPath, String varientList) {
+        this.modelID = modelID;
+        this.modelCode = modelCode;
+        this.modelDescription = modelDescription;
+        this.imgPath = imgPath;
+        this.varientList = varientList;
     }
 
     @Ignore
-    public ItemTable(String itemid, String itemname, String itemdesc, String imageurl, String price) {
-        this.itemid = itemid;
-        this.itemname = itemname;
-        this.itemdesc = itemdesc;
-        this.imageurl = imageurl;
+    public ItemTable(String modelID, String modelCode, String modelDescription, String imgPath, String varientList, long price, long discount, long timestamp) {
+        this.modelID = modelID;
+        this.modelCode = modelCode;
+        this.modelDescription = modelDescription;
+        this.imgPath = imgPath;
+        this.varientList = varientList;
         this.price = price;
-
+        this.discount = discount;
+        this.timestamp = timestamp;
     }
-
 
 
 
