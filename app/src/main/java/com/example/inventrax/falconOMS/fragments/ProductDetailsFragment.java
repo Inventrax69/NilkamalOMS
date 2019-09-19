@@ -88,7 +88,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
     private void loadFormControls() {
 
-        ItemTable itemTable = new ItemTable();
+        ItemTable itemTable = new ItemTable(dd.getModelID(), dd.getModelCode(), dd.getModelDescription(), dd.getImgPath(), dd.getVarientList());
 
         itemTable = (ItemTable) getArguments().getSerializable("modelItems");
 

@@ -75,7 +75,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             sugg.add("GAB");
             sugg.add("BFL");
 
-
             // Get SearchView autocomplete object.
             searchAutoComplete = (SearchView.SearchAutoComplete)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
             searchAutoComplete.setTextColor(Color.WHITE);
@@ -92,7 +91,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position,
                                         long id) {
-                    // TODO Auto-generated method stub
 
                     String searchString = (String) parent.getItemAtPosition(position);
                     searchAutoComplete.setText("" + searchString);
@@ -111,7 +109,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-
+        Toast.makeText(getContext(), "submitted" + query,
+                Toast.LENGTH_SHORT).show();
         return false;
     }
 

@@ -42,7 +42,7 @@ public interface CustomerDAO {
     void getLastRecord ();*/
 
     @Query("SELECT * FROM CustomerTable WHERE timeStamp = (SELECT MAX(timeStamp) FROM CustomerTable)")
-    CustomerTable getLastRecord ();
+    CustomerTable getLastRecord();
 
 
 }

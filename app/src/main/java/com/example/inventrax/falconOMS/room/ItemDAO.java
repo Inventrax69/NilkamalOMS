@@ -39,6 +39,6 @@ public interface ItemDAO {
     void update(ItemTable itemTable);
 
     @Query("SELECT * FROM ItemTable WHERE timeStamp = (SELECT MAX(timeStamp) FROM ItemTable)")
-    ItemTable getLastRecord ();
+    ItemTable getLastRecord();
 
 }

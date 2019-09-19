@@ -529,7 +529,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     lstItem = itemList.getResults();
 
 
-                                    //executeItemAsyncTask();
+                                    executeItemAsyncTask();
 
 
                                 } catch (Exception e) {
@@ -705,6 +705,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 String s = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH).format(new Date(startDate));
                 Log.v("s",s);*/
+
 
                 String varients = Converters.fromArrayList((ArrayList<VariantDTO>) dd.getVarientList());
 

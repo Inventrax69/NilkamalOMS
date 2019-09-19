@@ -161,7 +161,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void addLoadingFooter() {
         isLoadingAdded = true;
-        add(new ItemTable());
+        add(new ItemTable(dd.getModelID(), dd.getModelCode(), dd.getModelDescription(), dd.getImgPath(), dd.getVarientList()));
     }
 
     public void removeLoadingFooter() {

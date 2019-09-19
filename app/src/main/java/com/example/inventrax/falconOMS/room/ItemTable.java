@@ -22,19 +22,19 @@ public class ItemTable implements Serializable {
     @ColumnInfo(name = "modelDescription")
     public String modelDescription;
 
-     @ColumnInfo(name = "imgPath")
+    @ColumnInfo(name = "imgPath")
     public String imgPath;
 
     @ColumnInfo(name = "varientList")
     public String varientList;
 
-    @ColumnInfo(name="price")
+    @ColumnInfo(name = "price")
     public long price;
 
-    @ColumnInfo(name="discount")
+    @ColumnInfo(name = "discount")
     public long discount;
 
-    @ColumnInfo(name="timeStamp")
+    @ColumnInfo(name = "timeStamp")
     public long timestamp;
 
 
@@ -59,9 +59,8 @@ public class ItemTable implements Serializable {
     }
 
 
-
     @Ignore
-    public ItemTable(){
+    public ItemTable() {
 
     }
 }
