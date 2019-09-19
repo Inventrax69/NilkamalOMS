@@ -88,7 +88,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
     private void loadFormControls() {
 
-        ItemTable itemTable = new ItemTable(dd.getModelID(), dd.getModelCode(), dd.getModelDescription(), dd.getImgPath(), dd.getVarientList());
+        ItemTable itemTable = new ItemTable();
 
         itemTable = (ItemTable) getArguments().getSerializable("modelItems");
 
@@ -263,7 +263,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                 bundle.putString("itemName","myItem");
                 CartFragment cartFragment = new CartFragment();
                 cartFragment.setArguments(bundle);
-                FragmentUtils.replaceFragmentWithBackStack(getActivity(),R.id.container,cartFragment);
+                FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container,cartFragment);
                 break;
 
             case R.id.ivItem:
@@ -315,7 +315,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         CardView btnimgClose = (CardView) mDialog.findViewById(R.id.closedialog);
         TabLayout tabIndicator = (TabLayout) mDialog.findViewById(R.id.tab_indicator);
         
-        Integer[] IMAGES= {R.drawable.one,R.drawable.two,R.drawable.three};
+        Integer[] IMAGES= {R.drawable.one, R.drawable.two, R.drawable.three};
         ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
 
         for(int i=0;i<IMAGES.length;i++)
