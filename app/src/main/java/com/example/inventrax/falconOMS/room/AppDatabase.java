@@ -6,9 +6,10 @@ import android.arch.persistence.room.TypeConverters;
 
 import com.example.inventrax.falconOMS.util.Converters;
 
-@Database(entities = {CustomerTable.class, ItemTable.class}, version = 2)
+@Database(entities = {CustomerTable.class, ItemTable.class, VariantTable.class}, version = 2)
 @TypeConverters({Converters.class})
 public abstract  class AppDatabase extends RoomDatabase {
     public abstract CustomerDAO customerDAO();
     public abstract ItemDAO itemDAO();
+    public abstract VariantDAO variantDAO();
 }

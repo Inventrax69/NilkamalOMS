@@ -7,6 +7,7 @@ package com.example.inventrax.falconOMS.fragments;
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.arch.persistence.room.Room;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -37,9 +38,8 @@ import com.example.inventrax.falconOMS.adapters.ImagesAdapter;
 import com.example.inventrax.falconOMS.adapters.OffersAdapter;
 import com.example.inventrax.falconOMS.adapters.SlideImageAdapter;
 import com.example.inventrax.falconOMS.model.ImageModel;
-import com.example.inventrax.falconOMS.pojos.VariantDTO;
-import com.example.inventrax.falconOMS.room.ItemTable;
-import com.example.inventrax.falconOMS.util.Converters;
+import com.example.inventrax.falconOMS.room.AppDatabase;
+import com.example.inventrax.falconOMS.room.VariantTable;
 import com.example.inventrax.falconOMS.util.DateUtils;
 import com.example.inventrax.falconOMS.util.FragmentUtils;
 import com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner;
@@ -50,6 +50,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class ProductDetailsFragment extends Fragment implements View.OnClickListener {
@@ -71,9 +72,11 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
     ArrayList<String> varient;
 
     private String selectedVar = "";
-    ArrayList<VariantDTO> varientDtoLst;
     String myFormat = "dd/MMM/yyyy";
 
+    private String modelId = "";
+    AppDatabase db;
+    List<VariantTable> variantTables =null;
 
     @Nullable
     @Override
@@ -88,25 +91,19 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
     private void loadFormControls() {
 
-        ItemTable itemTable = new ItemTable();
-
-        itemTable = (ItemTable) getArguments().getSerializable("modelItems");
-
-        varient = new ArrayList<>();
-
-        varientDtoLst = new ArrayList<>();
-        varientDtoLst = Converters.fromString(itemTable.varientList);
-
-        for(VariantDTO v: varientDtoLst){
-
-            varient.add(v.getMcode());
-
-        }
-
-
-
         // To disable Bottom navigation bar
         ((MainActivity)getActivity()).SetNavigationVisibiltity(false);
+
+        if(getArguments() == null) {
+            return;
+        }
+
+        modelId = getArguments().getString("modelId");
+        varient = new ArrayList<>();
+
+        db = Room.databaseBuilder(getActivity(),
+                AppDatabase.class, "room_oms").allowMainThreadQueries().build();
+
 
         deliveryDatePicker = (EditText) rootView.findViewById(R.id.deliveryDatePicker);
         etQtyBottom = (EditText) rootView.findViewById(R.id.etQtyBottom);
@@ -215,8 +212,17 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         setDataListItems();
         initRecyclerView();
 
+        variantTables = db.variantDAO().getVariants(modelId);
+
+        for(VariantTable var: variantTables){
+
+            varient.add(var.mCode);
+
+        }
+
         ArrayAdapter adapter = new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, varient);
         spinnerVariant.setAdapter(adapter);
+
 
         spinnerVariant.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -225,10 +231,10 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
                 if(!selectedVar.equals("")){
 
-                    for(int k= 0;i <= varientDtoLst.size();k++){
+                    for(int k= 0;i <= variantTables.size();k++){
 
-                        if(varientDtoLst.get(k).getMcode().equals(selectedVar)){
-                            updateUI(varientDtoLst.get(k));
+                        if(variantTables.get(k).mCode.equals(selectedVar)){
+                            updateUI(variantTables.get(k));
                             return;
                         }
                     }
@@ -247,9 +253,9 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
     }
 
-    public void updateUI(VariantDTO varientDtoLst){
-        txtItemName.setText(varientDtoLst.getMcode());
-        txtDescreption.setText(varientDtoLst.getMDescriptionLong());
+    public void updateUI(VariantTable variantTable){
+        txtItemName.setText(variantTable.mCode);
+        txtDescreption.setText(variantTable.mDescriptionLong);
     }
 
 

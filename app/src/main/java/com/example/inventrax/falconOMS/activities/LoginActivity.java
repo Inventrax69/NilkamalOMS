@@ -57,9 +57,9 @@ import com.example.inventrax.falconOMS.pojos.VariantDTO;
 import com.example.inventrax.falconOMS.room.AppDatabase;
 import com.example.inventrax.falconOMS.room.CustomerTable;
 import com.example.inventrax.falconOMS.room.ItemTable;
+import com.example.inventrax.falconOMS.room.VariantTable;
 import com.example.inventrax.falconOMS.services.RestService;
 import com.example.inventrax.falconOMS.util.AndroidUtils;
-import com.example.inventrax.falconOMS.util.Converters;
 import com.example.inventrax.falconOMS.util.DialogUtils;
 import com.example.inventrax.falconOMS.util.Encryption;
 import com.example.inventrax.falconOMS.util.ExceptionLoggerUtils;
@@ -529,7 +529,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     lstItem = itemList.getResults();
 
 
-                                    executeItemAsyncTask();
+                                    //executeItemAsyncTask();
 
 
                                 } catch (Exception e) {
@@ -692,6 +692,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (itemList != null && itemList.size() > 0) {
 
+            db.itemDAO().deleteAll();
+            db.variantDAO().deleteAll();
+
             for (ModelDTO dd : itemList) {
 
                 /*SimpleDateFormat sdf = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH);
@@ -707,15 +710,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Log.v("s",s);*/
 
 
-                String varients = Converters.fromArrayList((ArrayList<VariantDTO>) dd.getVarientList());
 
-                itemTables.add(new ItemTable(dd.getModelID(), dd.getModelCode(), dd.getModelDescription(),
-                        dd.getImgPath(), varients));
+                db.itemDAO().insert(new ItemTable(dd.getModelID(), dd.getModelCode(), dd.getModelDescription(),
+                        dd.getImgPath()));
+
+                for(VariantDTO variantDTO : dd.getVarientList()){
+
+                    db.variantDAO().insert(new VariantTable(dd.getModelID(),variantDTO.getMaterialID(),variantDTO.getMDescription(),variantDTO.getMDescriptionLong(),
+                            variantDTO.getMcode(),variantDTO.getModelColor()));
+
+                }
+
             }
 
-            db.itemDAO().deleteAll();
-
-            db.itemDAO().insertAll(itemTables);
 
         }
 

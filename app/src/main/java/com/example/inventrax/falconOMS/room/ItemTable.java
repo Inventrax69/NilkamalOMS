@@ -3,11 +3,13 @@ package com.example.inventrax.falconOMS.room;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity
+@Entity(indices = {@Index(value = {"modelID"},
+        unique = true)})
 public class ItemTable implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
@@ -25,8 +27,8 @@ public class ItemTable implements Serializable {
     @ColumnInfo(name = "imgPath")
     public String imgPath;
 
-    @ColumnInfo(name = "varientList")
-    public String varientList;
+    /*@ColumnInfo(name = "varientList")
+    public String varientList;*/
 
     @ColumnInfo(name = "price")
     public long price;
@@ -38,29 +40,29 @@ public class ItemTable implements Serializable {
     public long timestamp;
 
 
-    public ItemTable(String modelID, String modelCode, String modelDescription, String imgPath, String varientList) {
+    public ItemTable(String modelID, String modelCode, String modelDescription, String imgPath) {
         this.modelID = modelID;
         this.modelCode = modelCode;
         this.modelDescription = modelDescription;
         this.imgPath = imgPath;
-        this.varientList = varientList;
+    }
+
+
+    @Ignore
+    public ItemTable(){
+
     }
 
     @Ignore
-    public ItemTable(String modelID, String modelCode, String modelDescription, String imgPath, String varientList, long price, long discount, long timestamp) {
+    public ItemTable(int id, String modelID, String modelCode, String modelDescription, String imgPath, long price, long discount, long timestamp) {
+        this.id = id;
         this.modelID = modelID;
         this.modelCode = modelCode;
         this.modelDescription = modelDescription;
         this.imgPath = imgPath;
-        this.varientList = varientList;
         this.price = price;
         this.discount = discount;
         this.timestamp = timestamp;
-    }
-
-
-    @Ignore
-    public ItemTable() {
 
     }
 }

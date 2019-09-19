@@ -41,11 +41,10 @@ import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.Log.Logger;
 import com.example.inventrax.falconOMS.common.constants.ErrorMessages;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
-import com.example.inventrax.falconOMS.pojos.VariantDTO;
 import com.example.inventrax.falconOMS.room.AppDatabase;
 import com.example.inventrax.falconOMS.room.ItemTable;
+import com.example.inventrax.falconOMS.room.VariantTable;
 import com.example.inventrax.falconOMS.services.RestService;
-import com.example.inventrax.falconOMS.util.Converters;
 import com.example.inventrax.falconOMS.util.DateUtils;
 import com.example.inventrax.falconOMS.util.ExceptionLoggerUtils;
 import com.example.inventrax.falconOMS.util.FragmentUtils;
@@ -384,11 +383,16 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
                 ArrayList<String> varient = new ArrayList<>();
 
-                List<VariantDTO> varients = Converters.fromString(items.get(pos).varientList);
 
-                for(VariantDTO var: varients){
+                db = Room.databaseBuilder(getActivity(),
+                        AppDatabase.class, "room_oms").allowMainThreadQueries().build();
 
-                   varient.add(var.getMcode());
+                List<VariantTable> variantTables =null;
+                variantTables = db.variantDAO().getVariants(items.get(pos).modelID);
+
+                for(VariantTable var: variantTables){
+
+                    varient.add(var.mCode);
 
                 }
 
@@ -462,6 +466,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("modelItems", items.get(pos));
+        bundle.putString("modelId",items.get(pos).modelID);
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         productDetailsFragment.setArguments(bundle);
         FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container, productDetailsFragment);

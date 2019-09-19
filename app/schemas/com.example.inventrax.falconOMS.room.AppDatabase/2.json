@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "35dde5d3dd62488a0664b7abbb3398e8",
+    "identityHash": "539d05726271e5afa4df167712a6d867",
     "entities": [
       {
         "tableName": "CustomerTable",
@@ -92,7 +92,7 @@
       },
       {
         "tableName": "ItemTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `modelID` TEXT, `modelCode` TEXT, `modelDescription` TEXT, `imgPath` TEXT, `varientList` TEXT, `price` INTEGER NOT NULL, `discount` INTEGER NOT NULL, `timeStamp` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `modelID` TEXT, `modelCode` TEXT, `modelDescription` TEXT, `imgPath` TEXT, `price` INTEGER NOT NULL, `discount` INTEGER NOT NULL, `timeStamp` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -125,12 +125,6 @@
             "notNull": false
           },
           {
-            "fieldPath": "varientList",
-            "columnName": "varientList",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
             "fieldPath": "price",
             "columnName": "price",
             "affinity": "INTEGER",
@@ -155,13 +149,90 @@
           ],
           "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_ItemTable_modelID",
+            "unique": true,
+            "columnNames": [
+              "modelID"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_ItemTable_modelID` ON `${TABLE_NAME}` (`modelID`)"
+          }
+        ],
         "foreignKeys": []
+      },
+      {
+        "tableName": "VariantTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `modelID` TEXT, `MaterialID` TEXT, `MDescription` TEXT, `MDescriptionLong` TEXT, `Mcode` TEXT, `ModelColor` TEXT, FOREIGN KEY(`modelID`) REFERENCES `ItemTable`(`modelID`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "modelID",
+            "columnName": "modelID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "materialID",
+            "columnName": "MaterialID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mDescription",
+            "columnName": "MDescription",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mDescriptionLong",
+            "columnName": "MDescriptionLong",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mCode",
+            "columnName": "Mcode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "modelColor",
+            "columnName": "ModelColor",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "ItemTable",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "modelID"
+            ],
+            "referencedColumns": [
+              "modelID"
+            ]
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"35dde5d3dd62488a0664b7abbb3398e8\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"539d05726271e5afa4df167712a6d867\")"
     ]
   }
 }
