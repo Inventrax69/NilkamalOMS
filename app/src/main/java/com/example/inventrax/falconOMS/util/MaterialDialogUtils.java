@@ -2,26 +2,28 @@ package com.example.inventrax.falconOMS.util;
 
 import android.content.Context;
 
+import com.example.circulardialog.CDialog;
+import com.example.circulardialog.extras.CDConstants;
 
 
 public class MaterialDialogUtils {
 
     private Context context;
-    //private MaterialDialog.Builder builder;
-   // private MaterialDialog materialDialog;
     public String positiveText="Ok";
     public String negativeText="Cancel";
 
-    public MaterialDialogUtils(Context context){
-        this.context=context;
-        //builder=new MaterialDialog.Builder(context);
+    public MaterialDialogUtils(){
+
     }
 
-    public void showAlertDialog(String message){
-       /* builder.content(message);
-        builder.positiveText(positiveText);
-        materialDialog=builder.build();
-        materialDialog.show();*/
+    public static void showUploadSuccessDialog(Context context, String message){
+        new CDialog(context).createAlert(message,
+                CDConstants.SUCCESS,   // Type of dialog
+                CDConstants.LARGE)    //  size of dialog
+                .setAnimation(CDConstants.SCALE_FROM_BOTTOM_TO_TOP)     //  Animation for enter/exit
+                .setDuration(2000)   // in milliseconds
+                .setTextSize(CDConstants.LARGE_TEXT_SIZE)  // CDConstants.LARGE_TEXT_SIZE, CDConstants.NORMAL_TEXT_SIZE
+                .show();
     }
 
 

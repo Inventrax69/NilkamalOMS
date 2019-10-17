@@ -40,8 +40,8 @@ public interface ApiInterface {
     @POST("Master/GetItemList")
     Call<OMSCoreMessage> GetItemList(@Body OMSCoreMessage oRequest);
 
-    @POST("Master/GetProductCatalog")
-    Call<OMSCoreMessage> GetProductCatalog(@Body OMSCoreMessage oRequest);
+    @POST("Master/ProductCatalog")
+    Call<OMSCoreMessage> ProductCatalog(@Body OMSCoreMessage oRequest);
 
     @POST("Master/GetCustomerList")
     Call<OMSCoreMessage> GetCustomerList(@Body OMSCoreMessage oRequest);
@@ -51,6 +51,29 @@ public interface ApiInterface {
 
     @POST("Master/SyncCustomerData")
     Call<OMSCoreMessage> SyncCustomerData(@Body OMSCoreMessage oRequest);
+
+    @POST("OrderAssistanceUpload")
+    Call<OMSCoreMessage>OrderAssistanceUpload(@Body OMSCoreMessage oRequest);
+
+    @POST("Orders/cartlist")
+    Call<OMSCoreMessage>cartlist(@Body OMSCoreMessage oRequest);
+
+    @POST("Orders/GetPrice")
+    Call<OMSCoreMessage>GetPrice(@Body OMSCoreMessage oRequest);
+
+    @POST("Orders/HHTCartDetails")
+    Call<OMSCoreMessage>HHTCartDetails(@Body OMSCoreMessage oRequest);
+
+    @POST("Orders/OrderFulfilment")
+    Call<OMSCoreMessage>OrderFulfilment(@Body OMSCoreMessage oRequest);
+
+    @POST("Orders/DeleteCartItem")
+    Call<OMSCoreMessage>DeleteCartItem(@Body OMSCoreMessage oRequest);
+
+    @POST("Orders/DeleteCartItemReservation")
+    Call<OMSCoreMessage>DeleteCartItemReservation(@Body OMSCoreMessage oRequest);
+
+
 
 
     /*@GET("Master/Image")

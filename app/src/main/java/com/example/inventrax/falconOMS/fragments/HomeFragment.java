@@ -4,6 +4,8 @@ package com.example.inventrax.falconOMS.fragments;
  * Created by Padmaja on 04/07/2019.
  */
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,8 +16,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.R;
+import com.example.inventrax.falconOMS.activities.MainActivity;
+import com.example.inventrax.falconOMS.model.KeyValues;
 import com.example.inventrax.falconOMS.util.FragmentUtils;
 import com.example.inventrax.falconOMS.util.SharedPreferencesUtils;
 
@@ -26,6 +29,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private LinearLayout llProductCatalog, llCustomer, llInventory, llOrderAssistance, llOrderBooking, llComplaints,
             llHistory, llSchemesAndDiscounts, llOrderTracking;
     SharedPreferencesUtils sharedPreferencesUtils;
+
 
     @Nullable
     @Override
@@ -43,6 +47,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // To enable Bottom navigation bar
         ((MainActivity) getActivity()).SetNavigationVisibiltity(true);
+
 
         llProductCatalog = (LinearLayout) rootView.findViewById(R.id.llProductCatalog);
         llCustomer = (LinearLayout) rootView.findViewById(R.id.llCustomer);
@@ -64,6 +69,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         llSchemesAndDiscounts.setOnClickListener(this);
         llOrderTracking.setOnClickListener(this);
         sharedPreferencesUtils = new SharedPreferencesUtils("LoginActivity", getActivity());
+        SharedPreferences sp = getContext().getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
+
+
+
     }
 
 

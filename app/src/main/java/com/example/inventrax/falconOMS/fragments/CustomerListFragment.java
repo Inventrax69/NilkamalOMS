@@ -6,6 +6,8 @@ package com.example.inventrax.falconOMS.fragments;
 
 import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,7 +15,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +24,19 @@ import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.adapters.CustomerListAdapter;
 import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.constants.ErrorMessages;
+import com.example.inventrax.falconOMS.model.KeyValues;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.room.AppDatabase;
+import com.example.inventrax.falconOMS.room.CustomerTable;
 import com.example.inventrax.falconOMS.services.RestService;
 import com.example.inventrax.falconOMS.util.ExceptionLoggerUtils;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerListFragment extends Fragment {
 
@@ -41,7 +48,7 @@ public class CustomerListFragment extends Fragment {
     ProgressDialog pd;
     private SwipeRefreshLayout swipeContainer;
     private TextView txtView;
-
+    LinearLayoutManager layoutManager;
 
     private Common common;
     private ExceptionLoggerUtils exceptionLoggerUtils;
@@ -50,6 +57,10 @@ public class CustomerListFragment extends Fragment {
     RestService restService;
     private OMSCoreMessage core;
 
+    private String cusomerIDs = "", userId = "";
+    int pagecount = 0;
+    List<CustomerTable> customers;
+    CustomerTable custTable;
 
     AppDatabase db;
 
@@ -89,12 +100,14 @@ public class CustomerListFragment extends Fragment {
         exceptionLoggerUtils = new ExceptionLoggerUtils();
         restService = new RestService();
         core = new OMSCoreMessage();
+        layoutManager = new LinearLayoutManager(getContext());
 
+        SharedPreferences sp = getContext().getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
+        userId = sp.getString(KeyValues.USER_ID, "");
+        cusomerIDs = sp.getString(KeyValues.CUSTOMER_IDS, "");
 
         db = Room.databaseBuilder(getActivity(),
                 AppDatabase.class, "room_oms").allowMainThreadQueries().build();
-
-        Log.v("ABCDE", new Gson().toJson(db.customerDAO().getAll()));
 
 
         pd = new ProgressDialog(getContext());
@@ -103,20 +116,45 @@ public class CustomerListFragment extends Fragment {
         //pd.show();
         Disconnected = (TextView) rootView.findViewById(R.id.disconnected);
 
-
         rvCustomerList = (RecyclerView) rootView.findViewById(R.id.rvCustomerList);
-        rvCustomerList.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvCustomerList.setLayoutManager(layoutManager);
         rvCustomerList.smoothScrollToPosition(0);
 
-        loadCustomers();
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = new JSONArray(cusomerIDs);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        customers = new ArrayList();
 
 
+        for (int i = 0; i < jsonArray.length(); i++) {
+
+            try {
+                if (jsonArray.getString(i) != null) {
+
+                    if (db.customerDAO().getCustomer(jsonArray.getString(i)).customerId != null && db.customerDAO().getCustomer(jsonArray.getString(i)).custName != null) {
+                        custTable = db.customerDAO().getCustomer(jsonArray.getString(i));
+                        customers.add(custTable);
+                    }
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (customers.size() != 0) {
+            loadCustomers(customers);
+        }
 
     }
 
-    private void loadCustomers() {
+    private void loadCustomers(List<CustomerTable> lst) {
 
-        CustomerListAdapter customerListAdapter = new CustomerListAdapter(getContext(), (ArrayList) db.customerDAO().getAll(), new CustomerListAdapter.OnItemClickListener() {
+        CustomerListAdapter customerListAdapter = new CustomerListAdapter(getContext(), (ArrayList) customers, new CustomerListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
 
@@ -125,8 +163,8 @@ public class CustomerListFragment extends Fragment {
 
 
         rvCustomerList.setAdapter(customerListAdapter);
+        rvCustomerList.scrollToPosition(pagecount * 50);
     }
-
 
 
     @Override

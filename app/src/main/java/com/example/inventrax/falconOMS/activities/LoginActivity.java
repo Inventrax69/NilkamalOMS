@@ -75,17 +75,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.example.inventrax.falconOMS.util.DateUtils.DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH;
 
 /**
  * Created by Padmaja on 04/07/2019.
@@ -135,8 +130,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Log.d("ABCDE", "Refreshed token:" + FirebaseInstanceId.getInstance().getToken());
 
         FirebaseMessaging.getInstance().subscribeToTopic("all");
-
-
     }
 
     //Loading all the form controls
@@ -223,11 +216,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, getApplicationContext());
 
             if (sharedPreferencesUtils.loadPreferenceAsBoolean(KeyValues.IS_REMEMBER_PASSWORD_CHECKED, false)) {
-                inputUserId.setText(sharedPreferencesUtils.loadPreference(KeyValues.USER_NAME, ""));
+                inputUserId.setText(sharedPreferencesUtils.loadPreference(KeyValues.EMAIL, ""));
                 inputPassword.setText(sharedPreferencesUtils.loadPreference(KeyValues.PASSWORD, ""));
                 chkRememberPassword.setChecked(true);
             } else {
-                inputUserId.setText(sharedPreferencesUtils.loadPreference(KeyValues.USER_NAME, ""));
+                inputUserId.setText(sharedPreferencesUtils.loadPreference(KeyValues.EMAIL, ""));
                 inputPassword.setText(sharedPreferencesUtils.loadPreference(KeyValues.PASSWORD, ""));
                 sharedPreferencesUtils.loadPreferenceAsBoolean(KeyValues.IS_REMEMBER_PASSWORD_CHECKED, true);
             }
@@ -235,8 +228,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             AbstractApplication.CONTEXT = getApplicationContext();
 
         } catch (Exception ex) {
-
-            Log.v("ABCD", "" + ex);
 
             DialogUtils.showAlertDialog(this, "Error while initializing controls");
             return;
@@ -304,6 +295,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ItemListDTO itemListDTO = new ItemListDTO();
         itemListDTO.setPageIndex(1);
         itemListDTO.setPageSize(10);
+        itemListDTO.setHandheldRequest(true);
         message.setEntityObject(itemListDTO);
 
 
@@ -312,7 +304,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 RestService.getClient().create(ApiInterface.class);
 
 
-        call = apiService.GetProductCatalog(message);
+        call = apiService.ProductCatalog(message);
         ProgressDialogUtils.showProgressDialog("Please Wait");
 
 
@@ -337,7 +329,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                     omsExceptionMessage = oms;
                                     ProgressDialogUtils.closeProgressDialog();
-                                    common.showAlertType(omsExceptionMessage, LoginActivity.this, getApplicationContext());
+                                    common.showAlertType(omsExceptionMessage, LoginActivity.this, LoginActivity.this);
                                 }
 
 
@@ -361,7 +353,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
                                 } catch (Exception e) {
-                                    common.showUserDefinedAlertType("No items found", LoginActivity.this, getApplicationContext(), "Warning");
+                                    common.showUserDefinedAlertType("No items found", LoginActivity.this, LoginActivity.this, "Warning");
                                     // logException();
                                 }
                                 ProgressDialogUtils.closeProgressDialog();
@@ -376,7 +368,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    Toast.makeText(LoginActivity.this, throwable.toString(), Toast.LENGTH_LONG).show();
                     ProgressDialogUtils.closeProgressDialog();
                 }
             });
@@ -417,19 +408,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     //validateUserSession();
 
-                    //getItemList();
-
-                    //getCustomerList();
+                    /*getProductCatalog();
+                    getCustomerList();*/
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
 
-
-                    getProductCatalog();
-
                     //If User Clicks on remember me username,Password is stored in Shared preferences
                     if (chkRememberPassword.isChecked()) {
-                        sharedPreferencesUtils.savePreference(KeyValues.USER_NAME, inputUserId.getText().toString().trim());
+                        sharedPreferencesUtils.savePreference(KeyValues.EMAIL, inputUserId.getText().toString().trim());
                         sharedPreferencesUtils.savePreference(KeyValues.PASSWORD, inputPassword.getText().toString().trim());
                         sharedPreferencesUtils.savePreference(KeyValues.IS_REMEMBER_PASSWORD_CHECKED, true);
                     }
@@ -460,110 +447,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }.start();
     }
 
-    public void getItemList() {
-
-        if (NetworkUtils.isInternetAvailable(LoginActivity.this)) {
-        } else {
-            DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0007);
-            // soundUtils.alertSuccess(LoginActivity.this,getBaseContext());
-            return;
-        }
-
-        setProgressDialog();
-
-        OMSCoreMessage message = new OMSCoreMessage();
-        message = common.SetAuthentication(EndpointConstants.ItemMaster_FPS_DTO, LoginActivity.this);
-        ItemListDTO itemListDTO = new ItemListDTO();
-        itemListDTO.setPageIndex(0);
-        itemListDTO.setPageSize(0);
-        message.setEntityObject(itemListDTO);
-
-
-        Call<OMSCoreMessage> call = null;
-        ApiInterface apiService =
-                RestService.getClient().create(ApiInterface.class);
-
-
-        call = apiService.GetItemList(message);
-        ProgressDialogUtils.showProgressDialog("Please Wait");
-
-
-        try {
-            //Getting response from the method
-            call.enqueue(new Callback<OMSCoreMessage>() {
-
-                @Override
-                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
-                    ProgressDialogUtils.closeProgressDialog();
-                    if (response.body() != null) {
-
-                        core = response.body();
-
-                        if (core != null) {
-
-                            if ((core.getType().toString().equals("Exception"))) {
-
-                                OMSExceptionMessage omsExceptionMessage = null;
-
-                                for (OMSExceptionMessage oms : core.getOMSMessages()) {
-
-                                    omsExceptionMessage = oms;
-                                    ProgressDialogUtils.closeProgressDialog();
-                                    common.showAlertType(omsExceptionMessage, LoginActivity.this, getApplicationContext());
-                                }
-
-
-                            } else {
-
-                                ProgressDialogUtils.closeProgressDialog();
-
-                                LinkedTreeMap<?, ?> _lstItem = new LinkedTreeMap<String, String>();
-                                _lstItem = (LinkedTreeMap<String, String>) core.getEntityObject();
-
-                                itemTables = new ArrayList<>();
-                                ItemListDTO itemList;
-
-                                try {
-
-                                    itemList = new ItemListDTO(_lstItem.entrySet());
-                                    lstItem = itemList.getResults();
-
-
-                                    //executeItemAsyncTask();
-
-
-                                } catch (Exception e) {
-                                    common.showUserDefinedAlertType("No items found", LoginActivity.this, getApplicationContext(), "Warning");
-                                    // logException();
-                                }
-                                ProgressDialogUtils.closeProgressDialog();
-                            }
-                            ProgressDialogUtils.closeProgressDialog();
-                        }
-                        ProgressDialogUtils.closeProgressDialog();
-                    }
-                    ProgressDialogUtils.closeProgressDialog();
-                }
-
-                // response object fails
-                @Override
-                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    Toast.makeText(LoginActivity.this, throwable.toString(), Toast.LENGTH_LONG).show();
-                    ProgressDialogUtils.closeProgressDialog();
-                }
-            });
-        } catch (Exception ex) {
-
-            try {
-                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", LoginActivity.this);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            ProgressDialogUtils.closeProgressDialog();
-            DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0003);
-        }
-    }
 
     public void getCustomerList() {
 
@@ -577,8 +460,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         OMSCoreMessage message = new OMSCoreMessage();
         message = common.SetAuthentication(EndpointConstants.Customer_FPS_DTO, LoginActivity.this);
         ItemListDTO itemListDTO = new ItemListDTO();
-        itemListDTO.setPageIndex(1);
-        itemListDTO.setPageSize(20);
+        itemListDTO.setPageIndex(0);
+        itemListDTO.setPageSize(0);
+        itemListDTO.setHandheldRequest(true);
         message.setEntityObject(itemListDTO);
 
 
@@ -636,7 +520,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                         lstDto.add(dd);
 
-                                        SimpleDateFormat sdf = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH);
+                                        /*SimpleDateFormat sdf = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH);
                                         Date date = null;
                                         try {
                                             date = sdf.parse(dd.getCreatedOn());
@@ -644,17 +528,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             e.printStackTrace();
                                         }
 
-                                        long startDate = date.getTime();
+                                        long startDate = date.getTime();*/
 
                                         customerTables.add(new CustomerTable(dd.getCustomerID(), dd.getCustomerName(), dd.getCustomerCode(),
-                                                dd.getCustomerType(), dd.getDivision(), dd.getConnectedDepot(), dd.getMobile(),
-                                                dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(), startDate));
+                                                dd.getCustomerType(), dd.getDivision(), dd.getDivisionID().split("[.]")[0], dd.getConnectedDepot(), dd.getMobile(),
+                                                dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone()));
 
                                     }
 
                                     customerList = lstDto;
-
+                                    setProgressDialog();
                                     executeCustomerAsyncTask();
+
                                 }
 
 
@@ -671,7 +556,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    Toast.makeText(LoginActivity.this, throwable.toString(), Toast.LENGTH_LONG).show();
                     ProgressDialogUtils.closeProgressDialog();
                 }
             });
@@ -695,7 +579,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             db.itemDAO().deleteAll();
             db.variantDAO().deleteAll();
 
-            for (ModelDTO dd : itemList) {
+            for (ModelDTO md : itemList) {
 
                 /*SimpleDateFormat sdf = new SimpleDateFormat(DDMMMYYYYHHMMSS_DATE_FORMAT_SLASH);
                 Date date = null;
@@ -710,14 +594,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Log.v("s",s);*/
 
 
+                db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                        md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
 
-                db.itemDAO().insert(new ItemTable(dd.getModelID(), dd.getModelCode(), dd.getModelDescription(),
-                        dd.getImgPath()));
+                for (VariantDTO variantDTO : md.getVarientList()) {
 
-                for(VariantDTO variantDTO : dd.getVarientList()){
-
-                    db.variantDAO().insert(new VariantTable(dd.getModelID(),variantDTO.getMaterialID(),variantDTO.getMDescription(),variantDTO.getMDescriptionLong(),
-                            variantDTO.getMcode(),variantDTO.getModelColor()));
+                    db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
+                            variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                            variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
+                            variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
+                            variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(),variantDTO.getOpenPrice()));
 
                 }
 
@@ -811,7 +697,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                     omsExceptionMessage = oms;
                                     ProgressDialogUtils.closeProgressDialog();
-                                    common.showAlertType(omsExceptionMessage, LoginActivity.this, getApplicationContext());
+                                    common.showAlertType(omsExceptionMessage, LoginActivity.this, LoginActivity.this);
                                 }
 
 
@@ -822,27 +708,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 LinkedTreeMap<String, String> _lstLogindetails = new LinkedTreeMap<String, String>();
                                 _lstLogindetails = (LinkedTreeMap<String, String>) core.getEntityObject();
                                 if (_lstLogindetails != null) {
-                                   /* for (Map.Entry<String, String> entry : _lstLogindetails.entrySet()) {
-                                        if (entry.getKey().equals("UserId")) {
 
-                                            sharedPreferencesUtils.savePreference("RefUserId", entry.getValue().toString());
-                                        }
-                                        if (entry.getKey().equals("UserName")) {
+                                    LoginDTO login;
 
-                                            sharedPreferencesUtils.savePreference("UserName", entry.getValue().toString());
-                                        }
-                                        if (entry.getKey().equals("UserRole")) {
+                                    login = new LoginDTO((((LinkedTreeMap<String, String>) core.getEntityObject()).entrySet()));
 
-                                            sharedPreferencesUtils.savePreference("RefUserRollId", entry.getValue().toString());
-                                        }
+                                    if (login.getUserId() != null && login.getUserName() != null && login.getCustomers() != null) {
+                                        sharedPreferencesUtils.savePreference(KeyValues.USER_ID, login.getUserId().split("[.]")[0]);
+                                        sharedPreferencesUtils.savePreference(KeyValues.USER_NAME, login.getUserName());
+                                        sharedPreferencesUtils.savePreference(KeyValues.CART_HEADERID, login.getCartHeaderID());
+                                        sharedPreferencesUtils.savePreference(KeyValues.CUSTOMER_IDS, gson.toJson(login.getCustomers()));
 
-                                    }*/
+                                    }
+
                                     sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, false);
+                                    sharedPreferencesUtils.savePreference(KeyValues.IS_Customer_LOADED, false);
 
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-
-                                    getItemList();
+                                    getProductCatalog();
 
                                     getCustomerList();
 
@@ -855,14 +737,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    Toast.makeText(LoginActivity.this, throwable.toString(), Toast.LENGTH_LONG).show();
                     ProgressDialogUtils.closeProgressDialog();
                 }
             });
         } catch (Exception ex) {
 
             try {
-                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", getApplicationContext());
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", LoginActivity.this);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -892,7 +773,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             protected void onPostExecute(String msg) {
                 sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
-
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
                 dialog.dismiss();
 
             }
@@ -910,6 +792,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+
             }
 
             @Override
@@ -925,7 +808,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             protected void onPostExecute(String msg) {
-
+                sharedPreferencesUtils.savePreference(KeyValues.IS_Customer_LOADED, true);
+                dialog.dismiss();
             }
         };
 
@@ -971,7 +855,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // Do something for lollipop and above versions
         } else {
 
-            Toast.makeText(getApplicationContext(), "You are running on lower versions of Android version, Some features may not work on your device", Toast.LENGTH_LONG).show();
+            Toast.makeText(LoginActivity.this, "You are running on lower versions of Android version, Some features may not work on your device", Toast.LENGTH_LONG).show();
             //finish();
         }
     }
@@ -980,18 +864,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-
-        /*try {
-
-            EnterpriseDeviceManager enterpriseDeviceManager = (EnterpriseDeviceManager)getSystemService(EnterpriseDeviceManager.ENTERPRISE_POLICY_SERVICE);
-
-            RestrictionPolicy restrictionPolicy = enterpriseDeviceManager.getRestrictionPolicy();
-
-            restrictionPolicy.allowSettingsChanges(false);
-
-        }catch (Exception ex){
-
-        }*/
 
         //android.provider.Settings.System.putInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS, 255);
 

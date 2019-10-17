@@ -26,11 +26,13 @@ public class RestService {
 
                 OkHttpClient client = new OkHttpClient.Builder()
                         .connectTimeout(100, TimeUnit.SECONDS)
-                        .readTimeout(100,TimeUnit.SECONDS).build();
+                        .readTimeout(100, TimeUnit.SECONDS).build();
 
-                         retrofit = new Retrofit.Builder()
-                        .baseUrl("http://192.168.1.22/OMS_Masters/").client(client)
+                retrofit = new Retrofit.Builder()
+                        //.baseUrl("http://192.168.1.107/OMS_Masters/").client(client)
                         //.baseUrl("http://192.168.1.20/OMS_StoreFront/api/").client(client)
+                        .baseUrl("http://192.168.1.20/OMS_StoreFront/api/").client(client)
+                        //.baseUrl("http://192.168.1.62/OMS_Orders/").client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }

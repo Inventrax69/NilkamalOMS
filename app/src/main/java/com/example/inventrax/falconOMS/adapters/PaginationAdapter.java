@@ -2,6 +2,7 @@ package com.example.inventrax.falconOMS.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.room.ItemTable;
+import com.example.inventrax.falconOMS.util.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,17 +28,19 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     OnItemClickListener listener;
     private List<ItemTable> itemsList;
     private boolean isgrid;
+    private FragmentActivity activity;
 
     private static final int ITEM = 0;
     private static final int LOADING = 1;
     private boolean isLoadingAdded = false;
 
 
-    public PaginationAdapter(Context applicationContext, OnItemClickListener mlistener, boolean isgrid) {
+    public PaginationAdapter(Context applicationContext, OnItemClickListener mlistener, boolean isgrid, FragmentActivity activity) {
         this.context = applicationContext;
         listener = mlistener;
         this.isgrid = isgrid;
         itemsList=new ArrayList<>();
+        this.activity = activity;
     }
 
     public PaginationAdapter(boolean isgrid) {
@@ -89,6 +93,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                 itemListView.txtItemName.setText(result.modelCode);
                 itemListView.txtItemDesc.setText(result.modelDescription);
+                //itemListView.txtPrice.setText("Rs" + " " + result.price + "/-");
 
                 if(result.imgPath.equals("")){
                     itemListView.ivItem.setImageResource(R.drawable.no_img);
@@ -97,6 +102,19 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                             .load(result.imgPath)
                             .placeholder(R.drawable.no_img)
                             .into(itemListView.ivItem);
+                }
+
+                if (NetworkUtils.isInternetAvailable(context)) {
+
+                    if(!result.discountCount.isEmpty() && !result.discountCount.equalsIgnoreCase("0")){
+                        itemListView.tvScheme.setClickable(true);
+                        itemListView.tvScheme.setVisibility(View.VISIBLE);
+                    }else {
+                        itemListView.tvScheme.setVisibility(View.GONE);
+                    }
+
+                } else {
+                    itemListView.tvScheme.setVisibility(View.GONE);
                 }
 
 
@@ -128,6 +146,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     */
 
     public void add(ItemTable r) {
+
         itemsList.add(r);
         notifyItemInserted(itemsList.size() - 1);
 
@@ -190,7 +209,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      * Main list's content ViewHolder
      */
     public class ItemListView extends RecyclerView.ViewHolder {
-        private TextView txtItemName, txtItemDesc, txtPrice, txtDiscount;
+        private TextView txtItemName, txtItemDesc, txtPrice, txtDiscount,tvScheme;
         private ImageView ivItem;
         private Button ivAddToCart;
 
@@ -204,6 +223,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             txtDiscount = (TextView) view.findViewById(R.id.txtDiscount);
             ivItem = (ImageView) view.findViewById(R.id.ivItem);
             ivAddToCart = (Button) view.findViewById(R.id.ivAddToCart);
+            tvScheme = (TextView) view.findViewById(R.id.tvScheme);
 
             //on item click
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -232,6 +252,22 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                 }
             });
+
+            tvScheme.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (listener != null) {
+                        int pos = getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION) {
+                            listener.onSchemeClick(pos);
+                        }
+                    }
+
+                }
+            });
+
+
         }
     }
 
@@ -250,6 +286,8 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         void onItemClick(int pos);
 
         void onCartClick(int pos);
+
+        void onSchemeClick(int pos);
 
     }
 }

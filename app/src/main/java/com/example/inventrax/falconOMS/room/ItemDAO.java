@@ -41,4 +41,7 @@ public interface ItemDAO {
     @Query("SELECT * FROM ItemTable WHERE timeStamp = (SELECT MAX(timeStamp) FROM ItemTable)")
     ItemTable getLastRecord();
 
+    @Query("SELECT * FROM ItemTable  ORDER BY  modelCode  DESC")
+    List<ItemTable> getDescendingList();
+
 }

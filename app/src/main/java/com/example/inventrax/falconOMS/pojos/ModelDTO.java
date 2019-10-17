@@ -13,14 +13,34 @@ public class ModelDTO {
     @SerializedName("ModelID")
     private String ModelID;
 
-    @SerializedName("ModelCode")
-    private String ModelCode;
+    @SerializedName("DivisionID")
+    private String DivisionID;
 
-    @SerializedName("ModelDescription")
+    @SerializedName("SegmentID")
+    private String SegmentID;
+
+    @SerializedName("Model")
+    private String Model;
+
+    @SerializedName("ModelDesc")
     private String ModelDescription;
 
-    @SerializedName("ImgPath")
+    @SerializedName("FileNames")
     private String ImgPath;
+
+    @SerializedName("Price")
+    private String price;
+
+    @SerializedName("DiscountCount")
+    private String discountCount;
+
+    @SerializedName("DiscountId")
+    private String discountId;
+
+    @SerializedName("DiscountDesc")
+    private String discountDesc;
+
+
 
     @SerializedName("VarientList")
     private List<VariantDTO> VarientList;
@@ -50,17 +70,17 @@ public class ModelDTO {
                         this.setModelID(entry.getValue().toString());
                     }
                     break;
-                case "ModelCode":
+                case "Model":
                     if (entry.getValue() != null) {
-                        this.setModelCode(entry.getValue().toString());
+                        this.setModel(entry.getValue().toString());
                     }
                     break;
-                case "ModelDescription":
+                case "ModelDesc":
                     if (entry.getValue() != null) {
                         this.setModelDescription(entry.getValue().toString());
                     }
                     break;
-                case "ImgPath":
+                case "FileNames":
                     if (entry.getValue() != null) {
                         this.setImgPath(entry.getValue().toString());
                     }
@@ -91,6 +111,46 @@ public class ModelDTO {
                         this.setVarientList(lst);
                     }
                     break;
+
+                case "Price":
+                    if (entry.getValue() != null) {
+                        this.setPrice(entry.getValue().toString());
+                    }
+                    break;
+
+                case "SegmentID":
+                    if (entry.getValue() != null) {
+                        this.setSegmentID(entry.getValue().toString());
+                    }
+                    break;
+
+                case "DivisionID":
+                    if (entry.getValue() != null) {
+                        this.setDivisionID(entry.getValue().toString());
+                    }
+                    break;
+
+                case "DiscountCount":
+                    if (entry.getValue() != null) {
+                        this.setDiscountCount(entry.getValue().toString());
+                    }
+                    break;
+
+                case "DiscountId":
+                    if (entry.getValue() != null) {
+                        this.setDiscountId(entry.getValue().toString());
+                    }
+                    break;
+
+                case "DiscountDesc":
+                    if (entry.getValue() != null) {
+                        this.setDiscountDesc(entry.getValue().toString());
+                    }
+                    break;
+
+
+
+
             }
 
         }
@@ -106,12 +166,12 @@ public class ModelDTO {
         ModelID = modelID;
     }
 
-    public String getModelCode() {
-        return ModelCode;
+    public String getModel() {
+        return Model;
     }
 
-    public void setModelCode(String modelCode) {
-        ModelCode = modelCode;
+    public void setModel(String model) {
+        Model = model;
     }
 
     public String getModelDescription() {
@@ -152,5 +212,53 @@ public class ModelDTO {
 
     public void setVarientList(List<VariantDTO> varientList) {
         VarientList = varientList;
+    }
+
+    public String getSegmentID() {
+        return SegmentID;
+    }
+
+    public void setSegmentID(String segmentID) {
+        SegmentID = segmentID;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getDivisionID() {
+        return DivisionID;
+    }
+
+    public void setDivisionID(String divisionID) {
+        DivisionID = divisionID;
+    }
+
+    public String getDiscountCount() {
+        return discountCount;
+    }
+
+    public void setDiscountCount(String discountCount) {
+        this.discountCount = discountCount;
+    }
+
+    public String getDiscountId() {
+        return discountId;
+    }
+
+    public void setDiscountId(String discountId) {
+        this.discountId = discountId;
+    }
+
+    public String getDiscountDesc() {
+        return discountDesc;
+    }
+
+    public void setDiscountDesc(String discountDesc) {
+        this.discountDesc = discountDesc;
     }
 }

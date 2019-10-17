@@ -36,6 +36,7 @@
                 android:elevation="3dp">
 
                 <LinearLayout
+                    android:id="@+id/llSort"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
@@ -47,11 +48,12 @@
                         android:layout_weight="0.2"/>
 
                     <ImageView
+                        android:id="@+id/ivSort"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.2"
                         android:src="@drawable/sort"
-                        />
+                        android:rotation="180"/>
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -213,11 +215,13 @@
                 android:layout_height="0dp"
                 android:layout_weight="5.6"
                 android:backgroundTint="@color/colorAccent"
+                android:overScrollMode="never"
                 tools:context=".controller.MainActivity"
                 tools:showIn="@layout/activity_main"
                 android:scrollbars="vertical"
                 android:scrollbarStyle="insideInset"
-                android:scrollbarThumbVertical="@drawable/scrollbar"/>
+                android:scrollbarThumbVertical="@drawable/scrollbar"
+                android:background="@android:color/transparent"/>
 
         <!--    <TextView
                 android:id="@+id/disconnected"
@@ -259,8 +263,8 @@
         android:orientation="vertical"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
-        app:layout_behavior="@string/bottom_sheet_behavior"
-        tools:ignore="MissingPrefix">
+        tools:ignore="MissingPrefix"
+        app:layout_behavior="@string/bottom_sheet_behavior">
 
         <!-- app:layout_behavior="@string/bottom_sheet_behavior"-->
 
@@ -269,6 +273,8 @@
             android:layout_height="@dimen/_140sdp"
             android:orientation="horizontal"
             android:weightSum="3">
+            
+
 
             <ImageView
                 android:id="@+id/ivItemBottom"
@@ -300,14 +306,44 @@
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
-                <com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner
-                    android:id="@+id/spinnerColorSelectionBottom"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
-                </com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner>
+                    <ImageView
+                        android:layout_width="38dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/avail_colors" />
+
+
+                    <com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner
+                        android:id="@+id/spinnerColorSelectionBottom"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4">
+
+                    </com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner>
+
+                    <EditText
+                        android:id="@+id/etPrice"
+                        style="@style/editTextStyleSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:enabled="false"
+                        android:hint="@string/price"
+                        android:layout_weight="0.6"
+                        android:gravity="center|left"
+                        android:singleLine="true"
+                        android:text="NA"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -348,7 +384,8 @@
                             android:layout_height="match_parent"
                             android:hint="@string/qty"
                             style="@style/editTextStyleSmall"
-                            android:inputType="number"/>
+                            android:inputType="number"
+                            android:text="1"/>
 
                     </android.support.design.widget.TextInputLayout>
 

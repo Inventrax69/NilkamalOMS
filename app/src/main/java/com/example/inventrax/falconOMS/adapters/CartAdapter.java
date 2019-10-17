@@ -10,22 +10,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.inventrax.falconOMS.R;
+import com.example.inventrax.falconOMS.room.CartDetails;
+import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by padmaja on 13/07/19.
  */
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
-    private ArrayList items;
+    private List<CartDetails> cartList;
     private Context context;
     OnItemClickListener listener;
 
-    public CartAdapter(Context applicationContext, ArrayList itemArrayList, OnItemClickListener mlistener) {
+    public CartAdapter(Context applicationContext, List<CartDetails> cartList, OnItemClickListener mlistener) {
         this.context = applicationContext;
-        this.items = itemArrayList;
+        this.cartList = cartList;
         listener = mlistener;
     }
+
+    public CartAdapter(){
+
+    }
+
 
     @Override
     public CartAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -35,24 +42,27 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(CartAdapter.ViewHolder viewHolder, int i) {
-        viewHolder.txtItemName.setText(items.get(i).toString());
-       /* viewHolder.txtItemDesc.setText(items.get(i).getHtmlUrl());
-        viewHolder.txtPrice.setText(items.get(i).getHtmlUrl());
-        viewHolder.txtDiscount.setText(items.get(i).getHtmlUrl());*/
 
-        /*Picasso.with(context)
-                .load(items.get(i).getAvatarUrl())
+        CartDetails itemList = (CartDetails) cartList.get(i);
+
+        viewHolder.txtItemName.setText(cartList.get(i).mCode);
+        viewHolder.txtItemDesc.setText(cartList.get(i).mDescription);
+        viewHolder.txtDeliveryDate.setText(cartList.get(i).expectedDeliveryDate);
+        viewHolder.etQtyCart.setText(cartList.get(i).quantity);
+        viewHolder.txtPrice.setText(cartList.get(i).price);
+
+        Picasso.with(context)
+                .load(cartList.get(i).imgPath)
                 .placeholder(R.drawable.load)
-                .into(viewHolder.ivItem);*/
+                .into(viewHolder.ivItem);
 
 
-        viewHolder.ivItem.setImageResource(R.drawable.load);
 
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return cartList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -72,19 +82,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             ivDeleteItem = (ImageView) view.findViewById(R.id.ivDeleteItem);
             etQtyCart = (EditText) view.findViewById(R.id.etQtyCart);
 
-            //on item click
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        int pos = getAdapterPosition();
-                        if (pos != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(pos);
-                        }
-                    }
-                }
-
-            });
 
             ivDeleteItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -93,7 +90,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     if (listener != null) {
                         int pos = getAdapterPosition();
                         if (pos != RecyclerView.NO_POSITION) {
-                            //listener.onCartClick(pos);
+                            listener.onDeletClick(pos);
                         }
                     }
 
@@ -104,9 +101,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     // Item Click listener interface
     public interface OnItemClickListener {
-        void onItemClick(int pos);
 
-        void onCartClick(int pos);
+
+        void onDeletClick(int pos);
 
     }
 }

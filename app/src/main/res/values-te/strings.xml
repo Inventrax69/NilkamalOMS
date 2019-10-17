@@ -115,7 +115,7 @@
     <string name="user_manual">User Manual</string>
     <string name="help_line_number_9676692934">Help Line Number : 9676692934</string>
     <string name="product_catalog">ఉత్పత్తి జాబితా</string>
-    <string name="customerTable">Customer</string>
+    <string name="customer_list">Customer</string>
     <string name="inventory">Inventory</string>
     <string name="order_assistance">Order Assistance</string>
     <string name="order_booking">Order Booking</string>
@@ -136,10 +136,40 @@
     <string name="shipment_2_starndard_delivery">Shipment 2: Starndard Delivery</string>
     <string name="view_">View</string>
     <string name="featured">Featured</string>
-    <string name="qty">Qty</string>
     <string name="edit_account">Edit account</string>
     <string name="change_password">Change password</string>
     <string name="enter_new_password">Enter new password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="back_to_profile">Back to Profile</string>
+    <string name="upload">Upload</string>
+    <string name="on_offer">ON Offer</string>
+    <string name="select_customer">Select Customer</string>
+    <string name="download_e_brochure">Download e-brochure</string>
+    <string name="download_catalog">Download Catalog</string>
+    <string name="download_specifications">Download Specifications</string>
+
+
+    <!--Alerts-->
+    <string name="syncingItems">Items sycning Please wait..!</string>
+    <string name="syncingCustomers">Customers sycning Please wait..!</string>
+    <string name="imgUploadAlert">Please select checkbox to proceed..!</string>
+    <string name="selectCust">Please select cusomer to proceed..!</string>
+    <string name="addTocartAlert">Please enter quantity to proceed..!</string>
+    <string name="divisionIDnotmatched">Division id not matched</string>
+    <string name="PriceNotAvailable">Price not available</string>
+
+
+    <!--Hints-->
+
+    <string name="hint_product_catalog">One stop to explore our all products</string>
+    <string name="hint_customer_list">Tap here to see your customers</string>
+    <string name="hint_inventory">Inventory</string>
+    <string name="hint_order_assistance">We assist you to order in few steps</string>
+    <string name="hint_order_booking">Book you order</string>
+    <string name="hint_compliants">FAQ\'s and Complaints </string>
+    <string name="hint_order_history"> Order History</string>
+    <string name="hint_sd">Schemes and discounts</string>
+    <string name="hint_order_tracking">You can track your order status here</string>
+    <string name="qty">Qty</string>
+    <string name="price">Price</string>
 </resources>

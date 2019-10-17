@@ -28,6 +28,9 @@ public class CustomerTable {
     @ColumnInfo(name = "division")
     public String division;
 
+    @ColumnInfo(name = "divisionId")
+    public String divisionId;
+
     @ColumnInfo(name = "connectedDepo")
     public String connectedDepo;
 
@@ -48,12 +51,13 @@ public class CustomerTable {
     public long timestamp;
 
     @Ignore
-    public CustomerTable(String customerId, String custName, String custCode, String custType, String division, String connectedDepo, String mobile, String primaryID, String salesDistrict, String zone) {
+    public CustomerTable(String customerId, String custName, String custCode, String custType, String division, String divisionId, String connectedDepo, String mobile, String primaryID, String salesDistrict, String zone) {
         this.customerId = customerId;
         this.custName = custName;
         this.custCode = custCode;
         this.custType = custType;
         this.division = division;
+        this.divisionId = divisionId;
         this.connectedDepo = connectedDepo;
         this.mobile = mobile;
         this.primaryID = primaryID;

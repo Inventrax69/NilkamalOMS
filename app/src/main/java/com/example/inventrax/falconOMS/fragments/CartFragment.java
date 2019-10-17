@@ -5,6 +5,10 @@ package com.example.inventrax.falconOMS.fragments;
  */
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.arch.persistence.room.Room;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,8 +18,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -29,16 +37,40 @@ import android.widget.Toast;
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.adapters.CartAdapter;
+import com.example.inventrax.falconOMS.common.Common;
+import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
+import com.example.inventrax.falconOMS.common.constants.ErrorMessages;
+import com.example.inventrax.falconOMS.interfaces.ApiInterface;
+import com.example.inventrax.falconOMS.model.KeyValues;
+import com.example.inventrax.falconOMS.pojos.CartDTO;
+import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
+import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
+import com.example.inventrax.falconOMS.pojos.PriceDTO;
+import com.example.inventrax.falconOMS.room.AppDatabase;
+import com.example.inventrax.falconOMS.room.CartDetails;
+import com.example.inventrax.falconOMS.room.CartHeader;
+import com.example.inventrax.falconOMS.services.RestService;
 import com.example.inventrax.falconOMS.util.DateUtils;
+import com.example.inventrax.falconOMS.util.DialogUtils;
+import com.example.inventrax.falconOMS.util.ExceptionLoggerUtils;
 import com.example.inventrax.falconOMS.util.FragmentUtils;
+import com.example.inventrax.falconOMS.util.NetworkUtils;
+import com.example.inventrax.falconOMS.util.ProgressDialogUtils;
 import com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CartFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String classCode = "OMS_Android_CartFragment";
@@ -59,8 +91,18 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
     private EditText deliveryDatePicker;
     private SearchableSpinner selectVehicleType;
 
+    AppDatabase db;
+    List<CartDetails> items = null;
+    CartAdapter mAdapter;
 
+    private Common common;
+    private ExceptionLoggerUtils exceptionLoggerUtils;
+    private ErrorMessages errorMessages;
+    private Gson gson;
+    RestService restService;
+    private OMSCoreMessage core;
 
+    private  String userId = "";
 
     @Nullable
     @Override
@@ -81,7 +123,13 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
         frame = (FrameLayout) rootView.findViewById(R.id.frame);
 
-        //String itemname = getArguments().getString("itemName");
+        db = Room.databaseBuilder(getActivity(),
+                AppDatabase.class, "room_oms").allowMainThreadQueries().build();
+
+        SharedPreferences sp = getContext().getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
+        userId = sp.getString(KeyValues.USER_ID, "");
+
+        mAdapter = new CartAdapter();
 
         txtstartshopping = (TextView) rootView.findViewById(R.id.txtstartshopping);
         txtstartshopping.setOnClickListener(this);
@@ -135,8 +183,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
             }
         });
 
+        items = new ArrayList<>();
 
-        loadJSON();
 
 
         cbSingleDelivery.setOnCheckedChangeListener(this);
@@ -210,6 +258,64 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
             }
         });
 
+        if (getArguments()!= null) {
+
+            if(getArguments().getBoolean(KeyValues.IS_ITEM_ADDED_TO_CART)){
+                if(NetworkUtils.isInternetAvailable(getContext())){
+                  ((MainActivity) getActivity()).startTime();
+                }
+            }
+        }
+
+        common = new Common();
+        errorMessages = new ErrorMessages();
+        exceptionLoggerUtils = new ExceptionLoggerUtils();
+        restService = new RestService();
+        core = new OMSCoreMessage();
+
+        CartHeader cartHeader = db.cartHeaderDAO().getCartHeader(userId);
+
+        if(NetworkUtils.isInternetAvailable(getContext())) {
+
+            if (!cartHeader.isCreditLimit && !cartHeader.isInActive && (cartHeader.isApproved == 0 || cartHeader.isApproved == 4)) {
+                loadCart();
+                showInActiveDailog();
+            } else {
+
+                if (cartHeader.isCreditLimit) {
+                    showCreditLimitDailog();
+                } else if (cartHeader.isInActive) {
+                    showInActiveDailog();
+                }
+
+            }
+        }else {
+            loadCart();
+            txtOrderFulfilment.setEnabled(false);
+            txtConfirmOrder.setEnabled(false);
+        }
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        if (menu != null) {
+
+            final MenuItem item = menu.findItem(R.id.addItem);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            item.setVisible(true);
+
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
+
     }
 
 
@@ -236,31 +342,99 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
     }
 
 
-    private void loadJSON() {
+    private void deleteItem(int pos){
 
-        final ArrayList<String> items = new ArrayList<>();
-        items.add("Item 1");
-        items.add("Item 2");
-        items.add("Item 3");
+        db.cartDetailsDAO().deleteItem(items.get(pos).materialID,items.get(pos).quantity,items.get(pos).id);
+        loadCart();
+    }
 
-        CartAdapter mAdapter = new CartAdapter(getContext(), items, new CartAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int pos) {
-                Toast.makeText(getContext(), String.valueOf(items.get(pos) + "" + "Item"), Toast.LENGTH_SHORT).show();
+    private void loadCart() {
 
-            }
+        items = db.cartDetailsDAO().getAllCartItems();
+
+        mAdapter = new CartAdapter(getContext(), items, new CartAdapter.OnItemClickListener() {
 
             @Override
-            public void onCartClick(int pos) {
+            public void onDeletClick(int pos) {
+
+                deleteItem(pos);
+
+                if (NetworkUtils.isInternetAvailable(getContext())) {
+                    deleteCartItem(pos);
+                }
 
             }
 
         });
 
+
         rvCartItemsList.setAdapter(mAdapter);
 
     }
 
+    private void showCreditLimitDailog() {
+
+        final Dialog mDialog = new Dialog(getContext());
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setCancelable(true);
+        mDialog.setContentView(R.layout.approval_dialog);
+
+        TextView content = (TextView) mDialog.findViewById(R.id.dialog_content);
+        Button cmfrmBtn = (Button) mDialog.findViewById(R.id.confirm_btn);
+        Button cnclBtn = (Button) mDialog.findViewById(R.id.cancel_btn);
+
+        content.setText("Sending for credit limit approval");
+
+        cnclBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDialog.dismiss();
+            }
+        });
+
+        cmfrmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDialog.dismiss();
+            }
+        });
+
+
+        mDialog.show();
+
+    }
+
+    private void showInActiveDailog() {
+
+        final Dialog mDialog = new Dialog(getContext());
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setCancelable(true);
+        mDialog.setContentView(R.layout.approval_dialog);
+
+        TextView content = (TextView) mDialog.findViewById(R.id.dialog_content);
+        Button cmfrmBtn = (Button) mDialog.findViewById(R.id.confirm_btn);
+        Button cnclBtn = (Button) mDialog.findViewById(R.id.cancel_btn);
+
+        content.setText("One of your item is in-active it should get approval before proceeding");
+
+        cnclBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDialog.dismiss();
+            }
+        });
+
+        cmfrmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDialog.dismiss();
+            }
+        });
+
+
+        mDialog.show();
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -293,57 +467,163 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                 FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container, new ProductCatalogFragment());
                 break;
 
-
         }
     }
 
+    public void fulfilment() {
 
-    public void getFulfilmentOptions() {
-        int one = 0, two = 0, three = 0, four = 0, five = 0, six = 0, seven = 0,
-                eight = 0, nine = 0, ten = 0, eleven = 0, total = 0;
 
-        if (cbPartialFulfilment.isChecked()) {
-            one = 1;
-            total = one;
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, getContext());
+        PriceDTO oDto = new PriceDTO();
 
-        }
-        if (cbSingleDelivery.isChecked()) {
-            two = 2;
-            total = two;
-        }
-        if (cbVehicleTypePreference.isChecked()) {
-            three = 3;
-            total = three;
-        }
+        message.setEntityObject(oDto);
 
-        if (cbPartialFulfilment.isChecked() && cbSingleDelivery.isChecked()) {
-            total = 4;
-        }
-        if (cbPartialFulfilment.isChecked() && cbVehicleTypePreference.isChecked()) {
-            total = 5;
-        }
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService =
+                RestService.getClient().create(ApiInterface.class);
 
-        if (cbPartialFulfilment.isChecked() && cbSingleDelivery.isChecked()
-                && cbVehicleTypePreference.isChecked()) {
-            total = 12;
-        }
 
-        switch (total) {
-            case 1:
-                Toast.makeText(getActivity(), "cbPartialFulfilment", Toast.LENGTH_SHORT).show();
-                break;
-            case 2:
-                Toast.makeText(getActivity(), "cbSingleDelivery", Toast.LENGTH_SHORT).show();
-                break;
-            case 4:
-                Toast.makeText(getActivity(), "cbVehicleTypePreference", Toast.LENGTH_SHORT).show();
-                break;
-            case 5:
-                Toast.makeText(getActivity(), "cbPartialFulfilment && cbSingleDelivery", Toast.LENGTH_SHORT).show();
-                break;
+        call = apiService.OrderFulfilment(message);
+        ProgressDialogUtils.showProgressDialog("Please Wait");
 
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+                    ProgressDialogUtils.closeProgressDialog();
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if (core != null) {
+
+                            if ((core.getType().toString().equals("Exception"))) {
+
+                                OMSExceptionMessage omsExceptionMessage = null;
+
+                                for (OMSExceptionMessage oms : core.getOMSMessages()) {
+
+                                    omsExceptionMessage = oms;
+                                    ProgressDialogUtils.closeProgressDialog();
+                                    common.showAlertType(omsExceptionMessage, getActivity(), getContext());
+                                }
+
+
+                            } else {
+
+
+
+                                ProgressDialogUtils.closeProgressDialog();
+                            }
+                            ProgressDialogUtils.closeProgressDialog();
+                        }
+                        ProgressDialogUtils.closeProgressDialog();
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    Toast.makeText(getContext(), throwable.toString(), Toast.LENGTH_LONG).show();
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+            });
+        } catch (Exception ex) {
+
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", getContext());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
         }
     }
+
+    public void deleteCartItem(int pos) {
+
+
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, getContext());
+        CartDTO oDto = new CartDTO();
+
+        oDto.setCartDetailsID(items.get(pos).cartDetailsId);
+
+        message.setEntityObject(oDto);
+
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService =
+                RestService.getClient().create(ApiInterface.class);
+
+
+        call = apiService.DeleteCartItem(message);
+        ProgressDialogUtils.showProgressDialog("Please Wait");
+
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+                    ProgressDialogUtils.closeProgressDialog();
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if (core != null) {
+
+                            if ((core.getType().toString().equals("Exception"))) {
+
+                                OMSExceptionMessage omsExceptionMessage = null;
+
+                                for (OMSExceptionMessage oms : core.getOMSMessages()) {
+
+                                    omsExceptionMessage = oms;
+                                    ProgressDialogUtils.closeProgressDialog();
+                                    common.showAlertType(omsExceptionMessage, getActivity(), getContext());
+                                }
+
+
+                            } else {
+
+                                loadCart();
+
+                                ProgressDialogUtils.closeProgressDialog();
+                            }
+                            ProgressDialogUtils.closeProgressDialog();
+                        }
+                        ProgressDialogUtils.closeProgressDialog();
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    Toast.makeText(getContext(), throwable.toString(), Toast.LENGTH_LONG).show();
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+            });
+        } catch (Exception ex) {
+
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", getContext());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
+        }
+    }
+
 
     @Override
     public void onResume() {

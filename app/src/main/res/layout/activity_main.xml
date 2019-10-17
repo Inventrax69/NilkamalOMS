@@ -25,9 +25,26 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        />
+
+
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/txtTimer"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_gravity="right|bottom"
+        android:textColor="@color/white"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/snack_bar_action_layout"
@@ -36,6 +53,8 @@
         app:layout_constraintBottom_toTopOf="@+id/navigation"
 
         >
+
+
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.BottomNavigationView

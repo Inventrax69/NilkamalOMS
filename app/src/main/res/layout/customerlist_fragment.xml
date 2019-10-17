@@ -33,8 +33,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:backgroundTint="@color/colorAccent"
+                android:overScrollMode="never"
                 tools:context=".controller.MainActivity"
                 tools:showIn="@layout/activity_main"
+                android:scrollbars="vertical"
+                android:scrollbarStyle="insideInset"
+                android:scrollbarThumbVertical="@drawable/scrollbar"
+                android:background="@android:color/transparent"
                 />
 
             <TextView

@@ -13,7 +13,7 @@ import java.util.Set;
 public class ProfileDTO {
 
     @SerializedName("Email")
-    private String email    ;
+    private String email;
 
     @SerializedName("DOB")
     private String DOB;
@@ -33,58 +33,57 @@ public class ProfileDTO {
     @SerializedName("Lastname")
     private String lastname;
 
-    public ProfileDTO(){
+
+
+
+    public ProfileDTO() {
 
     }
 
 
-    public ProfileDTO(Set<? extends Map.Entry<?, ?>> entries)
-    {
+    public ProfileDTO(Set<? extends Map.Entry<?, ?>> entries) {
 
-        for(Map.Entry<?, ?> entry : entries)
-        {
+        for (Map.Entry<?, ?> entry : entries) {
 
-            switch(entry.getKey().toString())
-            {
+            switch (entry.getKey().toString()) {
 
-                case   "Email":
-                    if(entry.getValue()!=null) {
+                case "Email":
+                    if (entry.getValue() != null) {
                         this.setEmail(entry.getValue().toString());
                     }
                     break;
-                case   "DOB":
-                    if(entry.getValue()!=null) {
+                case "DOB":
+                    if (entry.getValue() != null) {
                         this.setDOB(entry.getValue().toString());
                     }
                     break;
-                case   "Mobile":
-                    if(entry.getValue()!=null) {
+                case "Mobile":
+                    if (entry.getValue() != null) {
                         this.setMobile(entry.getValue().toString());
                     }
                     break;
-                case   "UserID":
-                    if(entry.getValue()!=null) {
+                case "UserID":
+                    if (entry.getValue() != null) {
                         this.setUserID(entry.getValue().toString());
                     }
                     break;
-                case   "FirstName":
-                    if(entry.getValue()!=null) {
+                case "FirstName":
+                    if (entry.getValue() != null) {
                         this.setFirstName(entry.getValue().toString());
                     }
                     break;
 
-                case   "MiddleName":
-                    if(entry.getValue()!=null) {
+                case "MiddleName":
+                    if (entry.getValue() != null) {
                         this.setMiddleName(entry.getValue().toString());
                     }
                     break;
 
-                case   "Lastname":
-                    if(entry.getValue()!=null) {
+                case "Lastname":
+                    if (entry.getValue() != null) {
                         this.setLastname(entry.getValue().toString());
                     }
                     break;
-
 
 
 
@@ -152,4 +151,6 @@ public class ProfileDTO {
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
+
+
 }

@@ -35,14 +35,16 @@ public interface CustomerDAO {
     @Update
     void update(CustomerTable customerTable);
 
-   /* @Query("SELECT timeStamp FROM ItemTable ORDER BY timeStamp DESC LIMIT 1")
-    CustomerListDTO[] getLastRecord ();*/
-
-   /* @Query("SELECT * FROM ItemTable WHERE ID = (SELECT MAX(ID) FROM ItemTable)")
-    void getLastRecord ();*/
+    @Query("SELECT * FROM CustomerTable WHERE customerId=:custId")
+    CustomerTable getCustomerNames(String custId);
 
     @Query("SELECT * FROM CustomerTable WHERE timeStamp = (SELECT MAX(timeStamp) FROM CustomerTable)")
     CustomerTable getLastRecord();
 
+    @Query("SELECT * FROM CustomerTable LIMIT (:pagecount*50)+50  OFFSET (:pagecount*50)")
+    List<CustomerTable> getAllCust(int pagecount);
+
+    @Query("SELECT * FROM CustomerTable WHERE division=:division")
+    CustomerTable getCustomerIdFromDivision(String division);
 
 }

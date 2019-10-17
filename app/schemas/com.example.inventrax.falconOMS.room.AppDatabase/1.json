@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "075cbfb04b214d3764ddea6d93055c89",
+    "identityHash": "24627aa3960246a21ccc25711a1b6940",
     "entities": [
       {
         "tableName": "CustomerTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `custId` TEXT NOT NULL, `custName` TEXT, `custCode` TEXT, `custType` TEXT, `division` TEXT, `connectedDepo` TEXT, `mobile` TEXT, `primaryID` TEXT, `salesDistrict` TEXT, `zone` TEXT, `timeStamp` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `customerId` TEXT NOT NULL, `custName` TEXT, `custCode` TEXT, `custType` TEXT, `division` TEXT, `divisionId` TEXT, `connectedDepo` TEXT, `mobile` TEXT, `primaryID` TEXT, `salesDistrict` TEXT, `zone` TEXT, `timeStamp` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,8 +15,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "custId",
-            "columnName": "custId",
+            "fieldPath": "customerId",
+            "columnName": "customerId",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -41,6 +41,12 @@
           {
             "fieldPath": "division",
             "columnName": "division",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "divisionId",
+            "columnName": "divisionId",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -77,6 +83,330 @@
           {
             "fieldPath": "timestamp",
             "columnName": "timeStamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ItemTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `modelID` TEXT, `divisionID` TEXT, `segmentID` TEXT, `modelCode` TEXT, `modelDescription` TEXT, `imgPath` TEXT, `price` TEXT, `discountCount` TEXT, `discountId` TEXT, `discountDesc` TEXT, `timeStamp` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "modelID",
+            "columnName": "modelID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "divisionID",
+            "columnName": "divisionID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "segmentID",
+            "columnName": "segmentID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "modelCode",
+            "columnName": "modelCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "modelDescription",
+            "columnName": "modelDescription",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imgPath",
+            "columnName": "imgPath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "discountCount",
+            "columnName": "discountCount",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "discountId",
+            "columnName": "discountId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "discountDesc",
+            "columnName": "discountDesc",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timeStamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_ItemTable_modelID",
+            "unique": true,
+            "columnNames": [
+              "modelID"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_ItemTable_modelID` ON `${TABLE_NAME}` (`modelID`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "VariantTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `modelID` TEXT, `divisionID` TEXT, `materialID` TEXT, `mDescription` TEXT, `mDescriptionLong` TEXT, `mCode` TEXT, `modelColor` TEXT, `price` TEXT, `discountCount` TEXT, `discountId` TEXT, `discountDesc` TEXT, `materialImgPath` TEXT, `specsUrl` TEXT, `catalogUrl` TEXT, `brochureUrl` TEXT, `isOpenPrice` INTEGER, FOREIGN KEY(`modelID`) REFERENCES `ItemTable`(`modelID`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "modelID",
+            "columnName": "modelID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "divisionID",
+            "columnName": "divisionID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "materialID",
+            "columnName": "materialID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mDescription",
+            "columnName": "mDescription",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mDescriptionLong",
+            "columnName": "mDescriptionLong",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mCode",
+            "columnName": "mCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "modelColor",
+            "columnName": "modelColor",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "discountCount",
+            "columnName": "discountCount",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "discountId",
+            "columnName": "discountId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "discountDesc",
+            "columnName": "discountDesc",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "materialImgPath",
+            "columnName": "materialImgPath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "specsUrl",
+            "columnName": "specsUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "catalogUrl",
+            "columnName": "catalogUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "brochureUrl",
+            "columnName": "brochureUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isOpenPrice",
+            "columnName": "isOpenPrice",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_VariantTable_modelID",
+            "unique": false,
+            "columnNames": [
+              "modelID"
+            ],
+            "createSql": "CREATE  INDEX `index_VariantTable_modelID` ON `${TABLE_NAME}` (`modelID`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "ItemTable",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "modelID"
+            ],
+            "referencedColumns": [
+              "modelID"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "CartDetails",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `materialID` TEXT, `mCode` TEXT, `mDescription` TEXT, `expectedDeliveryDate` TEXT, `actualDeliveryDate` TEXT, `quantity` TEXT, `timeStamp` TEXT, `imgPath` TEXT, `price` TEXT, `cartHeaderId` TEXT, `cartDetailsId` TEXT, `customerId` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "materialID",
+            "columnName": "materialID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mCode",
+            "columnName": "mCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mDescription",
+            "columnName": "mDescription",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "expectedDeliveryDate",
+            "columnName": "expectedDeliveryDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "actualDeliveryDate",
+            "columnName": "actualDeliveryDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quantity",
+            "columnName": "quantity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "timeStamp",
+            "columnName": "timeStamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imgPath",
+            "columnName": "imgPath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cartHeaderId",
+            "columnName": "cartHeaderId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cartDetailsId",
+            "columnName": "cartDetailsId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "customerId",
+            "columnName": "customerId",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -91,8 +421,8 @@
         "foreignKeys": []
       },
       {
-        "tableName": "ItemTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `itemid` TEXT, `itemname` TEXT, `itemdesc` TEXT, `imageurl` TEXT, `price` TEXT, `timeStamp` TEXT)",
+        "tableName": "UserDivisionCustTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` TEXT, `customerId` TEXT, `divisionId` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -101,40 +431,72 @@
             "notNull": true
           },
           {
-            "fieldPath": "itemid",
-            "columnName": "itemid",
+            "fieldPath": "userId",
+            "columnName": "userId",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "itemname",
-            "columnName": "itemname",
+            "fieldPath": "customerId",
+            "columnName": "customerId",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "itemdesc",
-            "columnName": "itemdesc",
+            "fieldPath": "divisionId",
+            "columnName": "divisionId",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "CartHeader",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` TEXT, `cartHeaderID` INTEGER NOT NULL, `isInActive` INTEGER, `isCreditLimit` INTEGER, `isApproved` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "imageurl",
-            "columnName": "imageurl",
-            "affinity": "TEXT",
+            "fieldPath": "cartHeaderID",
+            "columnName": "cartHeaderID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isInActive",
+            "columnName": "isInActive",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
-            "fieldPath": "price",
-            "columnName": "price",
-            "affinity": "TEXT",
+            "fieldPath": "isCreditLimit",
+            "columnName": "isCreditLimit",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
-            "fieldPath": "timestamp",
-            "columnName": "timeStamp",
-            "affinity": "TEXT",
-            "notNull": false
+            "fieldPath": "isApproved",
+            "columnName": "isApproved",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -149,7 +511,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"075cbfb04b214d3764ddea6d93055c89\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"24627aa3960246a21ccc25711a1b6940\")"
     ]
   }
 }

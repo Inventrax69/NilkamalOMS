@@ -25,6 +25,29 @@ public class VariantDTO {
     @SerializedName("MaterialID")
     private String MaterialID;
 
+    @SerializedName("Price")
+    private String Price;
+
+    @SerializedName("DiscountCount")
+    private String discountCount;
+
+    @SerializedName("DiscountId")
+    private String discountId;
+
+    @SerializedName("DiscountDesc")
+    private String discountDesc;
+
+    @SerializedName("ProductSpecification")
+    private String ProductSpecification;
+
+    @SerializedName("ProductCatalog")
+    private String ProductCatalog;
+
+    @SerializedName("EBrochure")
+    private String EBrochure;
+
+    @SerializedName("IsOpenPrice")
+    private Boolean IsOpenPrice;
 
     @SerializedName("CreatedOn")
     private String createdOn;
@@ -87,6 +110,54 @@ public class VariantDTO {
                 case "Action":
                     if (entry.getValue() != null) {
                         this.setAction(entry.getValue().toString());
+                    }
+                    break;
+
+                case "Price":
+                    if (entry.getValue() != null) {
+                        this.setPrice(entry.getValue().toString());
+                    }
+                    break;
+
+                case "DiscountCount":
+                    if (entry.getValue() != null) {
+                        this.setDiscountCount(entry.getValue().toString());
+                    }
+                    break;
+
+                case "DiscountId":
+                    if (entry.getValue() != null) {
+                        this.setDiscountId(entry.getValue().toString());
+                    }
+                    break;
+
+                case "DiscountDesc":
+                    if (entry.getValue() != null) {
+                        this.setDiscountDesc(entry.getValue().toString());
+                    }
+                    break;
+
+                case "ProductSpecification":
+                    if (entry.getValue() != null) {
+                        this.setProductSpecification(entry.getValue().toString());
+                    }
+                    break;
+
+                case "ProductCatalog":
+                    if (entry.getValue() != null) {
+                        this.setProductCatalog(entry.getValue().toString());
+                    }
+                    break;
+
+                case "EBrochure":
+                    if (entry.getValue() != null) {
+                        this.setEBrochure(entry.getValue().toString());
+                    }
+                    break;
+
+                case "IsOpenPrice":
+                    if (entry.getValue() != null) {
+                        this.setOpenPrice(Boolean.valueOf(entry.getValue().toString()));
                     }
                     break;
 
@@ -160,5 +231,70 @@ public class VariantDTO {
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public String getPrice() {
+        return Price;
+    }
+
+    public void setPrice(String price) {
+        Price = price;
+    }
+
+
+    public String getDiscountCount() {
+        return discountCount;
+    }
+
+    public void setDiscountCount(String discountCount) {
+        this.discountCount = discountCount;
+    }
+
+    public String getDiscountId() {
+        return discountId;
+    }
+
+    public void setDiscountId(String discountId) {
+        this.discountId = discountId;
+    }
+
+    public String getDiscountDesc() {
+        return discountDesc;
+    }
+
+    public void setDiscountDesc(String discountDesc) {
+        this.discountDesc = discountDesc;
+    }
+
+    public String getProductSpecification() {
+        return ProductSpecification;
+    }
+
+    public void setProductSpecification(String productSpecification) {
+        ProductSpecification = productSpecification;
+    }
+
+    public String getProductCatalog() {
+        return ProductCatalog;
+    }
+
+    public void setProductCatalog(String productCatalog) {
+        ProductCatalog = productCatalog;
+    }
+
+    public String getEBrochure() {
+        return EBrochure;
+    }
+
+    public void setEBrochure(String EBrochure) {
+        this.EBrochure = EBrochure;
+    }
+
+    public Boolean getOpenPrice() {
+        return IsOpenPrice;
+    }
+
+    public void setOpenPrice(Boolean openPrice) {
+        IsOpenPrice = openPrice;
     }
 }

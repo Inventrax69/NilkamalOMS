@@ -22,6 +22,9 @@ public class ItemListDTO  {
     @SerializedName("Results")
     private List<ModelDTO> results;
 
+    @SerializedName("IsHandheldRequest")
+    private Boolean isHandheldRequest;
+
     public ItemListDTO() {
 
     }
@@ -91,5 +94,13 @@ public class ItemListDTO  {
 
     public void setPageCount(Double pageCount) {
         this.pageCount = pageCount;
+    }
+
+    public Boolean getHandheldRequest() {
+        return isHandheldRequest;
+    }
+
+    public void setHandheldRequest(Boolean handheldRequest) {
+        isHandheldRequest = handheldRequest;
     }
 }

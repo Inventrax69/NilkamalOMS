@@ -41,7 +41,7 @@ public class Common {
     public OMSCoreMessage SetAuthentication(EndpointConstants Constant, Context context) {
 
         SharedPreferences sp = context.getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
-        userId = sp.getString("RefUserId", "");
+        userId = sp.getString(KeyValues.USER_ID,"");
         OMSCoreMessage message = new OMSCoreMessage();
         OMSCoreAuthentication token = new OMSCoreAuthentication();
         token.setAuthKey(AndroidUtils.getDeviceSerialNumber().toString());
@@ -52,8 +52,8 @@ public class Common {
         token.setRequestNumber(1);
         token.setCookieIdentifier("adada");
         token.setSSOUSerID(0);
-        token.setLoggedInUserID("1");
-        token.setTransactionUserID("1");
+        token.setLoggedInUserID(userId);
+        token.setTransactionUserID(userId);
         message.setType(Constant);
         message.setAuthToken(token);
 

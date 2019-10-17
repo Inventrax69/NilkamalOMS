@@ -18,6 +18,12 @@ public class ItemTable implements Serializable {
     @ColumnInfo(name = "modelID")
     public String modelID;
 
+    @ColumnInfo(name = "divisionID")
+    public String divisionID;
+
+    @ColumnInfo(name = "segmentID")
+    public String segmentID;
+
     @ColumnInfo(name = "modelCode")
     public String modelCode;
 
@@ -27,24 +33,35 @@ public class ItemTable implements Serializable {
     @ColumnInfo(name = "imgPath")
     public String imgPath;
 
-    /*@ColumnInfo(name = "varientList")
-    public String varientList;*/
-
     @ColumnInfo(name = "price")
-    public long price;
+    public String price;
 
-    @ColumnInfo(name = "discount")
-    public long discount;
+    @ColumnInfo(name = "discountCount")
+    public String discountCount;
+
+    @ColumnInfo(name = "discountId")
+    public String discountId;
+
+    @ColumnInfo(name = "discountDesc")
+    public String discountDesc;
+
 
     @ColumnInfo(name = "timeStamp")
     public long timestamp;
 
 
-    public ItemTable(String modelID, String modelCode, String modelDescription, String imgPath) {
+    public ItemTable(String modelID,String divisionID, String segmentID, String modelCode, String modelDescription,
+                     String imgPath, String discountCount,String discountId,String discountDesc) {
         this.modelID = modelID;
+        this.divisionID = divisionID;
+        this.segmentID = segmentID;
         this.modelCode = modelCode;
         this.modelDescription = modelDescription;
         this.imgPath = imgPath;
+        this.discountCount = discountCount;
+        this.discountId = discountId;
+        this.discountDesc = discountDesc;
+
     }
 
 
@@ -54,14 +71,15 @@ public class ItemTable implements Serializable {
     }
 
     @Ignore
-    public ItemTable(int id, String modelID, String modelCode, String modelDescription, String imgPath, long price, long discount, long timestamp) {
+    public ItemTable(int id, String modelID,String segmentID, String modelCode, String modelDescription, String imgPath, String price, String discount, long timestamp) {
         this.id = id;
         this.modelID = modelID;
+        this.segmentID = segmentID;
         this.modelCode = modelCode;
         this.modelDescription = modelDescription;
         this.imgPath = imgPath;
         this.price = price;
-        this.discount = discount;
+        this.discountId = discount;
         this.timestamp = timestamp;
 
     }

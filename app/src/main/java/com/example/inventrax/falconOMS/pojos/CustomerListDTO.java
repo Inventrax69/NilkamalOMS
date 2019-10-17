@@ -34,6 +34,9 @@ public class CustomerListDTO {
     @SerializedName("Division")
     private String division;
 
+    @SerializedName("DivisionID")
+    private String DivisionID;
+
     @SerializedName("ConnectedDepot")
     private String connectedDepot;
 
@@ -101,6 +104,12 @@ public class CustomerListDTO {
                 case "Division":
                     if (entry.getValue() != null) {
                         this.setDivision(entry.getValue().toString());
+                    }
+                    break;
+
+                case "DivisionID":
+                    if (entry.getValue() != null) {
+                        this.setDivisionID(entry.getValue().toString());
                     }
                     break;
                 case "ConnectedDepot":
@@ -251,5 +260,13 @@ public class CustomerListDTO {
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public String getDivisionID() {
+        return DivisionID;
+    }
+
+    public void setDivisionID(String divisionID) {
+        DivisionID = divisionID;
     }
 }

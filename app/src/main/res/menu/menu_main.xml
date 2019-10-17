@@ -11,6 +11,14 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/addItem"
+        android:title="Add Item"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:icon="@drawable/plus"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_profile"
         android:orderInCategory="100"
         android:title="@string/action_profile"

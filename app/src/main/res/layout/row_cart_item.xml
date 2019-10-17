@@ -5,8 +5,6 @@
     android:layout_marginTop="5dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    android:clickable="true"
-    android:focusable="true"
     android:elevation="60dp"
     android:foreground="?android:attr/selectableItemBackground"
     >
@@ -33,35 +31,33 @@
             android:orientation="vertical"
             android:layout_weight="2.1"
             android:layout_marginLeft="@dimen/_5sdp"
-            android:weightSum="3.7">
+            >
 
             <TextView
                 android:id="@+id/txtItemName"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:text="Bed Room Furniture"
                 android:singleLine="true"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:layout_weight="0.9"
                 android:gravity="center|left"/>
 
             <TextView
                 android:id="@+id/txtItemDesc"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:text="Bed Room Furniture"
-                android:singleLine="true"
                 android:textColor="@color/black"
                 android:textStyle="normal"
-                android:layout_weight="0.7"/>
+                android:layout_marginTop="5dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.9"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/txtDeliveryDate"
@@ -72,17 +68,17 @@
                     android:textColor="@color/black"
                     android:textStyle="normal"
                     android:gravity="center|left"
-                    android:layout_weight="0.8"/>
+                    android:layout_weight="0.8"
+                    />
 
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.4"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="@dimen/_10sdp">
+                android:layout_marginBottom="5dp">
 
                 <TextView
                     android:id="@+id/txtPrice"
@@ -95,6 +91,8 @@
                     android:gravity="center|left"
                     android:layout_weight="1"/>
 
+
+
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/textInputQtyBottom"
                     android:layout_width="0dp"
@@ -105,8 +103,9 @@
                         android:id="@+id/etQtyCart"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Qty"
+                        android:hint="@string/qty"
                         android:inputType="number"
+                        android:enabled="false"
                         style="@style/editTextStyleSmall"/>
 
                 </android.support.design.widget.TextInputLayout>
@@ -125,7 +124,8 @@
             android:layout_marginStart="@dimen/_5sdp"
             android:background="@drawable/delete"
             android:layout_weight="0.3"
-            android:clickable="true"/>
+            android:clickable="true"
+            android:focusable="true"/>
 
 
     </LinearLayout>

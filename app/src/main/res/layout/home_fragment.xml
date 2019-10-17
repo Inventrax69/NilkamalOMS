@@ -111,7 +111,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center"
                     android:layout_marginLeft="5dp"
-                    android:text="@string/customerTable"
+                    android:text="@string/customer_list"
                     android:textColor="@color/black" />
 
             </LinearLayout>

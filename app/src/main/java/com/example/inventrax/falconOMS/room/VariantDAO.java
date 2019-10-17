@@ -28,4 +28,6 @@ public interface VariantDAO {
     @Query("SELECT * FROM VariantTable WHERE modelID =:modelId")
     List<VariantTable> getVariants(String modelId);
 
+
+
 }
