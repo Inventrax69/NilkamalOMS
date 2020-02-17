@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String classCode = "OMS_Android_MainActivity";
     private static final String changedForRef = "OMS_Android_MainActivity";
+
     private static final String hi = "OMS_Android_MainActivity";
 
     // this is added for testing
