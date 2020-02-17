@@ -102,6 +102,7 @@ import static android.support.design.bottomnavigation.LabelVisibilityMode.LABEL_
 public class MainActivity extends AppCompatActivity {
 
     private static final String classCode = "OMS_Android_MainActivity";
+    private static final String changedForRef = "OMS_Android_MainActivity";
     private TextView mTextMessage, txtTimer;
     Toolbar toolbar;
     ActionBar actionBar;
