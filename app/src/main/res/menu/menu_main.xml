@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_home"
+        android:icon="@drawable/ic_home"
+        android:orderInCategory="100"
+        android:title="@string/nav_item_home"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/cust_action_search"
+        android:orderInCategory="100"
+        android:visible="false"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/addItem"
+        android:icon="@drawable/add_item_menu"
+        android:orderInCategory="100"
+        android:title="Add Item"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_profile"
+        android:orderInCategory="100"
+        android:title="@string/action_profile"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_notification"
+        android:icon="@drawable/notification"
+        app:actionLayout="@layout/notification_bell_badge"
+        android:orderInCategory="100"
+        android:title="@string/toolbar_notifications"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_sync_info"
+        android:icon="@drawable/sync"
+        android:orderInCategory="100"
+        android:title="Sync"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_cart"
+        android:icon="@drawable/cart"
+        android:orderInCategory="100"
+        android:title="@string/toolbar_cart"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_change"
+        android:icon="@drawable/ic_change"
+        android:orderInCategory="100"
+        android:title="@string/toolbar_customer"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_setting"
+        android:icon="@drawable/settings"
+        android:orderInCategory="100"
+        android:title="@string/toolbar_settings"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="100"
+        android:title="@string/action_logout"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_spinner"
+        android:orderInCategory="100"
+        android:visible="false"
+        app:actionViewClass="android.widget.Spinner"
+        app:showAsAction="never" />
+
+
+</menu>

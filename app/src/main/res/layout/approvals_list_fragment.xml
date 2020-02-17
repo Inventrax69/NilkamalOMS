@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <RelativeLayout
+        android:id="@+id/mainRelative"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <CheckBox
+            android:id="@+id/checkBoxSelectAll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:visibility="gone"
+            android:text="@string/select_all" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_below="@+id/checkBoxSelectAll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/colorAccent"
+            android:overScrollMode="never"
+            tools:context=".controller.MainActivity"
+            tools:showIn="@layout/activity_main"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="insideInset"
+            android:scrollbarThumbVertical="@drawable/scrollbar"
+            android:background="@android:color/transparent"/>
+
+        <LinearLayout
+            android:id="@+id/linear_check"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp"
+            android:weightSum="2"
+            android:paddingTop="@dimen/_4sdp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true">
+
+            <EditText
+                android:id="@+id/etRemarks"
+                style="@style/editTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:drawablePadding="@dimen/activity_login_padding_left"
+                android:hint="Remarks"
+                android:inputType="text"
+                android:singleLine="false" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp">
+
+                <TextView
+                    android:id="@+id/txtReject"
+                    android:layout_weight="1"
+                    android:text="@string/reject"
+                    android:gravity="center"
+                    android:textStyle="bold|italic"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:drawableLeft="@drawable/ic_close_black_24dp"
+                    android:background="@color/orange_red"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_15sdp"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <TextView
+                    android:id="@+id/txtAccept"
+                    android:layout_weight="1"
+                    android:text="@string/approve"
+                    android:gravity="center"
+                    android:textStyle="bold|italic"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:drawableLeft="@drawable/ic_check_black_24dp"
+                    android:background="@color/green"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_15sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/noitemRelative"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="@string/no_approvals_n_pending"
+            android:gravity="center"
+            android:textSize="@dimen/_20sdp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

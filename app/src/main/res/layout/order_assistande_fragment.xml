@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/coordinatorLayout">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="10"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:id="@+id/llOne"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="2">
+
+            <TextView
+                android:id="@+id/tvSelectedCustomer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_13sdp"
+                android:textStyle="bold"
+                android:padding="@dimen/_5sdp"
+                android:drawableEnd="@drawable/ic_arrow_drop_down_black_24dp"
+                android:background="@drawable/boarder"
+                android:textColor="@color/black"
+                android:layout_marginBottom="10dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/file_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:weightSum="2"
+            android:layout_weight="8"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.CoordinatorLayout
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/btnOpenCamera"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_margin="2dp"
+                    android:src="@android:color/transparent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|right"
+                        android:text="@string/add"
+                        android:textSize="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_16sdp"
+                        android:elevation="@dimen/_12sdp"
+                        android:textColor="@android:color/white"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </android.support.design.widget.CoordinatorLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:elevation="4dp">
+
+                <TextView
+                    android:id="@+id/txtBack"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/boarder"
+                    android:gravity="center"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:text="@string/back"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:background="@color/colorAccent"
+                    android:layout_weight="1"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:drawableRight="@drawable/send"/>
+
+                    <TextView
+                        android:id="@+id/txtUploadImg"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.5"
+                        android:gravity="left|center"
+                        android:text="@string/upload"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:paddingLeft="@dimen/_15sdp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

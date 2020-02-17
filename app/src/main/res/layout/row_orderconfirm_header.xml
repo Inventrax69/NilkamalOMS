@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#f3f3f3"
+        app:cardElevation="4dp"
+        android:layout_margin="8dp"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="vertical"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/tv_customerName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5sp"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:drawableLeft="@drawable/account"
+                android:drawableTint="@color/colorAccent"
+                android:drawablePadding="10dp"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_total"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5sp"
+                    android:textSize="11sp"
+                    android:textColor="@color/black"
+                    android:drawablePadding="10dp"/>
+
+                <TextView
+                    android:id="@+id/tv_total_tax"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5sp"
+                    android:textSize="11sp"
+                    android:textColor="@color/black"
+                    android:drawablePadding="10dp"/>
+
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:weightSum="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_creditLimit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5sp"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/credit_limit"
+                    android:drawableTint="@color/colorAccent"
+                    android:drawablePadding="10dp"/>
+
+                <TextView
+                    android:id="@+id/tv_Status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5sp"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:drawableTint="@color/colorAccent"
+                    android:drawablePadding="10dp"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:background="@color/black"
+                android:alpha="0.1"/>
+
+            <com.example.inventrax.falconOMS.util.CustomExpandableListView
+                android:id="@+id/expandableDeliveryDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indicatorRight="?android:attr/expandableListPreferredItemIndicatorRight"
+                android:divider="@android:color/darker_gray"
+                android:dividerHeight="0.5dp" />
+
+<!--
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_cartDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>-->
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

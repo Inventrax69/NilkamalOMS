@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:textColor="@color/white"
+        android:background="@drawable/notification"
+        android:id="@+id/badge_icon_button"/>
+
+    <TextView
+        android:id="@+id/badge_textView"
+        android:layout_width="@dimen/_10sdp"
+        android:layout_height="@dimen/_10sdp"
+        android:layout_alignTop="@id/badge_icon_button"
+        android:layout_alignRight="@id/badge_icon_button"
+        android:layout_alignEnd="@id/badge_icon_button"
+        android:paddingEnd="8dp"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:gravity="center"
+        android:textColor="#FFF"
+        android:textSize="@dimen/_8sdp"
+        android:backgroundTint="@color/orange_red"
+        android:background="@drawable/ic_brightness_1_black_24dp"/>
+
+</RelativeLayout>

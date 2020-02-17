@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OMS</string>
+    <!-- Navigation Drawer -->
+
+    <string name="msg">आपकी एप्लिकेशन भाषा को हिंदी में बदल दिया गया है।</string>
+
+
+    <string-array name="language_array">
+        <item>English</item>
+        <item>తెలుగు </item>
+        <item>हिंदी</item>
+    </string-array>
+
+    <string name="drawer_open">खुला</string>
+    <string name="drawer_close">बंद करे</string>
+    <string name="userHint">उपयोगकर्ता नाम</string>
+    <string name="passHint">Enter Password</string>
+    <string name="userEmail">ईमेल दर्ज करें</string>
+    <string name="verificationCode">पुष्टि संख्या</string>
+
+    <string name="btnSubmit">लॉग इन करें</string>
+    <string name="rememberMe">मुझे याद रखना</string>
+    <string name="username">उपयोगकर्ता नाम</string>
+
+    <string name="hintUser">उपयोगकर्ता नाम</string>
+    <string name="hintPass">Enter Password</string>
+
+    <string name="close">बंद करे</string>
+    <string name="cancel">रद्द</string>
+
+    <string name="menu_masterdata">मुख्य आंकडे</string>
+    <string name="menu_orders">ऑर्डर</string>
+
+    <string name="menu_dashboard">डैशबोर्ड</string>
+    <string name="menu_admin">व्यवस्थापक</string>
+
+    <string name="search">खोज</string>
+
+    <string name="confirm">की पुष्टि करें</string>
+
+    <string name="selectPrinter">Select Printer</string>
+    <string name="save">Save</string>
+
+    <string name="title_activity_navigation_menu">NavigationMenu</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_about">About</string>
+    <string name="action_profile">Profile</string>
+    <string name="title_activity_navigation_bar">NavigationBar</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="update">Update</string>
+    <string name="fragment_about_txt_version">Version :</string>
+    <string name="fragment_about_txt_visit">Visit :</string>
+    <string name="fragment_about_txt_copy_right">Copyright © 2016 Inventrax, All rights reserved.</string>
+    <string name="fragment_about_txt_inventrax_link">www.inventrax.com</string>
+    <string name="nav_item_home">होम</string>
+    <string name="title_about">About</string>
+    <string name="fragment_about_txt_ReleaseDate">Release Date :</string>
+
+    <string name="crash_toast_text">App Crashed</string>
+    <string name="toolbar_cart">कार्ट</string>
+    <string name="toolbar_home">होम</string>
+    <string name="toolbar_profile">प्रोफ़ाइल</string>
+    <string name="toolbar_ItemList">Item List</string>
+    <string name="toolbar_product">Product Details</string>
+    <string name="toolbar_approvals">Approvals</string>
+    <string name="toolbar_approvals_list">Approvals List</string>
+    <string name="toolbar_sad_list">S &amp; D  List</string>
+    <string name="toolbar_approvals_details">Approvals Details</string>
+    <string name="toolbar_credit_limit">Credit Limit Details</string>
+    <string name="toolbar_orderconfirmation">Order Confirmation</string>
+    <string name="toolbar_ordercheckout">Order Checkout</string>
+    <string name="toolbar_customerList">Customer List</string>
+    <string name="toolbar_orderassist">Order Assistance</string>
+    <string name="toolbar_deliverytracking">Delivery Tracking</string>
+    <string name="toolbar_complaints">Complaints</string>
+    <string name="toolbar_SandD">Schems &amp; Discounts</string>
+    <string name="toolbar_orderbooking">Order Booking</string>
+    <string name="toolbar_orderhistory">Order History</string>
+    <string name="toolbar_settings">Settings</string>
+    <string name="toolbar_search">खोज</string>
+    <string name="ok">OK</string>
+
+
+
+    <string name="print">Print</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="forgotString">Enter the email address associated with your account. \n We will mail you a link to reset your password. </string>
+    <string name="OTPstring">We have sent you an SMS with a OTP \n to your registered number for verification </string>
+    <string name="internet">No internet connection, Please make sure your device is connected to the internet</string>
+
+    <string name="filter">Filter</string>
+    <string name="sort_">Sort</string>
+    <string name="forgot_password">Forgot Password ?</string>
+    <string name="login">लॉग इन करें</string>
+    <string name="forgot_password_">Forgot Password</string>
+    <string name="sent_to_mail">Send verification email</string>
+    <string name="back_to_login">Back to Login</string>
+    <string name="mobile_number">Mobile number</string>
+    <string name="didn_t_receive_otp">Didn\'t Receive OTP ?</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="verify">Verify</string>
+    <string name="your_cart_is_empty">Your Cart is Empty</string>
+    <string name="start_shopping">Start Shopping</string>
+    <string name="continue_shopping">Continue Shopping</string>
+    <string name="available_credit_limit">Available Credit limit</string>
+    <string name="total">Total</string>
+    <string name="order_fulfilment">Order Fulfillment</string>
+    <string name="confirm_order">Confirm Order</string>
+    <string name="multiple_deliveries">Multiple Deliveries</string>
+    <string name="single_delivery">Single Delivery</string>
+    <string name="select_delivery_date">Select delivery date</string>
+    <string name="vehicle_type_preference">Vehicle Type Preference</string>
+    <string name="blanket_order_for_phased_deliveries">Blanket Order (for phased deliveries)</string>
+    <string name="proceed">Proceed</string>
+    <string name="check_update">Check Update</string>
+    <string name="user_manual">User Manual</string>
+    <string name="help_line_number_9676692934">Help Line Number : 9676692934</string>
+    <string name="product_catalog">Product Catalog</string>
+    <string name="customer_list">ग्राहक</string>
+    <string name="inventory">इन्वेंटरी</string>
+    <string name="approvals">अनुमोदन</string>
+    <string name="approve">Approve</string>
+    <string name="order_assistance">आदेश सहायता</string>
+    <string name="order_booking">ऑर्डर बुकिंग</string>
+    <string name="complaints">शिकायतें</string>
+    <string name="history">इतिहास</string>
+    <string name="schemes_amp_discounts"><![CDATA[Schemes & Discounts]]></string>
+    <string name="order_tracking"> क्रम नज़र रखना</string>
+    <string name="description_">विवरण</string>
+    <string name="specifications">विशेष विवरण</string>
+    <string name="package_contents">Package Contents</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="back">Back</string>
+    <string name="continuetxt">Continue</string>
+    <string name="delivery_options">Delivery Options</string>
+    <string name="default_delivery">Default Delivery</string>
+    <string name="shipment_1_starndard_delivery">Shipment 1: Starndard Delivery</string>
+    <string name="view_items">View Items</string>
+    <string name="shipment_2_starndard_delivery">Shipment 2: Starndard Delivery</string>
+    <string name="view_">View</string>
+    <string name="featured">Featured</string>
+    <string name="edit_account">Edit account</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="back_to_profile">Back to Profile</string>
+    <string name="upload">Upload</string>
+    <string name="on_offer">ON Offer</string>
+    <string name="download_e_brochure">Download e-brochure</string>
+    <string name="download_catalog">Download Catalog</string>
+    <string name="download_specifications">Download Specifications</string>
+
+
+
+    <!--Alerts-->
+    <string name="syncingData">Data sycning Please wait..!</string>
+    <string name="syncingItems">Items sycning Please wait..!</string>
+    <string name="syncingCustomers">Customers sycning Please wait..!</string>
+    <string name="imgUploadAlert">Please select checkbox to proceed.</string>
+    <string name="selectCust">Please select cusomer to proceed.</string>
+    <string name="addTocartAlert">Please enter quantity to proceed.</string>
+    <string name="divisionIDnotmatched">Division id not matched</string>
+    <string name="PriceNotAvailable">Price not available</string>
+
+
+    <!--Hints-->
+
+    <string name="hint_product_catalog">One stop to explore our all products</string>
+    <string name="hint_customer_list">Tap here to see your customers</string>
+    <string name="hint_inventory">Inventory</string>
+    <string name="hint_order_assistance">We assist you to order in few steps</string>
+    <string name="hint_order_booking">Book you order</string>
+    <string name="hint_compliants">FAQ\'s and Complaints </string>
+    <string name="hint_eInformation">E-information</string>
+    <string name="hint_order_history"> Order History</string>
+    <string name="hint_sd">Schemes and discounts</string>
+    <string name="hint_order_tracking">You can track your order status here</string>
+    <string name="qty">Qty</string>
+    <string name="select_customer">Select Customer</string>
+    <string name="price">Price</string>
+    <string name="select_all">Select All</string>
+    <string name="active_cart">Active Cart</string>
+
+    <!---->
+    <string name="file_picker_app_name" translatable="false">MaterialFilePicker</string>
+    <string name="action_close">Close</string>
+    <string name="empty_directory_hint">Empty directory</string>
+    <string name="type_archive">Archive</string>
+    <string name="type_certificate">Certificate</string>
+    <string name="type_directory">Directory</string>
+    <string name="type_document">File</string>
+    <string name="type_drawing">Picture</string>
+    <string name="type_excel">Spreadsheet</string>
+    <string name="type_image">Image</string>
+    <string name="type_music">Music</string>
+    <string name="type_video">Video</string>
+    <string name="type_pdf">PDF document</string>
+    <string name="type_power_point">Presentation</string>
+    <string name="type_word">Document</string>
+    <string name="type_apk">APK</string>
+
+
+
+    <string name="order_type">Order Type</string>
+    <string name="sold_to_party">Sold to party</string>
+    <string name="sales_organization">Sales organization</string>
+    <string name="dist_channel">Dist. Channel</string>
+    <string name="division">Division</string>
+    <string name="ship_to_party">Ship to party</string>
+    <string name="payment_terms">Payment Terms</string>
+    <string name="inco_terms">Inco Terms</string>
+    <string name="po_number">PO Number</string>
+    <string name="po_date">PO Date</string>
+    <string name="address">Address</string>
+    <string name="freight_paid_by_customer">Freight paid by customer</string>
+    <string name="so_number">SO Number</string>
+    <string name="sap_so_number">SAP SO Number</string>
+    <string name="so_header">SO Header</string>
+    <string name="so_details">SO Details</string>
+    <string name="add_items">Add Items</string>
+    <string name="submit_create">Submit</string>
+    <string name="so_information">SO Information</string>
+    <string name="create_so">Create SO</string>
+    <string name="enter_details">Enter Details</string>
+    <string name="enter_item">Item Code</string>
+    <string name="next">Next</string>
+    <string name="add_items_to_proceed">Please add items to proceed.</string>
+    <string name="enterQty">Please enter quantity</string>
+    <string name="dashboard">डैशबोर्ड</string>
+    <string name="launch_string">कृपया प्रतीक्षा करें, डेटा डाउनलोड करने में कुछ मिनट लगते हैं, कृपया मुख्य स्क्रीन लॉन्च करने वाले ऐप को बंद न करें</string>
+
+
+    <string name="e_info">ई जानकारी</string>
+    <string name="orders_list">आदेश सूची</string>
+
+    <string name="change_password">Change password</string>
+    <string name="create_new">Create new password</string>
+    <string name="confirm_password">Confirm new password</string>
+    <string name="old_password">Old password</string>
+
+    <string name="toolbar_notifications">Notifications</string>
+    <string name="submit">जमा करें</string>
+    <string name="clear">Clear</string>
+    <string name="send">Send</string>
+    <string name="add">Add</string>
+    <string name="product_information">Product information</string>
+    <string name="gst">GST</string>
+    <string name="data_sync">Please wait.. It takes few minutes to sync data</string>
+    <string name="no_custmer">No customer is mapped</string>
+    <string name="order_created">Order Created</string>
+    <string name="so_success_text">Your order has placed succefully with SO Number(s):</string>
+    <string name="order_failed">Order creation failed</string>
+    <string name="get_started">Get Started</string>
+    <string name="skip">Skip</string>
+    <string name="grand_total">Grand total</string>
+    <string name="grand_total_with_taxes">Grand total (With Taxes)</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="enter_url">Enter Url</string>
+    <string name="base_price">Base Price</string>
+    <string name="delivery_date">Delivery Date</string>
+    <string name="approval_request">Approval Request</string>
+    <string name="reject">Reject</string>
+    <string name="remarks">Remarks</string>
+    <string name="open_price">Open Price</string>
+    <string name="in_active">In-Active</string>
+    <string name="credit_limit">Credit Limit</string>
+    <string name="schemes_and_discounts">Schemes and Discounts</string>
+    <string name="no_approvals_n_pending">No Approvals   Pending</string>
+    <string name="available_stock">Available Stock</string>
+    <string name="site_no">Site No.</string>
+    <string name="site_name">Site Name</string>
+    <string name="available_qty">Available Qty.</string>
+    <string name="check_available_qty">Check Available Qty</string>
+    <string name="proceed_with_aq">Proceed with AQ</string>
+    <string name="proceed_with_oq">Proceed with OQ</string>
+    <string name="material_code">Material Code</string>
+    <string name="material_description">Material Description</string>
+    <string name="order_quantity">Order Quantity</string>
+    <string name="available_quantity">Available Quantity</string>
+    <string name="cart_ref_no">Cart Ref. No.</string>
+    <string name="date">Date</string>
+    <string name="customer">Customer</string>
+    <string name="quantity">Quantity</string>
+    <string name="amount">Amount</string>
+    <string name="credit_limit_details">Credit Limit Details</string>
+    <string name="total_cl_rs">Total CL (Rs.)</string>
+    <string name="available_cl_rs">Available CL (Rs.)</string>
+    <string name="required_cl_rs">Required CL (Rs.)</string>
+    <string name="failed">Failed</string>
+    <string name="expected_time_of_arrival">Expected time of arrival</string>
+    <string name="item_count">Item count</string>
+    <string name="enter_ship_to_party">Enter ship to party</string>
+    <string name="set_priority">Set priority</string>
+    <string name="offer_items">Offer Items</string>
+    <string name="order_history">Order History</string>
+    <string name="ready_furniture">Ready Furniture</string>
+    <string name="view_all">View All</string>
+    <string name="mattresses">Mattresses</string>
+    <string name="plastics">Plastics</string>
+    <string name="name">Name</string>
+    <string name="location">Location</string>
+    <string name="code">Code</string>
+    <string name="order_successfully_completed">Order Successfully Completed</string>
+    <string name="select_the_file_s_to_upload">Select the file(s) to upload</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="upload_pdf">Upload pdf</string>
+    <string name="proceed_cart">Proceed Cart</string>
+    <string name="scm_cart">SCM cart</string>
+    <string name="pending_cart">Pending Cart</string>
+    <string name="scm_approval">SCM Approval</string>
+    <string name="place_order">Place Order</string>
+    <string name="done">DONE</string>
+    <string name="no_pending_cart">No pending cart</string>
+    <string name="customer_approval">Customer Approval</string>
+    <string name="toolbar_customer">Change Customer</string>
+
+
+</resources>

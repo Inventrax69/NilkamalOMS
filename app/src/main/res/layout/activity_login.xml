@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    style="@style/AppTheme.NoActionBar.FullScreen"
+    android:background="@color/white"
+    android:animateLayoutChanges="true"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rlLogin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:id="@+id/main_relative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="@dimen/_110sdp"
+                android:layout_height="50dp"
+                app:cardUseCompatPadding="true"
+                android:layout_alignParentRight="true"
+                app:cardElevation="5dp"
+                android:id="@+id/card">
+
+                <Spinner
+                    android:id="@+id/languagespinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp" />
+
+            </android.support.v7.widget.CardView>
+
+            <ImageView
+                android:layout_below="@+id/card"
+                android:id="@+id/ivNilkamal"
+                android:layout_width="@dimen/_140sdp"
+                android:layout_height="@dimen/_60sdp"
+                android:layout_gravity="center"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/nilkamal_login"
+                android:layout_margin="10dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/login_tool_relative"
+            android:layout_below="@+id/main_relative"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_48sdp">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/login"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/colorAccent"
+                android:layout_marginRight="5dp"/>
+
+
+        </RelativeLayout>
+
+        <EditText
+            android:layout_below="@+id/login_tool_relative"
+            android:id="@+id/etUsername"
+            style="@style/editTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/email_img"
+            android:drawablePadding="@dimen/activity_login_padding_left"
+            android:hint="@string/userHint"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
+            android:layout_margin="@dimen/_10sdp"
+            android:drawableStart="@drawable/email_img" />
+
+        <EditText
+            android:layout_below="@+id/etUsername"
+            android:id="@+id/etPass"
+            style="@style/editTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:drawableLeft="@drawable/lock_img"
+            android:drawablePadding="@dimen/activity_login_padding_left"
+            android:fontFamily="sans-serif"
+            android:hint="@string/passHint"
+            android:inputType="textPassword"
+            android:singleLine="true" />
+
+        <LinearLayout
+            android:id="@+id/linear_check"
+            android:layout_below="@+id/etPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="@dimen/_10sdp"
+            android:weightSum="2">
+
+            <CheckBox
+                android:id="@+id/cbRememberMe"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/etPass"
+                android:buttonTint="@color/colorAccent"
+                android:text="@string/rememberMe"
+                android:visibility="visible"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/tvForgotPwd"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/forgot_password"
+                android:gravity="center_vertical|right"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginRight="5dp"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:layout_below="@+id/linear_check"
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="0.25"
+            android:background="@drawable/button_shape"
+            android:text="@string/submit"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/ivSettings"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/settings"
+            android:backgroundTint="#1F9EF6" />
+
+        <ImageView
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_90sdp"
+            android:src="@drawable/inventrax_logo" />
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>
