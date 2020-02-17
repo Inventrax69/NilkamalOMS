@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String changedForRef = "OMS_Android_MainActivity";
 
     // this is added for testing
+    // this is for second chance
 
 
     private TextView mTextMessage, txtTimer;
