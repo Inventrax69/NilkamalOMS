@@ -103,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String classCode = "OMS_Android_MainActivity";
     private static final String changedForRef = "OMS_Android_MainActivity";
+
+    // this is added for testing
+
+
     private TextView mTextMessage, txtTimer;
     Toolbar toolbar;
     ActionBar actionBar;
