@@ -146,7 +146,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
     private AppCompatButton ivAddToCartBottom;
     private ImageView ivItemBottom;
     private SearchableSpinner spinnerColorSelectionBottom;
-    private TextView txtItemNameBottom, txtTimer;
+    private TextView txtItemNameBottom, txtTimer,txtCustmerName;
     private EditText etQtyBottom, etPrice;
     private PaginationAdapter mAdapter;
     private Common common;
@@ -203,11 +203,19 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                     customerId = getArguments().getString("customerId");
             } else {
                 if (customerId == null || customerId.isEmpty())
-                    if (userRoleName.equals("DTD")) { } else showShipToPartyDialog();
+                    if (userRoleName.equals("DTD")) {
+
+                    } else {
+                        showShipToPartyDialog();
+                    }
             }
         } catch (NullPointerException e) {
             if (customerId == null || customerId.isEmpty())
-                if (userRoleName.equals("DTD")) { } else showShipToPartyDialog();
+                if (userRoleName.equals("DTD")) {
+
+                } else {
+                    showShipToPartyDialog();
+                }
         }
 
         frame = (FrameLayout) rootView.findViewById(R.id.frame);
@@ -228,6 +236,17 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         etPrice = (EditText) rootView.findViewById(R.id.etPrice);
         cbPriority = (CheckBox) rootView.findViewById(R.id.cbPriority);
         txtTimer = (TextView) getActivity().findViewById(R.id.txtTimer);
+        txtCustmerName = (TextView) rootView.findViewById(R.id.txtCustmerName);
+
+        if (userRoleName.equals("DTD")) {
+            txtCustmerName.setVisibility(View.GONE);
+        } else {
+            txtCustmerName.setVisibility(View.VISIBLE);
+            if(db.customerDAO().getAllCustomerName(customerId)==null)
+                txtCustmerName.setText("");
+            else
+                txtCustmerName.setText(db.customerDAO().getAllCustomerName(customerId));
+        }
 
         spinnerColorSelectionBottom = (SearchableSpinner) rootView.findViewById(R.id.spinnerColorSelectionBottom);
         spinnerColorSelectionBottom.setOnItemSelectedListener(this);
@@ -822,7 +841,6 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
             try {
                 ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", getActivity());
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -1167,13 +1185,13 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                             try {
                                 itemsList = new ArrayList<>();
                                 recyclerView.setAdapter(null);
+                                getArguments().remove("customerId");
                             } catch (NullPointerException ex) {
                                 //
                             }
-                            getArguments().remove("customerId");
+
                             loadFormControl();
                         } else {
-                            //SnackbarUtils.showSnackbar(coordLayout, "No customer are there", Snackbar.LENGTH_SHORT);
                             Toast.makeText(getActivity(), "No customer are there", Toast.LENGTH_SHORT).show();
                         }
                         dialog.dismiss();

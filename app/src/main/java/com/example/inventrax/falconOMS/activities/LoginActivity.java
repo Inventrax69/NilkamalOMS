@@ -488,6 +488,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         startActivity(intent);
                                         finish();
 
+                                    }else{
+
+                                        sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
+                                        sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
+
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+
                                     }
 
                                     ProgressDialogUtils.closeProgressDialog();
@@ -536,10 +545,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void getCustomerList() {
 
         if (NetworkUtils.isInternetAvailable(LoginActivity.this)) { } else {
-
             DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0007);
             return;
-
         }
 
         OMSCoreMessage message = new OMSCoreMessage();
@@ -584,7 +591,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         } else {
 
                             try {
-
 
                                 LinkedTreeMap<String, String> _lstItem = new LinkedTreeMap<String, String>();
                                 _lstItem = (LinkedTreeMap<String, String>) core.getEntityObject();
