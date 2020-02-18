@@ -100,12 +100,6 @@ import static android.support.design.bottomnavigation.LabelVisibilityMode.LABEL_
 public class MainActivity extends AppCompatActivity {
 
     private static final String classCode = "OMS_Android_MainActivity";
-    private static final String changedForRef = "OMS_Android_MainActivity";
-
-    private static final String hi = "OMS_Android_MainActivity";
-
-    // this is added for testing
-    // this is for second chance
 
     private TextView mTextMessage, txtTimer;
     Toolbar toolbar;
@@ -924,38 +918,11 @@ public class MainActivity extends AppCompatActivity {
             protected String doInBackground(Void... params) {
 
                 String msg = "";
-                syncCart();
-/*                if(!db.cartHeaderDetailsDao().getUpdateCount()){
+                if(db.cartHeaderDetailsDao().getUpdateCount()){
                     syncCart();
                 }else{
-                    cartList=new ArrayList<>();
-                    if (db.cartDetailsDAO().getCartItemsWithOutApprovals() != null) {
-
-                        List<CartDetails> cartDetailsList = new ArrayList<>();
-                        cartDetailsList = db.cartDetailsDAO().getCartItemsWithOutApprovals();
-
-                        productCatalogs cDto;
-
-                        for (int i = 0; i < cartDetailsList.size(); i++) {
-                            cDto = new productCatalogs();
-                            cDto.setMaterialMasterID(cartDetailsList.get(i).materialID);
-                            cDto.setMCode(cartDetailsList.get(i).mCode);
-                            cDto.setQuantity(cartDetailsList.get(i).quantity);
-                            cDto.setCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
-                            cDto.setImagePath(cartDetailsList.get(i).imgPath);
-                            cDto.setPrice(cartDetailsList.get(i).price);
-                            cDto.setShipToPartyCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
-                            cDto.setCartDetailsID("0");
-                            cDto.setMaterialPriorityID(String.valueOf(cartDetailsList.get(i).isPriority));
-                            cDto.setDeliveryDate(cartDetailsList.get(i).deliveryDate);
-                            cDto.setCartHeaderID(Integer.parseInt(cartDetailsList.get(i).cartHeaderId));
-                            cartList.add(cDto);
-                        }
-
-                    }
-
-                    addToCart();
-                }*/
+                    syncCart();
+                }
 
                 return msg;
             }
@@ -972,6 +939,7 @@ public class MainActivity extends AppCompatActivity {
             task.execute();
         }
     }
+
 
     public void deleteCartItemReservation() {
 
