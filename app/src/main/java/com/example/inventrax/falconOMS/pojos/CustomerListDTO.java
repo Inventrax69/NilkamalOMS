@@ -62,8 +62,11 @@ public class CustomerListDTO implements Serializable {
     @SerializedName("Type")
     private String Type;
 
+    @SerializedName("City")
+    private String City;
 
-    public CustomerListDTO(){
+
+    public CustomerListDTO() {
 
     }
 
@@ -140,8 +143,15 @@ public class CustomerListDTO implements Serializable {
                     }
                     break;
 
-                case   "Results":
-                    if(entry.getValue()!=null) {
+                case "City":
+                    if (entry.getValue() != null) {
+                        this.setCity(entry.getValue().toString());
+                    }
+                    break;
+
+
+                case "Results":
+                    if (entry.getValue() != null) {
                         List<LinkedTreeMap<?, ?>> treemapList = (List<LinkedTreeMap<?, ?>>) entry.getValue();
                         List<CustomerListDTO> lst = new ArrayList<CustomerListDTO>();
                         for (int i = 0; i < treemapList.size(); i++) {
@@ -159,12 +169,11 @@ public class CustomerListDTO implements Serializable {
                     }
                     break;
 
-                 case "Action":
+                case "Action":
                     if (entry.getValue() != null) {
                         this.setAction(entry.getValue().toString());
                     }
                     break;
-
 
 
             }
@@ -309,5 +318,13 @@ public class CustomerListDTO implements Serializable {
 
     public void setType(String type) {
         Type = type;
+    }
+
+    public String getCity() {
+        return City;
+    }
+
+    public void setCity(String city) {
+        City = city;
     }
 }

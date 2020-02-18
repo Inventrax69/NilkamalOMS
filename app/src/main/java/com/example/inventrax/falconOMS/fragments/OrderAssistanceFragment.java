@@ -94,8 +94,6 @@ public class OrderAssistanceFragment extends Fragment implements View.OnClickLis
     private TextView txtBack, txtUploadImg, tvSelectedCustomer;
     private CoordinatorLayout coordLayout;
     private FloatingActionButton btnOpenCamera;
-    private int camCount = 4;
-    private String imgStringOne = "", imgStringTwo = "", imgStringThree = "";
     private ErrorMessages errorMessages;
     private Gson gson;
     private OMSCoreMessage core;

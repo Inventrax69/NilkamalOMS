@@ -32,6 +32,9 @@ public interface VariantDAO {
     @Query("SELECT modelID FROM VariantTable WHERE materialID = :materialID")
     int getModelId(int materialID);
 
+    @Query("SELECT divisionID FROM VariantTable WHERE materialID = :materialID")
+    int getMaterialDivisionID(int materialID);
+
     @Query("SELECT discountDesc FROM VariantTable WHERE modelID=:modelID AND discountId > 0")
     List<String> getDiscountDesc(int modelID);
 

@@ -205,19 +205,24 @@
             android:layout_weight="6.5"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp">
 
-            <TextView
-                android:id="@+id/txtCustmerName"
+            <android.support.v7.widget.CardView
+
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_2sdp"
-                android:padding="@dimen/_3sdp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:background="@drawable/boarder"
-                android:text="@string/featured" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txtCustomerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:textStyle="bold" />
+
+            </android.support.v7.widget.CardView>
 
 
             <android.support.v7.widget.RecyclerView

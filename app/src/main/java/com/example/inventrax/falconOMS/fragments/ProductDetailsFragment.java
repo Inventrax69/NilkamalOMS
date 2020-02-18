@@ -43,7 +43,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -52,7 +51,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.activities.CartActivity;
@@ -88,6 +86,7 @@ import com.example.inventrax.falconOMS.util.ProgressDialogUtils;
 import com.example.inventrax.falconOMS.util.SharedPreferencesUtils;
 import com.example.inventrax.falconOMS.util.SnackbarUtils;
 import com.example.inventrax.falconOMS.util.ViewDialog;
+import com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -128,8 +127,9 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
     VariantTable selectedVariant = null;
     String selectedVariantImage = "", partnerId = "", userId = "", customerIDs = "", materialId = "";
     UserDivisionCustTable userDivisionCustTable;
-    private String specsUrl = "", catalogUrl = "", brochureUrl = "", price = "", conditionType = "", shipToParty = "";
+    private String specsUrl = "", catalogUrl = "", brochureUrl = "", price = "", conditionType = "", shipToParty = "", customerId = "";
     private boolean isCustomerMatched = false, isFromSearchResult = false;
+    private int materialDivisionId ;
 
     AlertDialog dialog;
 
@@ -147,6 +147,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
     DownloadManager dm = null;
     long downloadID;
 
+    SharedPreferences sp;
     ViewDialog viewDialog;
 
 
@@ -170,16 +171,29 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
         // To disable Bottom navigation bar
         ((MainActivity) getActivity()).SetNavigationVisibility(false);
-
+        sp = getActivity().getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
         if (getArguments() == null) {
             return;
         }
         coordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.coordinatorLayout);
         modelId = getArguments().getString(KeyValues.MODEL_ID);
 
+        // result from Intelli-Search
+        materialDivisionId = getArguments().getInt(KeyValues.MATERIAL_DIVISION_ID);
+
+
+
         varient = new ArrayList<>();
 
         db = new RoomAppDatabase(getActivity()).getAppDatabase();
+
+        // Handling Product Catalog result when non DTD/ChannelPartner case
+        if(!sp.getString(KeyValues.USER_ROLE_NAME,"").equalsIgnoreCase(KeyValues.USER_ROLE_NAME_DTD)){
+            if (getArguments().getString(KeyValues.CUSTOMER_ID) != null) {
+                if (!getArguments().getString(KeyValues.CUSTOMER_ID).isEmpty() || getArguments().getString(KeyValues.CUSTOMER_ID) != null)
+                    customerId = getArguments().getString(KeyValues.CUSTOMER_ID);
+            }
+        }
 
         SharedPreferences sp = getContext().getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
         userId = sp.getString(KeyValues.USER_ID, "");
@@ -236,6 +250,8 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
                 if (isFromSearchResult) {
 
+                    // selected item from intelli-search
+
                     ArrayAdapter myAdap = (ArrayAdapter) spinnerVariant.getAdapter(); //cast to an ArrayAdapter
 
                     int spinnerPosition = myAdap.getPosition(selectedVar);
@@ -245,6 +261,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
 
                 } else {
+                    // change result of variant spinner
                     selectedVar = spinnerVariant.getSelectedItem().toString();
                 }
 
@@ -281,6 +298,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         core = new OMSCoreMessage();
         cartList = new ArrayList<>();
 
+        // To handle intelli - search result material
         if ((getArguments().getInt(KeyValues.MID)) != 0) {
 
             int materialId = getArguments().getInt(KeyValues.MID);
@@ -292,15 +310,23 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
             isFromSearchResult = true;
         }
 
+        // Handling Intelli-Search result when non DTD/ChannelPartner case
+        if(!sp.getString(KeyValues.USER_ROLE_NAME,"").equalsIgnoreCase(KeyValues.USER_ROLE_NAME_DTD)) {
+            if (materialDivisionId != 0) {
+                showShipToPartyDialog();
+            }
+        }
+
     }
 
     public void updateUI(VariantTable variantTable) {
 
+        // offers tag visible only when internet is available or discount id not equals to 0
         if (NetworkUtils.isInternetAvailable(getActivity())) {
 
-            if(!variantTable.discountId.equalsIgnoreCase("0")){
+            if (!variantTable.discountId.equalsIgnoreCase("0")) {
                 availOffer.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 availOffer.setVisibility(View.GONE);
             }
 
@@ -315,6 +341,8 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         txtPrice.setText(variantTable.price);
         materialId = variantTable.materialID;
         UserDivisionCustTable division;
+
+        // getting customer id based on selected variant divison
         userDivisionCustTable = db.userDivisionCustDAO().getPartner(variantTable.divisionID);
         if (userDivisionCustTable != null) {
             partnerId = userDivisionCustTable.customerId;
@@ -322,6 +350,9 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         } else {
             division = null;
         }
+
+       /* customer division and material division should match to proceed to add to cart in case of DTD/ChannelPartner
+        in case of non DTD/ChannelPartner case, selected customer division id and material division should match*/
 
         if (division != null && !division.equals("")) {
             isCustomerMatched = true;
@@ -389,6 +420,14 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
             final MenuItem item1 = menu.findItem(R.id.cust_action_search);
             item1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             item1.setVisible(false);
+
+            final MenuItem customerSelection = menu.findItem(R.id.action_change);
+            customerSelection.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            customerSelection.setVisible(false);
+
+            final MenuItem settings = menu.findItem(R.id.action_setting);
+            settings.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            settings.setVisible(false);
 
         }
 
@@ -630,6 +669,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
                     DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0002);
+                    viewDialog.hideDialog();
                     ProgressDialogUtils.closeProgressDialog();
                 }
             });
@@ -652,6 +692,10 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         switch (v.getId()) {
 
             case R.id.txtAddtoCart:
+
+                if(!sp.getString(KeyValues.USER_ROLE_NAME,"").equalsIgnoreCase(KeyValues.USER_ROLE_NAME_DTD)){
+                    partnerId = customerId;
+                }
 
                 if (!partnerId.isEmpty() || !partnerId.equalsIgnoreCase("")) {
 
@@ -1018,34 +1062,44 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         }
     }
 
-    AlertDialog b;
-
     protected void showShipToPartyDialog() {
 
-        List customerCodes = new ArrayList();
-
-        customerCodes = db.customerDAO().getAllCustomerCodesName();
-
-        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
         View promptView = layoutInflater.inflate(R.layout.shiptoparty_dialog, null);
-        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+
+        List<String> customerCodes;
+        final List<String> customerIds;
+
+        customerCodes = db.customerDAO().getCustomerNamesBasedOnMDivision(String.valueOf(materialDivisionId));
+        customerIds = db.customerDAO().getCustomerIdsBasedOnMDivision(String.valueOf(materialDivisionId));
 
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(getContext(), R.layout.row_text, customerCodes);
-        final AutoCompleteTextView shipToPartyAutoComplete = (AutoCompleteTextView)
-                promptView.findViewById(R.id.shipToPartyAutoComplete);
+        if (customerCodes.size() == 0) {
+            SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "No customer is mapped", ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
+            return;
+        }
 
-        String customerShiptoParty = db.customerDAO().getCustomerCode(partnerId);
+        ArrayAdapter adapter1 = new ArrayAdapter<String>(getActivity(), R.layout.row_text, customerCodes);
+        final SearchableSpinner customerListDropDown = (SearchableSpinner) promptView.findViewById(R.id.customerListDropDown);
+        customerListDropDown.setAdapter(adapter1);
+        customerListDropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // customerListDropDown.getSelectedItem().toString();
+                customerId = customerIds.get(i);
+            }
 
-        shipToPartyAutoComplete.setText(customerShiptoParty);
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-        shipToPartyAutoComplete.setAdapter(adapter);
-
+            }
+        });
 
         final AlertDialog d = new AlertDialog.Builder(getActivity())
                 .setView(promptView)
+                .setCancelable(false)
                 .setPositiveButton("OK", null) //Set to null. We override the onclick
-                .setNegativeButton("CLEAR", null)
+                //  .setNegativeButton("CLEAR", null)
                 .create();
 
         d.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -1058,34 +1112,30 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
                     @Override
                     public void onClick(View view) {
-                        shipToParty = shipToPartyAutoComplete.getText().toString();
-                        if (NetworkUtils.isInternetAvailable(getContext())) {
-                            if (!price.equals("")) {
-                                addToCart();
-                            } else {
-                                SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, getString(R.string.PriceNotAvailable), ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);
+
+                        /*if (!customerId.isEmpty() || customerId != null) {
+*//*                            Bundle bundle = new Bundle();
+                            bundle.putString("customerId", customerId);
+                            FragmentUtils.replaceFragmentWithBackStackWithBundle(getActivity(), R.id.container, new ProductCatalogFragment(), bundle);*//*
+
+                            try {
+                                getArguments().remove("customerId");
+                            } catch (NullPointerException ex) {
+                                //
                             }
+
                         } else {
-                            Intent i = new Intent(getActivity(), CartActivity.class);
-                            Bundle extras = new Bundle();
-                            extras.putBoolean(KeyValues.IS_ITEM_ADDED_TO_CART, true);
-                            startActivity(i);
-                        }
+                            Toast.makeText(getActivity(), "No customer are there", Toast.LENGTH_SHORT).show();
+                        }*/
                         dialog.dismiss();
                     }
                 });
 
-                Button b1 = d.getButton(AlertDialog.BUTTON_NEGATIVE);
-                b1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        shipToPartyAutoComplete.setText("");
-                    }
-                });
             }
         });
 
         d.show();
+
 
     }
 

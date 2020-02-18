@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b289d33d9aa94c251a9790301c557731",
+    "identityHash": "43ca5c47f571adab60a8156471fdefa1",
     "entities": [
       {
         "tableName": "CustomerTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `customerId` TEXT NOT NULL, `customerName` TEXT, `customerCode` TEXT, `customerType` TEXT, `customerTypeID` TEXT, `division` TEXT, `divisionId` TEXT, `connectedDepo` TEXT, `mobile` TEXT, `primaryID` TEXT, `salesDistrict` TEXT, `zone` TEXT, `timeStamp` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `customerId` TEXT NOT NULL, `customerName` TEXT, `customerCode` TEXT, `customerType` TEXT, `customerTypeID` TEXT, `division` TEXT, `divisionId` TEXT, `connectedDepo` TEXT, `mobile` TEXT, `primaryID` TEXT, `salesDistrict` TEXT, `zone` TEXT, `city` TEXT, `timeStamp` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -83,6 +83,12 @@
           {
             "fieldPath": "zone",
             "columnName": "zone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "city",
+            "columnName": "city",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -624,7 +630,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b289d33d9aa94c251a9790301c557731\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"43ca5c47f571adab60a8156471fdefa1\")"
     ]
   }
 }

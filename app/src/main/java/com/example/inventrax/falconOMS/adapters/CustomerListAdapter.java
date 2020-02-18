@@ -49,6 +49,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
         viewHolder.txtCustmerName.setText((custList.customerName));
         viewHolder.txtPersonName.setText((custList.customerId));
         viewHolder.txtPersonName.setText((custList.customerType));
+        viewHolder.txtPlace.setText((custList.city));
 
         ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
         // generate random color

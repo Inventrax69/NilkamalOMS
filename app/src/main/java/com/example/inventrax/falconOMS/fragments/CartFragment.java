@@ -646,7 +646,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                 alert = builder.create();
 
                 //Setting the title manually
-                alert.setTitle("Alert");
+                alert.setTitle(getString(R.string.confirm));
                 alert.show();
 
                 break;
@@ -770,7 +770,9 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                     btnPOD.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
+
                                             if (isRFMcustomerPartnerDTOS.size() > 0) {
+                                                boolean check=false;
                                                 int[] headerIds = new int[isRFMcustomerPartnerDTOS.size()];
                                                 List<CartProcessDTO> cartProcessDTOS=new ArrayList<>();
                                                 for (int i = 0; i < fullfilmentDTOS.size(); i++) {
@@ -780,16 +782,24 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                     cartProcessDTOS.add(cartProcessDTO);
                                                     for(int j=0;j< isRFMcustomerPartnerDTOS.size();j++){
                                                         if(isRFMcustomerPartnerDTOS.get(j).getCartHeaderID() == Integer.parseInt(fullfilmentDTOS.get(i).getCartHeaderID())){
-                                                            headerIds[i] = isRFMcustomerPartnerDTOS.get(i).getCartHeaderID();
+                                                            headerIds[j] = isRFMcustomerPartnerDTOS.get(j).getCartHeaderID();
                                                             CartProcessDTO cartProcessDTO1=new CartProcessDTO();
-                                                            cartProcessDTO1.setCartHeaderID(isRFMcustomerPartnerDTOS.get(i).getCartHeaderID());
-                                                            cartProcessDTO1.setISProceessID(Integer.parseInt(isRFMcustomerPartnerDTOS.get(i).getIsProcessID()));
+                                                            cartProcessDTO1.setCartHeaderID(isRFMcustomerPartnerDTOS.get(j).getCartHeaderID());
+                                                            if(Integer.parseInt(isRFMcustomerPartnerDTOS.get(j).getIsProcessID())==0){
+                                                                check=true;
+                                                            }
+                                                            cartProcessDTO1.setISProceessID(Integer.parseInt(isRFMcustomerPartnerDTOS.get(j).getIsProcessID()));
                                                             cartProcessDTOS.set(i,cartProcessDTO1);
                                                         }
                                                     }
                                                 }
+                                                if(check){
+                                                    SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0025, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
+                                                }else{
+                                                    ProcessCart(headerIds, fullfilmentDTOS,cartProcessDTOS);
+                                                }
                                                 // ProceedWithOrderQty(headerIds, fullfilmentDTOS);
-                                                ProcessCart(headerIds, fullfilmentDTOS,cartProcessDTOS);
+
                                             }
 
                                         }

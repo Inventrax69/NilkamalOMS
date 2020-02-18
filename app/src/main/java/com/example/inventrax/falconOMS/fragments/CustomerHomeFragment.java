@@ -18,8 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.model.KeyValues;
@@ -28,7 +29,6 @@ import com.example.inventrax.falconOMS.room.CustomerTable;
 import com.example.inventrax.falconOMS.room.RoomAppDatabase;
 import com.example.inventrax.falconOMS.util.FragmentUtils;
 import com.example.inventrax.falconOMS.util.SharedPreferencesUtils;
-import com.squareup.picasso.Picasso;
 
 public class CustomerHomeFragment extends Fragment implements View.OnClickListener {
 
@@ -109,10 +109,18 @@ public class CustomerHomeFragment extends Fragment implements View.OnClickListen
             txtCustomerDivision.setText(divisionType);
             txtCustomerMobileNum.setText(mobileNo);
 
-            Picasso.with(getActivity())
+            /*Picasso.with(getActivity())
                     .load(R.drawable.hello_logo)
                     .placeholder(R.drawable.load)
-                    .into(CustImg);
+                    .into(CustImg);*/
+
+            GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(CustImg);
+            Glide.with(getActivity())
+                    .load(R.drawable.hello_logo)
+                    .placeholder(R.drawable.load)
+                    .centerCrop()
+                    .crossFade()
+                    .into(imageViewTarget);
 
             llOrderBooking.setOnClickListener(this);
             llComplaints.setOnClickListener(this);

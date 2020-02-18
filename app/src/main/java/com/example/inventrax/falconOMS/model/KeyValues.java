@@ -8,6 +8,9 @@ public class KeyValues {
     //SharedPreferences File names
     public static final String MY_PREFS="myPrefs";
 
+    //Home fragment
+    public static final String SELECTED_CUSTOMER_ID_GLOBAL = "selected_customerID";
+
     // language pref
     public static final String SELECTED_LANG="selectedLang";
     public static final String SETTINGS_URL="settings_url";
@@ -30,6 +33,7 @@ public class KeyValues {
     public static final String USER_ROLE_NAME= "user_role_name";
     public static final String OPEN_CATALOG= "openCatalog";
     public static final String MID= "mID";
+    public static final String MATERIAL_DIVISION_ID= "mDivisionID";
     public static final String IS_ITEM_MASTER_UPDATE= "isItemMasterUpdate";
     public static final String IS_CUSTOMER_MASTER_UPDATE= "isCustomerMasterUpdate";
     public static final String IS_NOTIFICATION_AVAILABLE= "isNotificationAvailable";
@@ -100,8 +104,9 @@ public class KeyValues {
     public static final String URL_ODR_GET_PRICE= "Orders/GetPrice";
     public static final String URL_MAS_VEHICLE_LIST = "Master/VehicleList";
 
+    //ProductCatalog
 
-
+    public static final String CUSTOMER_ID = "customerID";
 
 
 

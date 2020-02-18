@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.graphics.Color;
-import android.graphics.ImageFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,7 +36,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -60,11 +58,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.inventrax.falconOMS.R;
-import com.example.inventrax.falconOMS.activities.CartActivity;
 import com.example.inventrax.falconOMS.activities.LoginActivity;
 import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.adapters.OffersAdapter;
-import com.example.inventrax.falconOMS.adapters.PaginationAdapter;
 import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.Log.Logger;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
@@ -146,7 +142,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
     private AppCompatButton ivAddToCartBottom;
     private ImageView ivItemBottom;
     private SearchableSpinner spinnerColorSelectionBottom;
-    private TextView txtItemNameBottom, txtTimer,txtCustmerName;
+    private TextView txtItemNameBottom, txtTimer,txtCustomerName;
     private EditText etQtyBottom, etPrice;
     private PaginationAdapter mAdapter;
     private Common common;
@@ -166,11 +162,13 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
     CheckBox cbPriority;
     int count = 0;
     ViewDialog viewDialog;
+    SharedPreferences sp;
 
     @Override
     public void onStart() {
         recyclerView.scrollToPosition(postion_value);
         super.onStart();
+
     }
 
     @Override
@@ -192,11 +190,12 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
     private void loadFormControl() {
         // To enable Bottom navigation bar
         ((MainActivity) getActivity()).SetNavigationVisibility(true);
-        SharedPreferences sp = getActivity().getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
+        sp = getActivity().getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
         userId = sp.getString(KeyValues.USER_ID, "");
         cusomerIDs = sp.getString(KeyValues.CUSTOMER_IDS, "");
         userRoleName = sp.getString(KeyValues.USER_ROLE_NAME, "");
         db = new RoomAppDatabase(getActivity()).getAppDatabase();
+        sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, getActivity());
         try {
             if (getArguments().getString("customerId") != null) {
                 if (!getArguments().getString("customerId").isEmpty() || getArguments().getString("customerId") != null)
@@ -236,16 +235,18 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         etPrice = (EditText) rootView.findViewById(R.id.etPrice);
         cbPriority = (CheckBox) rootView.findViewById(R.id.cbPriority);
         txtTimer = (TextView) getActivity().findViewById(R.id.txtTimer);
-        txtCustmerName = (TextView) rootView.findViewById(R.id.txtCustmerName);
+        txtCustomerName = (TextView) rootView.findViewById(R.id.txtCustomerName);
+
+
 
         if (userRoleName.equals("DTD")) {
-            txtCustmerName.setVisibility(View.GONE);
+            txtCustomerName.setVisibility(View.GONE);
         } else {
-            txtCustmerName.setVisibility(View.VISIBLE);
+            txtCustomerName.setVisibility(View.VISIBLE);
             if(db.customerDAO().getAllCustomerName(customerId)==null)
-                txtCustmerName.setText("");
+                txtCustomerName.setText("");
             else
-                txtCustmerName.setText(db.customerDAO().getAllCustomerName(customerId));
+                txtCustomerName.setText(db.customerDAO().getCustomerCode(customerId));
         }
 
         spinnerColorSelectionBottom = (SearchableSpinner) rootView.findViewById(R.id.spinnerColorSelectionBottom);
@@ -384,6 +385,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         setHasOptionsMenu(true);
         postion_value = 0;
         pagecount = 0;
+        ((MainActivity) getActivity()).SetNavigationVisibility(true);
         try {
             itemsList = new ArrayList<>();
             recyclerView.setAdapter(null);
@@ -575,6 +577,10 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                             behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                             frame.setVisibility(View.GONE);
 
+                            if(!sp.getString(KeyValues.USER_ROLE_NAME,"").equalsIgnoreCase(KeyValues.USER_ROLE_NAME_DTD)){
+                                partnerId = customerId;
+                            }
+
                             cartList = new ArrayList<>();
                             if (!partnerId.isEmpty() || !partnerId.equalsIgnoreCase("")) {
 
@@ -682,10 +688,12 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                                         SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, getString(R.string.PriceNotAvailable), ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);
                                                     }
                                                 } else {
-                                                    Intent i = new Intent(getActivity(), CartActivity.class);
+                                                    /*Intent i = new Intent(getActivity(), CartActivity.class);
                                                     Bundle extras = new Bundle();
                                                     extras.putBoolean(KeyValues.IS_ITEM_ADDED_TO_CART, true);
-                                                    startActivity(i);
+                                                    startActivity(i);*/
+
+                                                    updateCartItemsCount();
                                                 }
                                             } else {
                                                 SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, getString(R.string.divisionIDnotmatched), ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
@@ -947,7 +955,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
                                 Calendar calendar = Calendar.getInstance();
                                 long mills = calendar.getTimeInMillis();
-                                sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, getActivity());
+
                                 sharedPreferencesUtils.savePreference("timer", mills);
                                 long timer = sharedPreferencesUtils.loadPreferenceAsLong("timer");
                                 ((MainActivity) getActivity()).startTime(300000 - (mills - timer));
@@ -955,13 +963,15 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                 viewDialog.hideDialog();
                                 SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Item added to cart", ContextCompat.getColor(getActivity(), R.color.dark_green), Snackbar.LENGTH_SHORT);
 
-                                BottomNavigationMenuView menuView = (BottomNavigationMenuView) ((BottomNavigationView) getActivity().findViewById(R.id.navigation)).getChildAt(0);
+                                /*BottomNavigationMenuView menuView = (BottomNavigationMenuView) ((BottomNavigationView) getActivity().findViewById(R.id.navigation)).getChildAt(0);
                                 BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(1);
 
                                 View notificationBadge = LayoutInflater.from(getActivity()).inflate(R.layout.notification_badge, menuView, false);
                                 TextView textView = notificationBadge.findViewById(R.id.counter_badge);
                                 textView.setText(String.valueOf(db.cartDetailsDAO().getCartDetailsCountIsApproved()));
-                                itemView.addView(notificationBadge);
+                                itemView.addView(notificationBadge);*/
+
+                                updateCartItemsCount();
 
 
 
@@ -1001,6 +1011,21 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         }
     }
 
+
+    private void updateCartItemsCount(){
+        SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Item added to cart", ContextCompat.getColor(getActivity(), R.color.dark_green), Snackbar.LENGTH_SHORT);
+
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) ((BottomNavigationView) getActivity().findViewById(R.id.navigation)).getChildAt(0);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(1);
+
+        View notificationBadge = LayoutInflater.from(getActivity()).inflate(R.layout.notification_badge, menuView, false);
+        TextView textView = notificationBadge.findViewById(R.id.counter_badge);
+        textView.setText(String.valueOf(db.cartDetailsDAO().getCartDetailsCountIsApproved()));
+        itemView.addView(notificationBadge);
+
+    }
+
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void showAvailableOffers(int pos) {
 
@@ -1031,6 +1056,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         postion_value = pos;
         Bundle bundle = new Bundle();
         bundle.putString(KeyValues.MODEL_ID, itemsList.get(pos).modelID);
+        bundle.putString(KeyValues.CUSTOMER_ID, customerId);
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         productDetailsFragment.setArguments(bundle);
         FragmentUtils.addFragmentWithBackStack(getActivity(), R.id.container, productDetailsFragment);
@@ -1150,6 +1176,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 // customerListDropDown.getSelectedItem().toString();
                 customerId = customerIds.get(i);
+                sharedPreferencesUtils.savePreference(KeyValues.SELECTED_CUSTOMER_ID_GLOBAL,customerId);
             }
 
             @Override
@@ -1177,6 +1204,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                     public void onClick(View view) {
 
                         if (!customerId.isEmpty() || customerId != null) {
+
 /*                            Bundle bundle = new Bundle();
                             bundle.putString("customerId", customerId);
                             FragmentUtils.replaceFragmentWithBackStackWithBundle(getActivity(), R.id.container, new ProductCatalogFragment(), bundle);*/
@@ -1212,6 +1240,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.toolbar_ItemList));
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayUseLogoEnabled(false);
+        ((MainActivity) getActivity()).SetNavigationVisibility(true);
     }
 
     @Override
@@ -1412,7 +1441,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                     } else {
                         Picasso.with(context)
                                 .load(result.imgPath)
-                                .placeholder(R.drawable.no_img)
+                                .placeholder(R.drawable.load)
                                 .into(itemListView.ivItem);
                     }
 

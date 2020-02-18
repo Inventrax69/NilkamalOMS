@@ -89,6 +89,12 @@ public interface CustomerDAO {
     @Query("SELECT ((customerCode) || '-' || (customerName)) FROM CustomerTable WHERE customerId=:customerId AND customerTypeID = 2")
     String getAllCustomerCode(int customerId);
 
+    @Query("SELECT ((customerCode) || '-' || (customerName)) FROM CustomerTable WHERE customerTypeID = 2 AND divisionId=:materialDivsionId")
+    List<String> getCustomerNamesBasedOnMDivision(String materialDivsionId);
+
+    @Query("SELECT customerId FROM CustomerTable WHERE customerTypeID = 2 AND divisionId=:materialDivsionId")
+    List<String> getCustomerIdsBasedOnMDivision(String materialDivsionId);
+
 }
 
 

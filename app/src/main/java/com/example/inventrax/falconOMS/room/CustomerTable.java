@@ -53,12 +53,17 @@ public class CustomerTable implements Serializable {
     @ColumnInfo(name = "zone")
     public String zone;
 
+    @ColumnInfo(name = "city")
+    public String city;
+
+
+
     @ColumnInfo(name = "timeStamp")
     public long timestamp;
 
 
     @Ignore
-    public CustomerTable(String customerId, String customerName, String customerCode, String customerType,String customerTypeID, String division, String divisionId, String connectedDepo, String mobile, String primaryID, String salesDistrict, String zone) {
+    public CustomerTable(String customerId, String customerName, String customerCode, String customerType,String customerTypeID, String division, String divisionId, String connectedDepo, String mobile, String primaryID, String salesDistrict, String zone,String city) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerCode = customerCode;
@@ -71,10 +76,11 @@ public class CustomerTable implements Serializable {
         this.primaryID = primaryID;
         this.salesDistrict = salesDistrict;
         this.zone = zone;
+        this.city = city;
     }
 
 
-    public CustomerTable(@NonNull String customerId, String customerName, String customerCode, String customerType,String customerTypeID, String division, String connectedDepo, String mobile, String primaryID, String salesDistrict, String zone, long timestamp) {
+    public CustomerTable(@NonNull String customerId, String customerName, String customerCode, String customerType,String customerTypeID, String division, String connectedDepo, String mobile, String primaryID, String salesDistrict, String zone, long timestamp,String city) {
         this.customerId = customerId;
         this.customerId = customerId;
         this.customerName = customerName;
@@ -88,5 +94,6 @@ public class CustomerTable implements Serializable {
         this.salesDistrict = salesDistrict;
         this.zone = zone;
         this.timestamp = timestamp;
+        this.city = city;
     }
 }

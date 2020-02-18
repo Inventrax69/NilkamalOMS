@@ -183,6 +183,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
                     String searchString = (String) parent.getItemAtPosition(position);
                     searchAutoComplete.setText("" + searchString);
+
+                    // Check if no view has focus:
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(searchAutoComplete.getWindowToken(), 0);
+
                   //  Toast.makeText(getContext(), "Your search result is " + " " + searchString, Toast.LENGTH_LONG).show();
                     mmId = hashMap.get(searchString);
                     loadView();
@@ -208,9 +213,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 public void onItemClick(int pos) {
 
                     int modelId = db.variantDAO().getModelId(mmId);
+                    int materialDivisionID = db.variantDAO().getMaterialDivisionID(mmId);
                     Bundle bundle = new Bundle();
                     bundle.putString(KeyValues.MODEL_ID, String.valueOf(modelId));
                     bundle.putInt(KeyValues.MID, mmId);
+                    bundle.putInt(KeyValues.MATERIAL_DIVISION_ID,materialDivisionID);
                     ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
                     productDetailsFragment.setArguments(bundle);
                     FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container, productDetailsFragment);

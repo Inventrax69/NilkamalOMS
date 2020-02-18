@@ -31,7 +31,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.activities.MainActivity;
@@ -114,6 +113,8 @@ public class HomeFragmentHints extends Fragment {
     RecyclerView recyclerView;
     MainMenuViewAdapter mainMenuViewAdapter;
 
+    SharedPreferences sp;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -128,10 +129,12 @@ public class HomeFragmentHints extends Fragment {
 
         // To enable Bottom navigation bar
         ((MainActivity) getActivity()).SetNavigationVisibility(true);
-        SharedPreferences sp = getContext().getSharedPreferences(KeyValues.MY_PREFS, MODE_PRIVATE);
+        sp = getContext().getSharedPreferences(KeyValues.MY_PREFS, MODE_PRIVATE);
         userName = sp.getString(KeyValues.USER_NAME, "");
         userId = sp.getString(KeyValues.USER_ID, "");
         userRoleName = sp.getString(KeyValues.USER_ROLE_NAME, "");
+
+
 
         coordLayout = (CoordinatorLayout) rootView.findViewById(R.id.coordLayout);
 
@@ -156,6 +159,8 @@ public class HomeFragmentHints extends Fragment {
 
         sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, getActivity());
 
+        //sharedPreferencesUtils.savePreference(KeyValues.SELECTED_CUSTOMER_ID_GLOBAL,"");
+
         mainMenus = new MainMenuList(getActivity()).getMainMenu(userRoleName);
         mainMenuViewAdapter = new MainMenuViewAdapter(getActivity(), mainMenus, new MainMenuViewAdapter.OnItemClickListener() {
             @Override
@@ -178,7 +183,14 @@ public class HomeFragmentHints extends Fragment {
                 if (userRoleName.equals("DTD")) {
                     FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container, new ProductCatalogFragment());
                 } else {
-                    showShipToPartyDialog();
+                    if(sp.getString(KeyValues.SELECTED_CUSTOMER_ID_GLOBAL,"").isEmpty()) {
+                        showShipToPartyDialog();
+                    }else {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("customerId", sp.getString(KeyValues.SELECTED_CUSTOMER_ID_GLOBAL,""));
+                        sharedPreferencesUtils.savePreference(KeyValues.SELECTED_CUSTOMER_ID_GLOBAL,customerId);
+                        FragmentUtils.replaceFragmentWithBackStackWithBundle(getActivity(), R.id.container, new ProductCatalogFragment(), bundle);
+                    }
                 }
                 break;
             case KeyValues.ORDER_TRACKING_TITLE:
@@ -358,6 +370,7 @@ public class HomeFragmentHints extends Fragment {
                         if (customerId != null || !customerId.isEmpty()) {
                             Bundle bundle = new Bundle();
                             bundle.putString("customerId", customerId);
+                            sharedPreferencesUtils.savePreference(KeyValues.SELECTED_CUSTOMER_ID_GLOBAL,customerId);
                             FragmentUtils.replaceFragmentWithBackStackWithBundle(getActivity(), R.id.container, new ProductCatalogFragment(), bundle);
                         } else {
                             SnackbarUtils.showSnackbarLengthShort(coordLayout, getActivity().getString(R.string.no_custmer), ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
@@ -453,7 +466,7 @@ public class HomeFragmentHints extends Fragment {
 
                                     customerTables.add(new CustomerTable(dd.getCustomerID(), dd.getCustomerName(), dd.getCustomerCode(),
                                             dd.getCustomerType(), dd.getCustomerTypeID(), dd.getDivision(), dd.getDivisionID().split("[.]")[0], dd.getConnectedDepot(), dd.getMobile(),
-                                            dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone()));
+                                            dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(),dd.getCity()));
 
                                 }
 

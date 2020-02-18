@@ -623,7 +623,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                         customerTables.add(new CustomerTable(dd.getCustomerID(), dd.getCustomerName(), dd.getCustomerCode(),
                                                 dd.getCustomerType(), dd.getCustomerTypeID(), dd.getDivision(), dd.getDivisionID().split("[.]")[0], dd.getConnectedDepot(), dd.getMobile(),
-                                                dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone()));
+                                                dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(),dd.getCity()));
 
 
                                         for (int i = 0; i < jsonArray.length(); i++) {

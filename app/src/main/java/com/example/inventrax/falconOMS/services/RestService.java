@@ -36,9 +36,9 @@ public class RestService {
                         .readTimeout(100, TimeUnit.SECONDS).build();
 
                 retrofit = new Retrofit.Builder()
-                         //.baseUrl("http://192.168.1.20/OMS_Masters/").client(client)
+                         //.baseUrl("http://192.168.1.62/OMS_Masters/").client(client)
                          //.baseUrl("http://192.168.1.20/OMS_StoreFront/api/").client(client)
-                         .baseUrl(sp.getString(KeyValues.SETTINGS_URL,"")).client(client)
+                           .baseUrl(sp.getString(KeyValues.SETTINGS_URL,"")).client(client)
                          //.baseUrl("http://103.252.184.181:90/OMS_StoreFront/api/").client(client)
                          //.baseUrl("http://192.168.1.62/OMS_StoreFront/api/").client(client)
                          //.baseUrl("http://192.168.1.241/OMS_StoreFront/api/").client(client)
