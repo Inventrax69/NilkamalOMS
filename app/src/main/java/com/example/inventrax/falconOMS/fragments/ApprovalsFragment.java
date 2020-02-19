@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.inventrax.falconOMS.R;
+import com.example.inventrax.falconOMS.model.KeyValues;
 import com.example.inventrax.falconOMS.util.FragmentUtils;
 
 public class ApprovalsFragment extends Fragment implements View.OnClickListener {
@@ -17,6 +18,10 @@ public class ApprovalsFragment extends Fragment implements View.OnClickListener 
     private static final String classCode = "OMS_Android_ApprovalsFragment";
     private View rootView;
     CardView cvOpenPrice, cvInActive, cvCreditLimit, cvSchemesAndDiscounts, cvSCMApproval;
+
+    String[] strings = {KeyValues.OPEN_PRICE_APPROVAL,KeyValues.IN_ACTIVE_APPROVAL,
+            KeyValues.CREDIT_LIMIT_APPROVAL,KeyValues.S_AND_D_APPROVAL,KeyValues.SCM_APPROVAL};
+
 
     @Nullable
     @Override
@@ -34,12 +39,31 @@ public class ApprovalsFragment extends Fragment implements View.OnClickListener 
     private void loadFormControls() {
 
 
-
         cvOpenPrice = rootView.findViewById(R.id.cvOpenPrice);
         cvInActive = rootView.findViewById(R.id.cvInActive);
         cvCreditLimit = rootView.findViewById(R.id.cvCreditLimit);
         cvSchemesAndDiscounts = rootView.findViewById(R.id.cvSchemesAndDiscounts);
         cvSCMApproval = rootView.findViewById(R.id.cvSCMApproval);
+
+        cvOpenPrice.setVisibility(View.GONE);
+        cvInActive.setVisibility(View.GONE);
+        cvCreditLimit.setVisibility(View.GONE);
+        cvSchemesAndDiscounts.setVisibility(View.GONE);
+        cvSCMApproval.setVisibility(View.GONE);
+
+        for (String s : strings) {
+            if (s.equals("OPEN_PRICE"))
+                cvOpenPrice.setVisibility(View.VISIBLE);
+            if (s.equals("IN_ACTIVE"))
+                cvInActive.setVisibility(View.VISIBLE);
+            if (s.equals("CREDIT_LIMIT"))
+                cvCreditLimit.setVisibility(View.VISIBLE);
+            if (s.equals("S_AND_D"))
+                cvSchemesAndDiscounts.setVisibility(View.VISIBLE);
+            if (s.equals("SCM"))
+                cvSCMApproval.setVisibility(View.VISIBLE);
+        }
+
 
         cvOpenPrice.setOnClickListener(this);
         cvInActive.setOnClickListener(this);

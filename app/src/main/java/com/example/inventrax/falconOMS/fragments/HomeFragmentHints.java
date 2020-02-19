@@ -214,7 +214,7 @@ public class HomeFragmentHints extends Fragment {
             case KeyValues.INVENTORY_TITLE:
                 break;
             case KeyValues.COMPLAINTS_TITLE:
-                String url = "http://nklorder.com/Login.aspx";
+                String url = KeyValues.COMPLAINTS_URL_EXTERNAL;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);

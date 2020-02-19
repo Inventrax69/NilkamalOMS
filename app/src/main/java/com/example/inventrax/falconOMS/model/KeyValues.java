@@ -105,9 +105,13 @@ public class KeyValues {
     public static final String URL_MAS_VEHICLE_LIST = "Master/VehicleList";
 
     //ProductCatalog
-
     public static final String CUSTOMER_ID = "customerID";
 
-
+    // Approvals
+    public static final String OPEN_PRICE_APPROVAL = "OPEN_PRICE";
+    public static final String IN_ACTIVE_APPROVAL = "IN_ACTIVE";
+    public static final String CREDIT_LIMIT_APPROVAL =  "CREDIT_LIMIT";
+    public static final String S_AND_D_APPROVAL = "S_AND_D";
+    public static final String SCM_APPROVAL = "SCM";
 
 }
