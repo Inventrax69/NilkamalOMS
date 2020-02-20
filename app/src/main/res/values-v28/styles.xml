@@ -14,10 +14,9 @@
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:fontFamily">@font/roboto</item>
         <item name="android:windowFullscreen">false</item>
-        <item name="android:windowLayoutInDisplayCutoutMode">
-            shortEdges
-        </item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
 
     </style>
 

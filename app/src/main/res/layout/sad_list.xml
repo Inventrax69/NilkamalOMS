@@ -37,10 +37,10 @@
                 android:id="@+id/txtWorkFlowType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center|left"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/black"
-                android:textStyle="bold"
-                android:gravity="center|left"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtRemarks"

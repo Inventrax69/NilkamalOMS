@@ -24,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.3"
                 android:padding="@dimen/_4sdp"
+                android:textSize="@dimen/_11sdp"
                 android:text="@string/site_no"
                 android:textStyle="bold" />
 
@@ -32,6 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
+                android:textSize="@dimen/_11sdp"
                 android:padding="@dimen/_4sdp"
                 android:singleLine="true" />
 
@@ -50,6 +52,7 @@
                 android:layout_weight="1.3"
                 android:padding="@dimen/_4sdp"
                 android:text="@string/site_name"
+                android:textSize="@dimen/_11sdp"
                 android:textStyle="bold" />
 
             <TextView
@@ -57,6 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
+                android:textSize="@dimen/_11sdp"
                 android:padding="@dimen/_4sdp"
                 android:singleLine="true" />
 
@@ -74,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.3"
                 android:padding="@dimen/_4sdp"
+                android:textSize="@dimen/_11sdp"
                 android:text="@string/available_qty"
                 android:textStyle="bold" />
 
@@ -82,6 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
+                android:textSize="@dimen/_11sdp"
                 android:padding="@dimen/_4sdp"
                 android:singleLine="true" />
 

@@ -115,6 +115,7 @@
                 android:layout_height="match_parent"
                 android:drawablePadding="@dimen/activity_login_padding_left"
                 android:hint="@string/remarks"
+                android:textSize="@dimen/_12sdp"
                 android:inputType="text"
                 android:singleLine="false" />
 

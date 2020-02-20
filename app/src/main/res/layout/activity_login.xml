@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/login"
-                android:textSize="18sp"
+                android:textSize="@dimen/_15sdp"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:layout_marginBottom="1dp"
@@ -81,6 +81,7 @@
             android:inputType="textEmailAddress"
             android:singleLine="true"
             android:layout_margin="@dimen/_10sdp"
+            android:textSize="@dimen/_14sdp"
             android:drawableStart="@drawable/email_img" />
 
         <EditText
@@ -94,6 +95,7 @@
             android:drawablePadding="@dimen/activity_login_padding_left"
             android:fontFamily="sans-serif"
             android:hint="@string/passHint"
+            android:textSize="@dimen/_14sdp"
             android:inputType="textPassword"
             android:singleLine="true" />
 
@@ -114,6 +116,7 @@
                 android:layout_below="@+id/etPass"
                 android:buttonTint="@color/colorAccent"
                 android:text="@string/rememberMe"
+                android:textSize="@dimen/_11sdp"
                 android:visibility="visible"
                 android:layout_weight="1"/>
 
@@ -126,6 +129,7 @@
                 android:gravity="center_vertical|right"
                 android:layout_marginBottom="1dp"
                 android:layout_marginTop="2dp"
+                android:textSize="@dimen/_11sdp"
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_marginRight="5dp"/>
 
@@ -140,8 +144,10 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_weight="0.25"
+            android:textSize="@dimen/_12sdp"
             android:background="@drawable/button_shape"
             android:text="@string/submit"
+            android:textAllCaps="false"
             android:textColor="@color/white" />
 
         <ImageView

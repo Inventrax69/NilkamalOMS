@@ -50,6 +50,7 @@
                         android:paddingLeft="@dimen/_10sdp"
                         android:text="@string/open_price"
                         android:textStyle="bold"
+                        android:textSize="@dimen/_11sdp"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
@@ -91,6 +92,7 @@
                         android:paddingLeft="@dimen/_10sdp"
                         android:text="@string/in_active"
                         android:textStyle="bold"
+                        android:textSize="@dimen/_11sdp"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
@@ -132,6 +134,7 @@
                         android:paddingLeft="@dimen/_10sdp"
                         android:text="@string/scm_approval"
                         android:textStyle="bold"
+                        android:textSize="@dimen/_11sdp"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
@@ -173,6 +176,7 @@
                         android:paddingLeft="@dimen/_10sdp"
                         android:text="@string/credit_limit"
                         android:textStyle="bold"
+                        android:textSize="@dimen/_11sdp"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
@@ -214,6 +218,7 @@
                         android:paddingLeft="@dimen/_10sdp"
                         android:text="@string/schemes_and_discounts"
                         android:textStyle="bold"
+                        android:textSize="@dimen/_11sdp"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
