@@ -13,15 +13,18 @@ import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.model.KeyValues;
 import com.example.inventrax.falconOMS.util.FragmentUtils;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ApprovalsFragment extends Fragment implements View.OnClickListener {
 
     private static final String classCode = "OMS_Android_ApprovalsFragment";
     private View rootView;
     CardView cvOpenPrice, cvInActive, cvCreditLimit, cvSchemesAndDiscounts, cvSCMApproval;
-
     String[] strings = {KeyValues.OPEN_PRICE_APPROVAL,KeyValues.IN_ACTIVE_APPROVAL,
             KeyValues.CREDIT_LIMIT_APPROVAL,KeyValues.S_AND_D_APPROVAL,KeyValues.SCM_APPROVAL};
-
 
     @Nullable
     @Override
@@ -52,15 +55,15 @@ public class ApprovalsFragment extends Fragment implements View.OnClickListener 
         cvSCMApproval.setVisibility(View.GONE);
 
         for (String s : strings) {
-            if (s.equals("OPEN_PRICE"))
+            if (s.equals(KeyValues.OPEN_PRICE_APPROVAL))
                 cvOpenPrice.setVisibility(View.VISIBLE);
-            if (s.equals("IN_ACTIVE"))
+            if (s.equals(KeyValues.IN_ACTIVE_APPROVAL))
                 cvInActive.setVisibility(View.VISIBLE);
-            if (s.equals("CREDIT_LIMIT"))
+            if (s.equals(KeyValues.CREDIT_LIMIT_APPROVAL))
                 cvCreditLimit.setVisibility(View.VISIBLE);
-            if (s.equals("S_AND_D"))
+            if (s.equals(KeyValues.S_AND_D_APPROVAL))
                 cvSchemesAndDiscounts.setVisibility(View.VISIBLE);
-            if (s.equals("SCM"))
+            if (s.equals(KeyValues.SCM_APPROVAL))
                 cvSCMApproval.setVisibility(View.VISIBLE);
         }
 

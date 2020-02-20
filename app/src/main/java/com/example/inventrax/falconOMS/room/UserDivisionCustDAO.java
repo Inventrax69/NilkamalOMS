@@ -17,8 +17,10 @@ public interface UserDivisionCustDAO {
     @Query("SELECT * FROM UserDivisionCustTable")
     List<UserDivisionCustTable> getAll();
 
-    /*@Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<UserDivisionCustDAO> userDivisionCustTables);*/
+    /*
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<UserDivisionCustDAO> userDivisionCustTables);
+    */
 
     @Insert(onConflict = REPLACE)
     void insert(UserDivisionCustTable userDivisionCustTable);
@@ -38,10 +40,15 @@ public interface UserDivisionCustDAO {
     @Query("SELECT DISTINCT customerId,customerName,customerCode FROM CustomerTable WHERE  customerId IN (SELECT customerId FROM UserDivisionCustTable)")
     List<CustomerData> getCustomerListByUser();
 
-    /*@Query("DELETE FROM CartDetails WHERE materialID =:materialID AND quantity=:quantity AND id=:id")
-    void deleteItem(String materialID, String quantity, int id);*/
+    /*
+    @Query("DELETE FROM CartDetails WHERE materialID =:materialID AND quantity=:quantity AND id=:id")
+    void deleteItem(String materialID, String quantity, int id);
+    */
 
+    @Query("UPDATE UserDivisionCustTable SET customerId=:customerId,divisionId=:divisionId WHERE customerId=:customerId")
+    void updateByCustomerId(String customerId,String divisionId);
 
-
+    @Query("DELETE FROM UserDivisionCustTable WHERE customerId=:customerId")
+    void deleteByCustomerId(String customerId);
 
 }

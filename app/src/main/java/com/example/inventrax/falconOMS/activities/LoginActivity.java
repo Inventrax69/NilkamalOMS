@@ -463,7 +463,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                         for (ModelDTO md : lstItem) {
 
-
                                             db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
                                                     md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
 

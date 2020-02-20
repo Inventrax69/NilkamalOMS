@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
     public boolean isProfileOpened = false, isSearchOpened = false, isSettingOpened = false;
 
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -230,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     Animation anim;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -466,7 +466,8 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
-        } catch (Exception ex) { }
+        } catch (Exception ex) {
+        }
 
 
         if (getIntent().getExtras() != null) {
@@ -510,10 +511,10 @@ public class MainActivity extends AppCompatActivity {
                 // Called after timer finishes
                 txtTimer.setText("00:00");
                 txtTimer.setVisibility(View.GONE);
-                if (mills > 0){
+                if (mills > 0) {
 
                 }
-                   // deleteCartItemReservation();
+                // deleteCartItemReservation();
                 //deleteCartItemReservation();
             }
         }.start();
@@ -646,8 +647,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    public void syncCart() {
+    public void syncCart(final String value) {
 
         OMSCoreMessage message = new OMSCoreMessage();
         message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, MainActivity.this);
@@ -701,42 +701,108 @@ public class MainActivity extends AppCompatActivity {
                                 db.cartHeaderDAO().deleteHeadersNotThereInCartDetails();
                                 */
 
-                                db.cartHeaderDAO().deleteAll();
-                                db.cartDetailsDAO().deleteAll();
+                                if (value.equals("1")) {
+                                    db.cartHeaderDAO().deleteAll();
+                                    db.cartDetailsDAO().deleteAll();
 
-                                for (int i = 0; i < getCartHeader.length(); i++) {
+                                    for (int i = 0; i < getCartHeader.length(); i++) {
 
 
-                                    for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
+                                        for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
 
-                                        CartHeaderListDTO cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
+                                            CartHeaderListDTO cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
 
-                                        db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
-                                                cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
-                                                cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
+                                            db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
+                                                    cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
+                                                    cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
 
-                                        for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
+                                            for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
 
-                                            CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
+                                                CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
 
-                                            db.cartDetailsDAO().insert(new CartDetails(cart.getCartHeaderID(), cart.getMaterialMasterID(),
-                                                    cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
-                                                    cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
-                                                    cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0,
-                                                    cart.getMaterialPriorityID(), cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID()));
+                                                db.cartDetailsDAO().insert(new CartDetails(cart.getCartHeaderID(), cart.getMaterialMasterID(),
+                                                        cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
+                                                        cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
+                                                        cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0,
+                                                        cart.getMaterialPriorityID(), cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID()));
+                                            }
+
                                         }
 
                                     }
 
+                                    BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
+                                    BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(1);
+
+                                    View notificationBadge = LayoutInflater.from(MainActivity.this).inflate(R.layout.notification_badge, menuView, false);
+                                    TextView textView = notificationBadge.findViewById(R.id.counter_badge);
+                                    textView.setText(String.valueOf(db.cartDetailsDAO().getCartDetailsCountIsApproved()));
+                                    itemView.addView(notificationBadge);
+
+                                } else {
+                                    cartList = new ArrayList<>();
+                                    if (db.cartDetailsDAO().getCartItemsWithOutApprovals() != null) {
+
+                                        List<CartDetails> cartDetailsList = new ArrayList<>();
+                                        cartDetailsList = db.cartDetailsDAO().getCartItemsWithOutApprovals();
+
+                                        productCatalogs cDto;
+
+                                        for (int i = 0; i < cartDetailsList.size(); i++) {
+                                            cDto = new productCatalogs();
+                                            cDto.setMaterialMasterID(cartDetailsList.get(i).materialID);
+                                            cDto.setMCode(cartDetailsList.get(i).mCode);
+                                            cDto.setQuantity(cartDetailsList.get(i).quantity);
+                                            cDto.setCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
+                                            cDto.setImagePath(cartDetailsList.get(i).imgPath);
+                                            cDto.setPrice(cartDetailsList.get(i).price);
+                                            cDto.setShipToPartyCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
+                                            cDto.setCartDetailsID("0");
+                                            cDto.setMaterialPriorityID(String.valueOf(cartDetailsList.get(i).isPriority));
+                                            cDto.setDeliveryDate(cartDetailsList.get(i).deliveryDate);
+                                            cDto.setCartHeaderID(Integer.parseInt(cartDetailsList.get(i).cartHeaderId));
+                                            cartList.add(cDto);
+                                        }
+                                    }
+
+
+                                    for (int i = 0; i < getCartHeader.length(); i++) {
+
+
+                                        for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
+
+                                            CartHeaderListDTO cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
+
+                                            for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
+
+                                                CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
+
+                                                db.cartDetailsDAO().insert(new CartDetails(cart.getCartHeaderID(), cart.getMaterialMasterID(),
+                                                        cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
+                                                        cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
+                                                        cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0,
+                                                        cart.getMaterialPriorityID(), cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID()));
+
+                                                productCatalogs cDto = new productCatalogs();
+                                                cDto.setMaterialMasterID(cart.getMaterialMasterID());
+                                                cDto.setMCode(cart.getMCode());
+                                                cDto.setQuantity(cart.getQuantity());
+                                                cDto.setCustomerID(String.valueOf(cartHeaderListDTO.getCustomerID()));
+                                                cDto.setImagePath(cart.getFileNames());
+                                                cDto.setPrice(cart.getPrice());
+                                                cDto.setShipToPartyCustomerID(String.valueOf(cartHeaderListDTO.getCustomerID()));
+                                                cDto.setCartDetailsID("0");
+                                                cDto.setMaterialPriorityID(String.valueOf(cart.getMaterialPriorityID()));
+                                                cDto.setDeliveryDate(cart.getExpectedDeliveryDate());
+                                                cDto.setCartHeaderID(Integer.parseInt(cart.getCartHeaderID()));
+                                                cartList.add(cDto);
+
+                                            }
+                                        }
+                                    }
+
+                                    addToCart();
                                 }
-
-                                BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
-                                BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(1);
-
-                                View notificationBadge = LayoutInflater.from(MainActivity.this).inflate(R.layout.notification_badge, menuView, false);
-                                TextView textView = notificationBadge.findViewById(R.id.counter_badge);
-                                textView.setText(String.valueOf(db.cartDetailsDAO().getCartDetailsCountIsApproved()));
-                                itemView.addView(notificationBadge);
 
                                 ProgressDialogUtils.closeProgressDialog();
 
@@ -816,7 +882,6 @@ public class MainActivity extends AppCompatActivity {
                             try {
 
 
-
                                 List<CartHeader> cartHeadersList = db.cartHeaderDAO().getCartHeadersForSTP();
 
                                 db.cartDetailsDAO().deleteAll();
@@ -838,7 +903,7 @@ public class MainActivity extends AppCompatActivity {
                                             if (cartHeaderListDTO.getListCartDetailsList().size() > 0) {
                                                 db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
                                                         cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
-                                                        cartHeaderListDTO.getTotalPrice(),cartHeaderListDTO.getTotalPriceWithTax()));
+                                                        cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
                                                 db.cartHeaderDAO().updateIsUpdated(cartHeaderListDTO.getCustomerID(), 0);
                                             }
 
@@ -849,7 +914,7 @@ public class MainActivity extends AppCompatActivity {
                                                         cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
-                                                        cart.getTotalPrice(),cart.getOfferValue(),cart.getOfferItemCartDetailsID()));
+                                                        cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID()));
                                             }
                                         }
 
@@ -864,7 +929,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
 
-                               // SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Item added to cart", ContextCompat.getColor(MainActivity.this, R.color.dark_green), Snackbar.LENGTH_SHORT);
+                                // SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Item added to cart", ContextCompat.getColor(MainActivity.this, R.color.dark_green), Snackbar.LENGTH_SHORT);
 
                                 BottomNavigationMenuView menuView = (BottomNavigationMenuView) ((BottomNavigationView) MainActivity.this.findViewById(R.id.navigation)).getChildAt(0);
                                 BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(1);
@@ -887,9 +952,9 @@ public class MainActivity extends AppCompatActivity {
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(MainActivity.this)){
+                    if (NetworkUtils.isInternetAvailable(MainActivity.this)) {
                         DialogUtils.showAlertDialog(MainActivity.this, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog(MainActivity.this, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
@@ -918,10 +983,10 @@ public class MainActivity extends AppCompatActivity {
             protected String doInBackground(Void... params) {
 
                 String msg = "";
-                if(db.cartHeaderDetailsDao().getUpdateCount()){
-                    syncCart();
-                }else{
-                    syncCart();
+                if (db.cartHeaderDetailsDao().getUpdateCount()) {
+                    syncCart("1");
+                } else {
+                    syncCart("2");
                 }
 
                 return msg;
@@ -1034,6 +1099,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
 /*        try {
             if (txtTimer.getText().toString().equals("00:00")) {
                 txtTimer.setText("00:00");

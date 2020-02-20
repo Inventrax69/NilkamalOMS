@@ -27,6 +27,7 @@ import java.util.List;
  * Created by padmaja on 13/07/19.
  */
 public class ApprovalDetailsAdapter extends RecyclerView.Adapter<ApprovalDetailsAdapter.ViewHolder> {
+
     private CartHeaderListDTO cartHeaderListDTO;
     private List<CartDetailsListDTO> cartItemList;
     private Context context;

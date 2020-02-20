@@ -67,7 +67,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     FrameLayout fragmentView;
     private String userId = "";
     private boolean isItemAdded = false;
-    TextView txtApprovals, txtOrders, txtTimer,txtSCMCart;
+    TextView txtApprovals, txtOrders, txtTimer, txtSCMCart;
     SharedPreferencesUtils sharedPreferencesUtils;
     private static CountDownTimer countDownTimer;
     SwipeRefreshLayout mySwipeRefreshLayout;
@@ -110,10 +110,10 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 txtTimer.setText("00:00");
                 txtTimer.setVisibility(View.GONE);
                 // Called after timer finishes
-                if(mills>0){
+                if (mills > 0) {
 
                 }
-                   // deleteCartItemReservation();
+                // deleteCartItemReservation();
             }
         }.start();
 
@@ -124,6 +124,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     Animation anim;
+
     //Loading all the form controls
     @SuppressLint("ClickableViewAccessibility")
     private void loadFormControls() {
@@ -137,7 +138,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             actionBar = getSupportActionBar();
 
             fragmentView = findViewById(R.id.fragmentView);
-            txtApprovals =  findViewById(R.id.txtApprovals);
+            txtApprovals = findViewById(R.id.txtApprovals);
             txtOrders = findViewById(R.id.txtOrders);
             txtSCMCart = findViewById(R.id.txtSCMCart);
             txtTimer = findViewById(R.id.txtTimer);
@@ -163,7 +164,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
             db = new RoomAppDatabase(CartActivity.this).getAppDatabase();
 
-            mySwipeRefreshLayout =  findViewById(R.id.mySwipeRefreshLayout);
+            mySwipeRefreshLayout = findViewById(R.id.mySwipeRefreshLayout);
 
             SharedPreferences sp = CartActivity.this.getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
             userId = sp.getString(KeyValues.USER_ID, "");
@@ -288,7 +289,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     // if you want to change color at end of animation
-                    //textview.settextcolor("your color")\
+                    // textview.settextcolor("your color")\
                     txtTimer.setVisibility(View.GONE);
                 }
 
@@ -303,6 +304,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
             txtTimer.setOnTouchListener(new View.OnTouchListener() {
                 private float xCoOrdinate, yCoOrdinate;
+
                 public boolean onTouch(View v, MotionEvent event) {
                     // TODO Auto-generated method stub
                     //drag(event, v);
@@ -323,7 +325,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
 
         }
 
@@ -372,6 +374,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
             }
             break;
+
             case R.id.action_profile: {
                 FragmentUtils.replaceFragmentWithBackStack(this, R.id.container, new ProfileFragment());
             }
@@ -397,8 +400,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-        }
+        switch (v.getId()) { }
     }
 
     @Override
@@ -413,14 +415,14 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getString(R.string.toolbar_cart));
         getSupportActionBar().setDisplayUseLogoEnabled(false);
-/*        try {
+        /*
+        try {
             Calendar calendar = Calendar.getInstance();
             long mills = calendar.getTimeInMillis();
             long timer = sharedPreferencesUtils.loadPreferenceAsLong(KeyValues.TIMER);
             startTime(300000 - (mills - timer));
-        } catch (Exception e) {
-
-        }*/
+        } catch (Exception e) { }
+        */
     }
 
     @Override
@@ -487,7 +489,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
                             } catch (Exception ex) {
                                 ProgressDialogUtils.closeProgressDialog();
-                                Toast.makeText(CartActivity.this,  ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CartActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -499,9 +501,9 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(CartActivity.this)){
+                    if (NetworkUtils.isInternetAvailable(CartActivity.this)) {
                         DialogUtils.showAlertDialog(CartActivity.this, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog(CartActivity.this, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
@@ -517,4 +519,5 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             DialogUtils.showAlertDialog(CartActivity.this, errorMessages.EMC_0003);
         }
     }
+
 }

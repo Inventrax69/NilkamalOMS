@@ -27,9 +27,6 @@ public interface ItemDAO {
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<ItemTable> itemTables);
 
-    @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void insert(ItemTable itemTable);
-
     @Delete
     void delete(ItemTable itemTable);
 
@@ -105,5 +102,23 @@ public interface ItemDAO {
             "OR (mCode LIKE '%'||:searchText||'%') OR (modelColor LIKE '%'||:searchText||'%')) " +
             "OR (modelCode like '%'||:searchText||'%') OR (modelDescription like '%'||:searchText||'%')")
     List<ItemTable> getFilterAllByCustomer(String searchText,String customerId);
+
+
+    // Master data updates
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
+    void insert(ItemTable itemTable);
+
+  //  modelID,divisionID,segmentID,modelCode,modelDescription,imgPath,price,discountCount,discountId,discountDesc,timeStamp
+
+    @Query("UPDATE itemtable SET modelID=:modelID,divisionID=:divisionID,segmentID=:segmentID," +
+            "modelCode=:modelCode,modelDescription=:modelDescription,imgPath=:imgPath," +
+            "price=:price,discountCount=:discountCount,discountId=:discountId,discountDesc=:discountDesc," +
+            "timeStamp=:timeStamp WHERE modelID=:modelID")
+    void updateByModelID(String modelID,String divisionID,String segmentID,String modelCode,String modelDescription,
+                         String imgPath,String price,String discountCount,String discountId,String discountDesc,String timeStamp);
+
+    @Query("DELETE FROM ItemTable WHERE modelID=:modelID")
+    void deleteByModelID(String modelID);
+
 
 }

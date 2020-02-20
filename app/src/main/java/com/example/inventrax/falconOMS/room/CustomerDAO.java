@@ -95,6 +95,23 @@ public interface CustomerDAO {
     @Query("SELECT customerId FROM CustomerTable WHERE customerTypeID = 2 AND divisionId=:materialDivsionId")
     List<String> getCustomerIdsBasedOnMDivision(String materialDivsionId);
 
+
+    // master data updates
+    // customerId,customerName,customerCode,customerType,customerTypeID,division,divisionId,connectedDepo,mobile,primaryID,salesDistrict,zone,city,timeStamp
+
+    @Query("UPDATE customertable SET customerId=:customerId,customerName=:customerName,customerCode=:customerCode," +
+            "customerType=:customerType,customerTypeID=:customerTypeID,division=:division,divisionId=:divisionId,connectedDepo=:connectedDepo," +
+            "mobile=:mobile,primaryID=:primaryID,salesDistrict=:salesDistrict,zone=:zone," +
+            "city=:city,timeStamp=:timeStamp WHERE customerId=:customerId")
+    void updateByCustomerId(String customerId,String customerName,String customerCode,String customerType,
+                            String customerTypeID,String division,String divisionId,String connectedDepo,String mobile,
+                            String primaryID,String salesDistrict,String zone,String city,String timeStamp);
+
+    @Query("DELETE FROM customertable WHERE customerId=:customerId")
+    void deleteByCustomerId(String customerId);
+
+
+
 }
 
 

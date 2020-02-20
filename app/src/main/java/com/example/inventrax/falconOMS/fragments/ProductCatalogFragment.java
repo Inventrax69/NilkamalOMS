@@ -4,6 +4,8 @@ package com.example.inventrax.falconOMS.fragments;
  * Created by Padmaja on 04/07/2019.
  */
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
@@ -25,6 +27,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
@@ -45,6 +48,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -574,6 +578,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                             SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "No customer is mapped. Please contact support team", ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);
 
                         } else {
+
                             behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                             frame.setVisibility(View.GONE);
 
@@ -1457,6 +1462,8 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                     } else {
                         itemListView.tvScheme.setVisibility(View.GONE);
                     }
+
+
                     break;
                 case LOADING:
                     break;

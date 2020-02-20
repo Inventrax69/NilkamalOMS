@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/_160sdp"
     android:layout_marginTop="5dp"
-    android:layout_marginRight="3dp"
-    android:layout_marginLeft="2dp"
+    android:layout_marginEnd="3dp"
+    android:layout_marginStart="2dp"
     android:clickable="true"
     android:focusable="true"
     android:elevation="60dp"
@@ -28,18 +28,18 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
-                android:gravity="left">
+                android:gravity="start">
 
                 <TextView
                     android:id="@+id/tvScheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:textColor="@color/white"
                     android:background="@color/green"
                     android:text="@string/on_offer"
                     android:layout_marginTop="10dp"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:padding="2dp"
                     android:textSize="10sp"
                     android:visibility="visible"/>
