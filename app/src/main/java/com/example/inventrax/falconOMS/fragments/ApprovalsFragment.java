@@ -13,18 +13,15 @@ import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.model.KeyValues;
 import com.example.inventrax.falconOMS.util.FragmentUtils;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class ApprovalsFragment extends Fragment implements View.OnClickListener {
 
     private static final String classCode = "OMS_Android_ApprovalsFragment";
     private View rootView;
     CardView cvOpenPrice, cvInActive, cvCreditLimit, cvSchemesAndDiscounts, cvSCMApproval;
-    String[] strings = {KeyValues.OPEN_PRICE_APPROVAL,KeyValues.IN_ACTIVE_APPROVAL,
-            KeyValues.CREDIT_LIMIT_APPROVAL,KeyValues.S_AND_D_APPROVAL,KeyValues.SCM_APPROVAL};
+  /*  String[] strings = {KeyValues.OPEN_PRICE_APPROVAL,KeyValues.IN_ACTIVE_APPROVAL,
+            KeyValues.CREDIT_LIMIT_APPROVAL,KeyValues.S_AND_D_APPROVAL,KeyValues.SCM_APPROVAL};*/
+  String[] strings = {KeyValues.OPEN_PRICE_APPROVAL,KeyValues.IN_ACTIVE_APPROVAL,
+            KeyValues.CREDIT_LIMIT_APPROVAL,KeyValues.S_AND_D_APPROVAL};
 
     @Nullable
     @Override

@@ -16,6 +16,10 @@ public interface CustomerDAO {
     @Query("SELECT * FROM CustomerTable")
     List<CustomerTable> getAll();
 
+    @Query("SELECT * FROM CustomerTable LIMIT 500;")
+    List<CustomerTable> getTop500Customers();
+
+
     @Query("SELECT COUNT(*) FROM CustomerTable")
     int getCustomerCount();
 

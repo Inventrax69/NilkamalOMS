@@ -67,7 +67,7 @@
                         android:layout_gravity="center_vertical|right"
                         android:text="@string/add"
                         android:textSize="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_16sdp"
+                        android:layout_marginEnd="@dimen/_19sdp"
                         android:elevation="@dimen/_12sdp"
                         android:textColor="@android:color/white"
                         android:textAppearance="?android:attr/textAppearanceMedium" />

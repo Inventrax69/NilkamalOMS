@@ -16,27 +16,14 @@
 
 
 
-        <android.support.v4.widget.SwipeRefreshLayout
+       <!-- <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="7"
             >
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvCustomerList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/colorAccent"
-                android:overScrollMode="never"
-                android:layoutAnimation="@anim/layout_anim"
-                tools:context=".controller.MainActivity"
-                tools:showIn="@layout/activity_main"
-                android:scrollbars="vertical"
-                android:scrollbarStyle="insideInset"
-                android:scrollbarThumbVertical="@drawable/scrollbar"
-                android:background="@android:color/transparent"
-                />
+
 
             <TextView
                 android:id="@+id/disconnected"
@@ -45,7 +32,23 @@
                 android:text="@string/internet"
                 android:textSize="30sp"
                 android:textStyle="bold" />
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>-->
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvCustomerList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/colorAccent"
+            android:overScrollMode="never"
+            android:layoutAnimation="@anim/layout_anim"
+            tools:context=".controller.MainActivity"
+            tools:showIn="@layout/activity_main"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="insideInset"
+            android:scrollbarThumbVertical="@drawable/scrollbar"
+            android:background="@android:color/transparent"
+            />
 
 
     </LinearLayout>

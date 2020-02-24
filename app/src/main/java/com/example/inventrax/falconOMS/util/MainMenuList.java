@@ -31,7 +31,7 @@ public class MainMenuList {
             arraylist.add(new MainMenu(2, KeyValues.ORDER_BOOKING_TITLE, true,R.string.order_booking));
             arraylist.add(new MainMenu(4, KeyValues.ORDER_ASSISTANCE_TITLE, true,R.string.order_assistance));
             arraylist.add(new MainMenu(9, KeyValues.COMPLAINTS_TITLE, true,R.string.complaints));
-            arraylist.add(new MainMenu(10, KeyValues.APPROVALS_TITLE, true,R.string.approvals));
+            //arraylist.add(new MainMenu(10, KeyValues.APPROVALS_TITLE, true,R.string.approvals));
         }else{
             arraylist.add(new MainMenu(1, KeyValues.CUSTOMER_TITLE, true,R.string.customer));
             arraylist.add(new MainMenu(2, KeyValues.ORDER_BOOKING_TITLE, true,R.string.order_booking));

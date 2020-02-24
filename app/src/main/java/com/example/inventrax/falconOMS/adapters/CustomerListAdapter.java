@@ -46,7 +46,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
     public void onBindViewHolder(CustomerListAdapter.ViewHolder viewHolder, int i) {
 
         CustomerTable custList = (CustomerTable) items.get(i);
-        viewHolder.txtCustmerName.setText((custList.customerName));
+        viewHolder.txtCustomerName.setText(custList.customerName + "-" + custList.customerCode);
         viewHolder.txtPersonName.setText((custList.customerId));
         viewHolder.txtPersonName.setText((custList.customerType));
         viewHolder.txtPlace.setText((custList.city));
@@ -67,14 +67,14 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtCustmerName, txtPersonName, txtPlace;
+        private TextView txtCustomerName, txtPersonName, txtPlace;
         private ImageView CustImg;
 
 
         public ViewHolder(View view) {
             super(view);
             // Initializing Views
-            txtCustmerName = (TextView) view.findViewById(R.id.txtCustmerName);
+            txtCustomerName = (TextView) view.findViewById(R.id.txtCustomerName);
             txtPersonName = (TextView) view.findViewById(R.id.txtPersonName);
             txtPlace = (TextView) view.findViewById(R.id.txtPlace);
             CustImg = (ImageView) view.findViewById(R.id.CustImg);
