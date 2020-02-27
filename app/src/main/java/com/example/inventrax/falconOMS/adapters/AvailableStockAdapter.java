@@ -27,7 +27,6 @@ public class AvailableStockAdapter extends RecyclerView.Adapter<AvailableStockAd
         this.context = context;
         this.availableStockDTOS = availableStockDTOS;
         this.mlistener = mlistener;
-
     }
 
     @Override

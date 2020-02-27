@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "43ca5c47f571adab60a8156471fdefa1",
+    "identityHash": "ac55c1a9fc0116bb0bb08fa9de5bf9ac",
     "entities": [
       {
         "tableName": "CustomerTable",
@@ -371,7 +371,7 @@
       },
       {
         "tableName": "CartDetails",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `materialID` TEXT, `mCode` TEXT, `mDescription` TEXT, `deliveryDate` TEXT, `quantity` TEXT, `timeStamp` TEXT, `imgPath` TEXT, `price` TEXT, `totalPrice` TEXT, `offerValue` TEXT, `offerItemCartDetailsID` TEXT, `cartHeaderId` TEXT, `cartDetailsId` TEXT, `customerId` INTEGER NOT NULL, `isInActive` INTEGER NOT NULL, `isPriority` INTEGER NOT NULL, `isUpdated` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `materialID` TEXT, `mCode` TEXT, `mDescription` TEXT, `deliveryDate` TEXT, `quantity` TEXT, `timeStamp` TEXT, `imgPath` TEXT, `price` TEXT, `totalPrice` TEXT, `offerValue` TEXT, `offerItemCartDetailsID` TEXT, `cartHeaderId` TEXT, `cartDetailsId` TEXT, `customerId` INTEGER NOT NULL, `isInActive` INTEGER NOT NULL, `isPriority` INTEGER NOT NULL, `isUpdated` INTEGER NOT NULL, `discountID` TEXT, `discountText` TEXT, `gst` TEXT, `tax` TEXT, `subtotal` TEXT, `HSNCode` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -480,6 +480,42 @@
             "columnName": "isUpdated",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "discountID",
+            "columnName": "discountID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "discountText",
+            "columnName": "discountText",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "gst",
+            "columnName": "gst",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tax",
+            "columnName": "tax",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "subtotal",
+            "columnName": "subtotal",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "HSNCode",
+            "columnName": "HSNCode",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -630,7 +666,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"43ca5c47f571adab60a8156471fdefa1\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ac55c1a9fc0116bb0bb08fa9de5bf9ac\")"
     ]
   }
 }

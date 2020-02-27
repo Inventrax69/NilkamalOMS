@@ -48,8 +48,6 @@ public class AppController extends Application {
         StrictMode.setVmPolicy(builder.build());
     }
 
-
-
     @Override
     public void onLowMemory() {
         super.onLowMemory();

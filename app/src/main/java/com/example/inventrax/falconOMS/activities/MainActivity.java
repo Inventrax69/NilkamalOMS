@@ -720,11 +720,14 @@ public class MainActivity extends AppCompatActivity {
 
                                                 CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
 
-                                                db.cartDetailsDAO().insert(new CartDetails(cart.getCartHeaderID(), cart.getMaterialMasterID(),
+                                               // String discountID,String discountText,String gst,String tax,String subtotal,String HSNCode
+
+                                                db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
                                                         cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0,
-                                                        cart.getMaterialPriorityID(), cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID()));
+                                                        cart.getMaterialPriorityID(), cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
+                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
                                             }
 
                                         }
@@ -777,11 +780,12 @@ public class MainActivity extends AppCompatActivity {
 
                                                 CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
 
-                                                db.cartDetailsDAO().insert(new CartDetails(cart.getCartHeaderID(), cart.getMaterialMasterID(),
+                                                db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
                                                         cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0,
-                                                        cart.getMaterialPriorityID(), cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID()));
+                                                        cart.getMaterialPriorityID(), cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
+                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
 
                                                 productCatalogs cDto = new productCatalogs();
                                                 cDto.setMaterialMasterID(cart.getMaterialMasterID());
@@ -881,7 +885,6 @@ public class MainActivity extends AppCompatActivity {
 
                             try {
 
-
                                 List<CartHeader> cartHeadersList = db.cartHeaderDAO().getCartHeadersForSTP();
 
                                 db.cartDetailsDAO().deleteAll();
@@ -914,7 +917,8 @@ public class MainActivity extends AppCompatActivity {
                                                         cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
-                                                        cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID()));
+                                                        cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
+                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
                                             }
                                         }
 

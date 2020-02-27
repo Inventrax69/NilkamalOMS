@@ -39,19 +39,19 @@ public class KeyValues {
     public static final String IS_NOTIFICATION_AVAILABLE= "isNotificationAvailable";
 
     // Timer
-    public static final String TIMER= "timer";
+    public static final String TIMER = "timer";
 
     // Bundle
-    public static final String SELECTED_CUSTOMER= "selectedCustomer";
+    public static final String SELECTED_CUSTOMER = "selectedCustomer";
 
     // SideMenu
-    public static final String CUSTOMER_TITLE= "Customer";
-    public static final String ORDER_BOOKING_TITLE= "OrderBooking";
-    public static final String ORDER_TRACKING_TITLE= "OrderTracking";
-    public static final String ORDER_ASSISTANCE_TITLE= "OrderAssistance";
-    public static final String ORDER_LIST_TITLE= "OrderList";
-    public static final String E_INFORMATION_TITLE= "EInformation";
-    public static final String DASHBOARD_TITLE= "Dashboard";
+    public static final String CUSTOMER_TITLE = "Customer";
+    public static final String ORDER_BOOKING_TITLE = "OrderBooking";
+    public static final String ORDER_TRACKING_TITLE = "OrderTracking";
+    public static final String ORDER_ASSISTANCE_TITLE = "OrderAssistance";
+    public static final String ORDER_LIST_TITLE = "OrderList";
+    public static final String E_INFORMATION_TITLE = "EInformation";
+    public static final String DASHBOARD_TITLE = "Dashboard";
     public static final String INVENTORY_TITLE = "Inventory";
     public static final String COMPLAINTS_TITLE = "Complaints";
     public static final String APPROVALS_TITLE = "Approvals";
@@ -85,24 +85,7 @@ public class KeyValues {
     public static final String USER_ROLE_NAME_JOB_WORKER = "JOBWorker";
     public static final String USER_ROLE_NAME_NHIC = "NHIC";
     public static final String USER_ROLE_ADMIN = "Admin";
-    // ASM not
 
-
-    // URL's
-    public static final String URL_USER_LOGOUT = "UserLogOut";
-    public static final String URL_FORGOT_PASSWORD= "ForgotPassword";
-    public static final String URL_PROFILE= "Profile";
-    public static final String URL_CHANGE_PASSWORD= "Changepassword";
-    public static final String URL_GET_NOTIFICATIONS= "GetNotifications";
-    public static final String URL_MAS_PRODUCT_CATALOG= "Master/ProductCatalog";
-    public static final String URL_MAS_GET_CUSTOMER_LIST= "Master/GetCustomerList";
-    public static final String URL_MAS_GET_CUSTOMER_LIST_MOBILE= "Master/GetCustomerListMobile";
-    public static final String URL_MAS_SYNC_ITEM_DATA= "Master/SyncItemData";
-    public static final String URL_MAS_SYNC_CUSTOMER_DATA= "Master/SyncCustomerData";
-    public static final String URL_ORDER_ASSISTANCE_UPLOAD= "OrderAssistanceUpload";
-    public static final String URL_ODR_ACTIVE_CART_LIST= "Orders/ActiveCartList";
-    public static final String URL_ODR_GET_PRICE= "Orders/GetPrice";
-    public static final String URL_MAS_VEHICLE_LIST = "Master/VehicleList";
 
     //ProductCatalog
     public static final String CUSTOMER_ID = "customerID";

@@ -61,13 +61,25 @@ public class CartDetailsListDTO {
     @SerializedName("OfferItemCartDetailsID")
     private String OfferItemCartDetailsID;
 
+    @SerializedName("DiscountID")
+    private String DiscountID;
 
+    @SerializedName("DiscountText")
+    private String DiscountText;
 
+    @SerializedName("GST")
+    private String GST;
 
+    @SerializedName("Tax")
+    private String Tax;
 
+    @SerializedName("SubTotal")
+    private String SubTotal;
+
+    @SerializedName("HSNCode")
+    private String HSNCode;
 
     public CartDetailsListDTO() { }
-
 
     public String getQuantity() {
         return Quantity;
@@ -212,4 +224,53 @@ public class CartDetailsListDTO {
     public void setOfferItemCartDetailsID(String offerItemCartDetailsID) {
         OfferItemCartDetailsID = offerItemCartDetailsID;
     }
+
+    public String getDiscountID() {
+        return DiscountID;
+    }
+
+    public void setDiscountID(String discountID) {
+        DiscountID = discountID;
+    }
+
+    public String getDiscountText() {
+        return DiscountText;
+    }
+
+    public void setDiscountText(String discountText) {
+        DiscountText = discountText;
+    }
+
+    public String getGST() {
+        return GST;
+    }
+
+    public void setGST(String GST) {
+        this.GST = GST;
+    }
+
+    public String getTax() {
+        return Tax;
+    }
+
+    public void setTax(String tax) {
+        Tax = tax;
+    }
+
+    public String getSubTotal() {
+        return SubTotal;
+    }
+
+    public void setSubTotal(String subTotal) {
+        SubTotal = subTotal;
+    }
+
+    public String getHSNCode() {
+        return HSNCode;
+    }
+
+    public void setHSNCode(String HSNCode) {
+        this.HSNCode = HSNCode;
+    }
+
 }

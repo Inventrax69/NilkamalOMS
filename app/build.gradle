@@ -4,7 +4,6 @@ apply plugin: 'com.google.gms.google-services'
 android {
 
     compileSdkVersion 28
-
     lintOptions {
         abortOnError false
     }
@@ -30,7 +29,8 @@ android {
 
     buildTypes {
 
-/*        debug {
+        /*
+        debug {
             debuggable true
         }*/
 
@@ -41,17 +41,18 @@ android {
         }
 
     }
+
     // add dexOptions
     dexOptions {
         /*incremental true*/
         javaMaxHeapSize "4g"
     }
+
     packagingOptions {
         exclude 'android/support/annotation/StyleRes.class'
     }
-    compileOptions {
 
-    }
+    compileOptions { }
 
 }
 
@@ -101,10 +102,8 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.synnapps:carouselview:0.1.5'
     //implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
-
     // 3. Android - Use Guava in your implementation only:
     implementation("com.google.guava:guava:28.2-android")
-
     // 4. Android - Use Guava types in your public API:
     api("com.google.guava:guava:28.2-android")
 

@@ -61,7 +61,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/scm_cart"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
 
                 </LinearLayout>
 
@@ -89,6 +89,7 @@
         android:background="@drawable/ic_timer"
         android:gravity="center"
         android:text="00:00"
+        android:visibility="gone"
         android:textColor="@color/black"
         android:textStyle="bold" />
 

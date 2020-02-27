@@ -277,6 +277,7 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
                 mAdapter = new ApprovalHeaderAdapter(cartHeaderList, getActivity(), getActivity());
                 rvCartItemsList.setAdapter(mAdapter);
             } else {
+
             }
         } else {
             // (MainActivity).stopTimer();
@@ -344,11 +345,14 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
                                 CustomerPartnerDTO customerPartnerDTO = new CustomerPartnerDTO();
                                 List<CustomerPartnerDTO> customerPartnerDTOS = new ArrayList<>();
                                 customerPartnerDTOS_list = new ArrayList<>();
+
                                 for (int i = 0; i < getCustomerList.length(); i++) {
                                     customerPartnerDTO = new Gson().fromJson(getCustomerList.getJSONObject(i).toString(), CustomerPartnerDTO.class);
                                     customerPartnerDTOS.add(customerPartnerDTO);
                                 }
+
                                 cartHeaderList = new ArrayList<>();
+
                                 if (customerPartnerDTOS.size() > 0) {
                                     for (int i = 0; i < customerPartnerDTOS.size(); i++) {
                                         if (customerPartnerDTOS.get(i).getCartHeader().size() > 0) {
@@ -382,19 +386,18 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
                                                   List<CartHeaderListDTO> cloneCartHeaderList =new GetCartHeaderList(cartHeaderList).getCartHeaderList_Class();
                                                   List<CartHeaderListDTO> cartHeaderList1 =new GetCartHeaderList(cartHeaderList).getCartHeaderList_Class();
 
-                                                    //List<CartHeaderListDTO> cloneCartHeaderList = ((List<CartHeaderListDTO>) ((ArrayList<CartHeaderListDTO>) cartHeaderList).clone());
-                                                   // List<CartHeaderListDTO> cartHeaderList1 = ((List<CartHeaderListDTO>) ((ArrayList<CartHeaderListDTO>) cartHeaderList).clone());
+                                                    // List<CartHeaderListDTO> cloneCartHeaderList = ((List<CartHeaderListDTO>) ((ArrayList<CartHeaderListDTO>) cartHeaderList).clone());
+                                                    // List<CartHeaderListDTO> cartHeaderList1 = ((List<CartHeaderListDTO>) ((ArrayList<CartHeaderListDTO>) cartHeaderList).clone());
 
-                                                   // List<CartHeaderListDTO> cloneCartHeaderList =new ArrayList<>();
-                                                   // List<CartHeaderListDTO> cartHeaderList1=new ArrayList<>();
+                                                    // List<CartHeaderListDTO> cloneCartHeaderList =new ArrayList<>();
+                                                    // List<CartHeaderListDTO> cartHeaderList1=new ArrayList<>();
 
-                                                   // cloneCartHeaderList = Collections.unmodifiableList(cartHeaderList);
-                                                   // cartHeaderList1 = Collections.unmodifiableList(cartHeaderList);
+                                                    // cloneCartHeaderList = Collections.unmodifiableList(cartHeaderList);
+                                                    // cartHeaderList1 = Collections.unmodifiableList(cartHeaderList);
 
-                                                   // List<CartHeaderListDTO> mutableList = cartHeaderList.getImmutableList().stream().collect(Collectors.toList());
+                                                    // List<CartHeaderListDTO> mutableList = cartHeaderList.getImmutableList().stream().collect(Collectors.toList());
 
-
-                                                    Log.v("ABCDE",new Gson().toJson(cartHeaderList));
+                                                    // Log.v("ABCDE",new Gson().toJson(cartHeaderList));
 
 
                                                     for (int p = 0; p < cloneCartHeaderList.size(); p++) {
@@ -429,7 +432,9 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
                                                     List<CartHeaderListDTO> cartHeaderList1 = new ArrayList<>(customerPartnerDTOS_list.get(i - 1).getCartHeader());
 
                                                     for (int p = 0; p < customerPartnerDTOS_list.get(i - 1).getCartHeader().size(); p++) {
+
                                                         HashMap<String,List<CartDetailsListDTO>> offerCartDetailsDTOList=new HashMap<>();
+
                                                         for (int q = 0; q < customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().size(); q++) {
                                                             if(customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID() != null){
                                                                 if(!customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID().equals("-1")){
@@ -443,9 +448,9 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
                                                                 }
                                                             }
                                                         }
+
                                                         cartHeaderList1.get(p).setOfferCartDetailsDTOList(offerCartDetailsDTOList);
                                                     }
-
 
                                                     if(cartHeaderList1!=null){
                                                         mAdapter = new ApprovalHeaderAdapter(cartHeaderList1, getActivity(), getActivity());

@@ -133,4 +133,8 @@ public interface CartHeaderDAO {
     @Query("DELETE FROM CartHeader WHERE cartHeaderID IN (:cartHeaderID)")
     void deleteCartHeaderbyList(int[] cartHeaderID);
 
+    @Query("SELECT COUNT(*) FROM CartHeader")
+    int getCartHeaderCount();
+
+
 }

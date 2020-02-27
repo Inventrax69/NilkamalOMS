@@ -156,7 +156,6 @@ public class ApprovalDetailsAdapter extends RecyclerView.Adapter<ApprovalDetails
                             mlistener.onDeletClick(pos);
                         }
                     }
-
                 }
             });
 

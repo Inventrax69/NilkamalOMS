@@ -303,6 +303,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             });
 
             txtTimer.setOnTouchListener(new View.OnTouchListener() {
+
                 private float xCoOrdinate, yCoOrdinate;
 
                 public boolean onTouch(View v, MotionEvent event) {
@@ -326,7 +327,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             });
 
         } catch (Exception ex) {
-
+                //
         }
 
     }

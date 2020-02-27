@@ -26,14 +26,11 @@ import com.example.inventrax.falconOMS.util.SharedPreferencesUtils;
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String classCode = "WMSCore_Android_Activity_002";
-
     private TextInputLayout inputLayoutServiceUrl;
     private EditText inputService;
     private Button btnSave,btnClose;
     private String url=null;
-
     AppDatabase db;
-
     private SharedPreferencesUtils sharedPreferencesUtils;
     ServiceURL serviceUrl = new ServiceURL();
 
@@ -41,8 +38,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
         loadFormControls();
+
     }
 
     public void loadFormControls()
@@ -79,9 +76,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     db.customerDAO().deleteAll();
                     db.variantDAO().deleteAll();
 
-                    DialogUtils.showAlertDialog(SettingsActivity.this,new ErrorMessages().EMC_0021);
 
+                    Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
 
+                   // DialogUtils.showAlertDialog(SettingsActivity.this,new ErrorMessages().EMC_0021);
 
                 }else {
                     DialogUtils.showAlertDialog(SettingsActivity.this,new ErrorMessages().EMC_0022);

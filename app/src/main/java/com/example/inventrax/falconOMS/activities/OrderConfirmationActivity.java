@@ -891,7 +891,17 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
         productCatalogs.setUserID(userId);
         productCatalogs.setCustomerID("0");
         productCatalogs.setResults("");
-        productCatalogs.setCartHeaderID(0);
+        if(db.cartHeaderDAO().getFullfilmentCompletedHeaders().size()==1)
+            productCatalogs.setCartHeaderID(db.cartHeaderDAO().getFullfilmentCompletedHeaders().get(0).cartHeaderID);
+        else
+            productCatalogs.setCartHeaderID(0);
+
+/*        if( db.cartHeaderDAO().getFullfilmentCompletedHeaders().size() == 0){
+
+        }else{
+            productCatalogs.setCartHeaderID(db.cartHeaderDAO().getFullfilmentCompletedHeaders().);
+        }*/
+
         message.setEntityObject(productCatalogs);
 
         Call<OMSCoreMessage> call = null;
@@ -930,8 +940,14 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
                                 JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
                                 cartHeaderList = new ArrayList<>();
                                 for (int i = 0; i < getCartHeader.length(); i++) {
+                                    String CustomerID =  getCartHeader.getJSONObject(i).getString("CustomerID");
+                                    String CustomerName =  getCartHeader.getJSONObject(i).getString("CustomerName");
+                                    String CustomerCode =  getCartHeader.getJSONObject(i).getString("CustomerCode");
+                                    Double CreditLimit =  getCartHeader.getJSONObject(i).getDouble("CreditLimit");
                                     for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
                                         CartHeaderListDTO cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
+                                        cartHeaderListDTO.setCustomerName(CustomerName);
+                                        cartHeaderListDTO.setCreditLimit(CreditLimit);
                                         if (db.cartHeaderDAO().getFullfilmentCompletedHeaders() != null) {
                                             List<CartHeader> cartHeaders = db.cartHeaderDAO().getFullfilmentCompletedHeaders();
                                             for (CartHeader cartHeader : cartHeaders) {
@@ -1122,11 +1138,12 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
                                             CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
 
-                                            db.cartDetailsDAO().insert(new CartDetails(cart.getCartHeaderID(), cart.getMaterialMasterID(),
+                                            db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
                                                     cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
                                                     cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                     cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
-                                                    cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID()));
+                                                    cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
+                                                    cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
                                         }
 
                                     }

@@ -35,8 +35,6 @@ public class CartHeaderListDTO implements Serializable,Cloneable  {
     @SerializedName("IsApproved")
     private int IsApproved;
 
-
-
     @SerializedName("IsOpenPrice")
     private int IsOpenPrice;
 

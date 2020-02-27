@@ -720,11 +720,12 @@ public class HomeFragmentHints extends Fragment {
 
                                             CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
 
-                                            db.cartDetailsDAO().insert(new CartDetails(cart.getCartHeaderID(), cart.getMaterialMasterID(),
+                                            db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
                                                     cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
                                                     cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                     cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
-                                                    cart.getTotalPrice(),cart.getOfferValue(),cart.getOfferItemCartDetailsID()));
+                                                    cart.getTotalPrice(),cart.getOfferValue(),cart.getOfferItemCartDetailsID(),
+                                                    cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
                                         }
                                     }
                                 }

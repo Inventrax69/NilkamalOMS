@@ -114,7 +114,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
         final boolean getUpdateCount=db.cartHeaderDetailsDao().getUpdateCount();
         if (!getUpdateCount) {
             viewHolder.txtPrice.setText("");
-            txtOrderFulfilment.setText("Sync Cart");
+            txtOrderFulfilment.setText(context.getString(R.string.sync_cart));
             viewHolder.txtOfferAvaiable.setVisibility(View.INVISIBLE);
             viewHolder.txtAvailableItem.setVisibility(View.INVISIBLE);
         } else {
@@ -127,10 +127,11 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
             anim.setRepeatMode(Animation.REVERSE);
             anim.setRepeatCount(Animation.INFINITE);
             viewHolder.txtAvailableItem.startAnimation(anim);
-            if (item.getTotalPrice().equals(item.getOfferValue()))
+            viewHolder.txtPrice.setText(Html.fromHtml("Rs. :" + item.getTotalPrice()));
+          /*  if (item.getTotalPrice().equals(item.getOfferValue()))
                 viewHolder.txtPrice.setText(Html.fromHtml("Rs. :" + item.getTotalPrice()));
             else
-                viewHolder.txtPrice.setText(Html.fromHtml("Rs. : <strike>" + item.getTotalPrice() + "</strike> " + item.getOfferValue()));
+                viewHolder.txtPrice.setText(Html.fromHtml("Rs. : <strike>" + item.getTotalPrice() + "</strike> " + item.getOfferValue()));*/
         }
 
         viewHolder.isItemInactive.setVisibility(View.GONE);

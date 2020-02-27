@@ -558,8 +558,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
         Call<OMSCoreMessage> call = null;
-        ApiInterface apiService =
-                RestService.getClient().create(ApiInterface.class);
+        ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
 
         call = apiService.GetCustomerListMobile(message);
 
@@ -607,12 +606,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     customerIDs = sp.getString(KeyValues.CUSTOMER_IDS, "");
                                     userId = sp.getString(KeyValues.USER_ID, "");
 
-                                    JSONArray jsonArray = null;
+/*                                    JSONArray jsonArray = null;
                                     try {
                                         jsonArray = new JSONArray(customerIDs);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
-                                    }
+                                    }*/
 
                                     db.userDivisionCustDAO().deleteAll();
 
@@ -624,21 +623,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                 dd.getCustomerType(), dd.getCustomerTypeID(), dd.getDivision(), dd.getDivisionID().split("[.]")[0], dd.getConnectedDepot(), dd.getMobile(),
                                                 dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(),dd.getCity()));
 
+                                        db.userDivisionCustDAO().insert(new UserDivisionCustTable(dd.getCustomerID(), dd.getDivisionID().split("[.]")[0]));
 
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-
+/*                                        for (int i = 0; i < jsonArray.length(); i++) {
                                             try {
                                                 if (jsonArray.getString(i).equals(dd.getCustomerID())) {
 
                                                     if (jsonArray.getString(i) != null) {
-                                                        db.userDivisionCustDAO().insert(new UserDivisionCustTable(dd.getCustomerID(), dd.getDivisionID().split("[.]")[0]));
                                                     }
                                                 }
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                                 dialog.dismiss();
                                             }
-                                        }
+                                        }*/
                                     }
 
                                     customerList = lstDto;
@@ -651,6 +649,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     }else{
 
                                         dialog.dismiss();
+
                                         sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
                                         sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -660,15 +659,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     }
 
                                     ProgressDialogUtils.closeProgressDialog();
+
                                 }
 
                                 ProgressDialogUtils.closeProgressDialog();
 
                             }catch (Exception ex){
+
                                 ProgressDialogUtils.closeProgressDialog();
+
                                 dialog.dismiss();
                             }
                         }
+
                         ProgressDialogUtils.closeProgressDialog();
                     }
                     ProgressDialogUtils.closeProgressDialog();

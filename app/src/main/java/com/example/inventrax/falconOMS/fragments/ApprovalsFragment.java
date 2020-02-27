@@ -38,7 +38,6 @@ public class ApprovalsFragment extends Fragment implements View.OnClickListener 
 
     private void loadFormControls() {
 
-
         cvOpenPrice = rootView.findViewById(R.id.cvOpenPrice);
         cvInActive = rootView.findViewById(R.id.cvInActive);
         cvCreditLimit = rootView.findViewById(R.id.cvCreditLimit);

@@ -38,9 +38,9 @@ public class IntroActivity extends AppCompatActivity {
     IntroViewPagerAdapter introViewPagerAdapter ;
     TabLayout tabIndicator;
     Button btnNext;
-    int position = 0 ;
+    int position = 0;
     Button btnGetStarted;
-    Animation btnAnim ;
+    Animation btnAnim;
     TextView tvSkip;
 
     public static final int MULTIPLE_PERMISSIONS = 15;
@@ -97,7 +97,7 @@ public class IntroActivity extends AppCompatActivity {
             // fill list screen
             final List<ScreenItem> mList = new ArrayList<>();
             mList.add(new ScreenItem("Order Booking", "We are getting India's favourite furniture brand closer to you with just a click away!", R.drawable.order_delivery));
-            mList.add(new ScreenItem("Experss Delivery", "One stop-shop for quality, trendy and budget-friendly furniture range", R.drawable.express_delivery));
+            mList.add(new ScreenItem("Express Delivery", "One stop-shop for quality, trendy and budget-friendly furniture range", R.drawable.express_delivery));
             mList.add(new ScreenItem("Order Status", "We are getting India's favourite furniture brand closer to you with just a click away!", R.drawable.delivery_status));
 
             // setup viewpager
@@ -120,8 +120,8 @@ public class IntroActivity extends AppCompatActivity {
                         screenPager.setCurrentItem(position);
                     }
 
-                    if (position == mList.size() - 1) { // when we rech to the last screen
-                        // TODO : show the GETSTARTED Button and hide the indicator and the next button
+                    if (position == mList.size() - 1) { // when we reach to the last screen
+                        // TODO : show the GET STARTED Button and hide the indicator and the next button
 
                         loaddLastScreen();
 
@@ -131,7 +131,7 @@ public class IntroActivity extends AppCompatActivity {
                 }
             });
 
-            // tablayout add change listener
+            // tab layout add change listener
 
 
             tabIndicator.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -188,7 +188,7 @@ public class IntroActivity extends AppCompatActivity {
                 }
             });
         }catch (Exception ex){
-            Toast.makeText(this,  ex.getMessage(), Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this,  ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -197,7 +197,7 @@ public class IntroActivity extends AppCompatActivity {
 
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences(KeyValues.MY_PREFS,MODE_PRIVATE);
-        Boolean isIntroActivityOpnendBefore = pref.getBoolean(KeyValues.IS_INTRO_OPENED,false);
+        boolean isIntroActivityOpnendBefore = pref.getBoolean(KeyValues.IS_INTRO_OPENED,false);
         return  isIntroActivityOpnendBefore;
 
     }
@@ -208,7 +208,6 @@ public class IntroActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean(KeyValues.IS_INTRO_OPENED,true);
         editor.commit();
-
 
     }
 
@@ -277,8 +276,6 @@ public class IntroActivity extends AppCompatActivity {
         // TODO : ADD an animation the getstarted button
         // setup animation
         btnGetStarted.setAnimation(btnAnim);
-
-
 
     }
 }

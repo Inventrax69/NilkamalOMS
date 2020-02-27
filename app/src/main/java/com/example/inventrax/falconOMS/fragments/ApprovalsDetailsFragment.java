@@ -171,7 +171,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                 if (etRemarks.getText().toString().isEmpty()) {
                     SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) getActivity()).findViewById(R.id.snack_bar_action_layout), "Please write remarks", ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
                     return;
-                }*/
+                }
+                */
 
                 for (int i = 0; i < approvalListDTOS.size(); i++) {
                     if (approvalListDTOS.get(i).isCorrectValue()) {

@@ -5,6 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 @Entity/*(indices = {@Index(value = {"materialID"}, unique = true)})*/
@@ -64,10 +66,31 @@ public class CartDetails implements Serializable {
     @ColumnInfo(name = "isUpdated")
     public int isUpdated=0;
 
+    @ColumnInfo(name = "discountID")
+    public String discountID;
+
+    @ColumnInfo(name = "discountText")
+    public String discountText;
+
+    @ColumnInfo(name = "gst")
+    public String gst;
+
+    @ColumnInfo(name = "tax")
+    public String tax;
+
+    @ColumnInfo(name = "subtotal")
+    public String subtotal;
+
+    @ColumnInfo(name = "HSNCode")
+    public String HSNCode;
+
+
+
     public CartDetails(String cartHeaderId,String materialID, String mCode, String mDescription,
                        String deliveryDate, String quantity, String imgPath,
                        String price, boolean isInActive, String cartDetailsId,int customerId,int isUpdated,int isPriority,
-                       String totalPrice,String offerValue,String offerItemCartDetailsID) {
+                       String totalPrice,String offerValue,String offerItemCartDetailsID,
+                       String discountID,String discountText,String gst,String tax,String subtotal,String HSNCode) {
         this.materialID = materialID;
         this.mCode = mCode;
         this.mDescription = mDescription;
@@ -84,6 +107,12 @@ public class CartDetails implements Serializable {
         this.totalPrice=totalPrice;
         this.offerValue=offerValue;
         this.offerItemCartDetailsID=offerItemCartDetailsID;
+        this.discountID=discountID;
+        this.discountText=discountText;
+        this.gst=gst;
+        this.tax=tax;
+        this.subtotal=subtotal;
+        this.HSNCode=HSNCode;
     }
 
     @Ignore

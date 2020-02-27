@@ -20,22 +20,57 @@
             android:id="@+id/txtInputLayoutServiceUrl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <EditText
                 android:id="@+id/etServiceUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/enter_url"
-                android:textSize="@dimen/_13sdp"
-                android:inputType="textUri" />
+                android:inputType="textUri"
+                android:textSize="@dimen/_11sdp" />
+
         </android.support.design.widget.TextInputLayout>
 
+
+        <RadioGroup
+            android:layout_below="@+id/txtInputLayoutServiceUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/_12sdp"
+            android:weightSum="2"
+            android:id="@+id/radioGroup">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Micro Service"
+                android:id="@+id/micro_service"
+                android:layout_gravity="center_horizontal"
+                android:checked="false"
+                android:layout_weight="1"
+                android:textSize="@dimen/_12sdp" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Direct Service"
+                android:id="@+id/direct_service"
+                android:layout_gravity="center_horizontal"
+                android:checked="false"
+                android:layout_weight="1"
+                android:textSize="@dimen/_12sdp" />
+
+
+        </RadioGroup>
+
         <TextView
+            android:layout_below="@+id/radioGroup"
             android:id="@+id/tvSelectPrinter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/selectPrinter"
             style="@style/textViewStyle"
-            android:layout_below="@+id/txtInputLayoutServiceUrl"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="5dp"
             android:visibility="gone"/>
