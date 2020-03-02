@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -364,7 +365,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             e.printStackTrace();
                         }
 
-                        validateUserSession();
+                        new AsyncTask<Void, Integer, String>(){
+
+                            @Override
+                            protected String doInBackground(Void... voids) {
+                                validateUserSession();
+                                return null;
+                            }
+                        }.execute();
+
 
                     /*getProductCatalog();
                     getCustomerList();*/
@@ -644,7 +653,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                         db.customerDAO().deleteAll();
                                         db.customerDAO().insertAll(customerTables);
-                                        getProductCatalog();
+
+                                        new AsyncTask<Void, Integer, String>(){
+
+                                            @Override
+                                            protected String doInBackground(Void... voids) {
+                                                getProductCatalog();
+                                                return null;
+                                            }
+                                        }.execute();
+
 
                                     }else{
 
@@ -815,7 +833,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         db.cartHeaderDAO().deleteAll();
 
                                         setProgressDialog();
-                                        getCustomerList();
+                                    new AsyncTask<Void, Integer, String>(){
+
+                                        @Override
+                                        protected String doInBackground(Void... voids) {
+                                            getCustomerList();
+                                            return null;
+                                        }
+                                    }.execute();
+
 
 /*                                        }else{
                                         SharedPreferences sp = LoginActivity.this.getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);

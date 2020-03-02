@@ -3,6 +3,7 @@ package com.example.inventrax.falconOMS.fragments;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.arch.persistence.room.ColumnInfo;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -434,7 +435,14 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                         cartDetailsListDTO.setOfferValue(cartDetails.offerValue);
                         cartDetailsListDTO.setTotalPrice(cartDetails.totalPrice);
                         cartDetailsListDTO.setOfferItemCartDetailsID(cartDetails.offerItemCartDetailsID);
+                        cartDetailsListDTO.setDiscountID(cartDetails.discountID);
+                        cartDetailsListDTO.setDiscountText(cartDetails.discountText);
+                        cartDetailsListDTO.setGST(cartDetails.gst);
+                        cartDetailsListDTO.setTax(cartDetails.tax);
+                        cartDetailsListDTO.setSubTotal(cartDetails.subtotal);
+                        cartDetailsListDTO.setHSNCode(cartDetails.HSNCode);
                         cartDetailsListDTOList.add(cartDetailsListDTO);
+
                     }
 
                 }
@@ -496,26 +504,33 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                     }
 
                     if (db.cartHeaderDetailsDao().getUpdateCount()) {
+
                         vehiclesList = new ArrayList<>();
                         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                         frame.setVisibility(View.VISIBLE);
 
                         if (userRoleName.equals("DTD")) {
+
                             if (db.cartHeaderDAO().getTaxesList().size() == 1) {
                                 txtTotalAmt.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPrice())));
                                 txtTaxes.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTaxes())));
                                 txtTotalAmtTax.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPriceWithTax())));
                             }
+
                         } else {
+
                             String customerId1 = customerId;
+
                             if (customerId.isEmpty()) {
                                 customerId1 = String.valueOf(cartHeaderList.get(0).getCustomerID());
                             }
+
                             if (db.cartHeaderDAO().getTaxesListByCustomer(customerId1).size() == 1) {
                                 txtTotalAmt.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPrice())));
                                 txtTaxes.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTaxes())));
                                 txtTotalAmtTax.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPriceWithTax())));
                             }
+
                         }
 
                     } else {
@@ -523,6 +538,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                         cartList = new ArrayList<>();
 
                         if (db.cartDetailsDAO().getCartItemsWithOutApprovals() != null) {
+
                             List<CartDetails> cartDetailsList = new ArrayList<>();
                             cartDetailsList = db.cartDetailsDAO().getCartItemsWithOutApprovals();
                             productCatalogs cDto;
@@ -728,7 +744,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                     //recyclerView.setText(new Gson().toJson(isRFMcustomerPartnerDTOS));
                                     linearLayoutManager = new LinearLayoutManager(getActivity());
                                     recyclerView.setLayoutManager(linearLayoutManager);
-                                    CartMaterialHeaderAdapter cartMaterialHeaderAdapter = new CartMaterialHeaderAdapter(isRFMcustomerPartnerDTOS, getActivity(), getActivity(), CartFragment.this,new CartMaterialHeaderAdapter.OnItemClickListener(){
+                                    CartMaterialHeaderAdapter cartMaterialHeaderAdapter = new CartMaterialHeaderAdapter(isRFMcustomerPartnerDTOS, getActivity(), getActivity(), CartFragment.this, new CartMaterialHeaderAdapter.OnItemClickListener() {
 
                                         @Override
                                         public void onItemClick(int pos) {
@@ -773,31 +789,31 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                         public void onClick(View view) {
 
                                             if (isRFMcustomerPartnerDTOS.size() > 0) {
-                                                boolean check=false;
+                                                boolean check = false;
                                                 int[] headerIds = new int[isRFMcustomerPartnerDTOS.size()];
-                                                List<CartProcessDTO> cartProcessDTOS=new ArrayList<>();
+                                                List<CartProcessDTO> cartProcessDTOS = new ArrayList<>();
                                                 for (int i = 0; i < fullfilmentDTOS.size(); i++) {
-                                                    CartProcessDTO cartProcessDTO=new CartProcessDTO();
+                                                    CartProcessDTO cartProcessDTO = new CartProcessDTO();
                                                     cartProcessDTO.setCartHeaderID(Integer.parseInt(fullfilmentDTOS.get(i).getCartHeaderID()));
                                                     cartProcessDTO.setISProceessID(Integer.parseInt("0"));
                                                     cartProcessDTOS.add(cartProcessDTO);
-                                                    for(int j=0;j< isRFMcustomerPartnerDTOS.size();j++){
-                                                        if(isRFMcustomerPartnerDTOS.get(j).getCartHeaderID() == Integer.parseInt(fullfilmentDTOS.get(i).getCartHeaderID())){
+                                                    for (int j = 0; j < isRFMcustomerPartnerDTOS.size(); j++) {
+                                                        if (isRFMcustomerPartnerDTOS.get(j).getCartHeaderID() == Integer.parseInt(fullfilmentDTOS.get(i).getCartHeaderID())) {
                                                             headerIds[j] = isRFMcustomerPartnerDTOS.get(j).getCartHeaderID();
-                                                            CartProcessDTO cartProcessDTO1=new CartProcessDTO();
+                                                            CartProcessDTO cartProcessDTO1 = new CartProcessDTO();
                                                             cartProcessDTO1.setCartHeaderID(isRFMcustomerPartnerDTOS.get(j).getCartHeaderID());
-                                                            if(Integer.parseInt(isRFMcustomerPartnerDTOS.get(j).getIsProcessID())==0){
-                                                                check=true;
+                                                            if (Integer.parseInt(isRFMcustomerPartnerDTOS.get(j).getIsProcessID()) == 0) {
+                                                                check = true;
                                                             }
                                                             cartProcessDTO1.setISProceessID(Integer.parseInt(isRFMcustomerPartnerDTOS.get(j).getIsProcessID()));
-                                                            cartProcessDTOS.set(i,cartProcessDTO1);
+                                                            cartProcessDTOS.set(i, cartProcessDTO1);
                                                         }
                                                     }
                                                 }
-                                                if(check){
+                                                if (check) {
                                                     SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0025, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
-                                                }else{
-                                                    ProcessCart(headerIds, fullfilmentDTOS,cartProcessDTOS);
+                                                } else {
+                                                    ProcessCart(headerIds, fullfilmentDTOS, cartProcessDTOS);
                                                 }
                                                 // ProceedWithOrderQty(headerIds, fullfilmentDTOS);
 
@@ -819,17 +835,18 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                                     for (int i = 0; i < getCartHeader.length(); i++) {
 
-                                        TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() { };
+                                        TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() {
+                                        };
 
                                         /*"CustomerID":164358,
                                                 "CustomerName":"Abhijit Ghosh .",
                                                 "CustomerCode":"0000376904",
                                                 "CreditLimit":0.00,*/
 
-                                        String CustomerID =  getCartHeader.getJSONObject(i).getString("CustomerID");
-                                        String CustomerName =  getCartHeader.getJSONObject(i).getString("CustomerName");
-                                        String CustomerCode =  getCartHeader.getJSONObject(i).getString("CustomerCode");
-                                        Double CreditLimit =  getCartHeader.getJSONObject(i).getDouble("CreditLimit");
+                                        String CustomerID = getCartHeader.getJSONObject(i).getString("CustomerID");
+                                        String CustomerName = getCartHeader.getJSONObject(i).getString("CustomerName");
+                                        String CustomerCode = getCartHeader.getJSONObject(i).getString("CustomerCode");
+                                        Double CreditLimit = getCartHeader.getJSONObject(i).getDouble("CreditLimit");
 
                                         for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
 
@@ -855,7 +872,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                             cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                             cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                             cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                            cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
+                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
                                                 }
                                             }
                                         }
@@ -865,11 +882,11 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                         db.cartHeaderDAO().updateShipToPatryAndIsPriority(cartHeadersList.get(i).customerID, cartHeadersList.get(i).shipToPartyId, cartHeadersList.get(i).isPriority);
                                     }
                                     SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, getActivity());
-                                                                    Calendar calendar = Calendar.getInstance();
-                                long mills = calendar.getTimeInMillis();
-                                sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, getActivity());
-                                sharedPreferencesUtils.savePreference(KeyValues.TIMER, mills);
-                                long timer = sharedPreferencesUtils.loadPreferenceAsLong(KeyValues.TIMER);
+                                    Calendar calendar = Calendar.getInstance();
+                                    long mills = calendar.getTimeInMillis();
+                                    sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, getActivity());
+                                    sharedPreferencesUtils.savePreference(KeyValues.TIMER, mills);
+                                    long timer = sharedPreferencesUtils.loadPreferenceAsLong(KeyValues.TIMER);
 
                                 /*
                                     SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, getActivity());
@@ -923,7 +940,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
         OMSCoreMessage message = new OMSCoreMessage();
         message = common.SetAuthentication(EndpointConstants.OrderFulfilment_DTO, getActivity());
-        CartHeaderListResponseDTO cartHeaderListResponseDTO=new CartHeaderListResponseDTO();
+        CartHeaderListResponseDTO cartHeaderListResponseDTO = new CartHeaderListResponseDTO();
         cartHeaderListResponseDTO.setCartProcessDTOS(cartProcessDTOS);
         message.setEntityObject(cartHeaderListResponseDTO);
 
@@ -963,21 +980,21 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                                 String respObject = core.getEntityObject().toString();
 
-                                if(core.getEntityObject().toString().equals("1")){
+                                if (core.getEntityObject().toString().equals("1")) {
                                     ProgressDialogUtils.closeProgressDialog();
                                     SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Send for SCM approval", ContextCompat.getColor(getActivity(), R.color.safron), Snackbar.LENGTH_SHORT);
                                     dialog.dismiss();
                                     db.cartHeaderDAO().deleteCartHeaderbyList(cartHeaderId);
-                                    ((CartActivity)getActivity()).findViewById(R.id.txtApprovals).performClick();
+                                    ((CartActivity) getActivity()).findViewById(R.id.txtApprovals).performClick();
                                     return;
                                 }
 
-                                if(core.getEntityObject().toString().equals("2")){
+                                if (core.getEntityObject().toString().equals("2")) {
                                     ProgressDialogUtils.closeProgressDialog();
                                     dialog.dismiss();
                                     SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Can't proceed as available quantity is zero", ContextCompat.getColor(getActivity(), R.color.safron), Snackbar.LENGTH_SHORT);
                                     db.cartHeaderDAO().deleteCartHeaderbyList(cartHeaderId);
-                                    ((CartActivity)getActivity()).findViewById(R.id.txtOrders).performClick();
+                                    ((CartActivity) getActivity()).findViewById(R.id.txtOrders).performClick();
                                     return;
                                 }
 
@@ -990,12 +1007,13 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                                 for (int i = 0; i < getCartHeader.length(); i++) {
 
-                                    TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() { };
+                                    TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() {
+                                    };
 
-                                    String CustomerID =  getCartHeader.getJSONObject(i).getString("CustomerID");
-                                    String CustomerName =  getCartHeader.getJSONObject(i).getString("CustomerName");
-                                    String CustomerCode =  getCartHeader.getJSONObject(i).getString("CustomerCode");
-                                    Double CreditLimit =  getCartHeader.getJSONObject(i).getDouble("CreditLimit");
+                                    String CustomerID = getCartHeader.getJSONObject(i).getString("CustomerID");
+                                    String CustomerName = getCartHeader.getJSONObject(i).getString("CustomerName");
+                                    String CustomerCode = getCartHeader.getJSONObject(i).getString("CustomerCode");
+                                    Double CreditLimit = getCartHeader.getJSONObject(i).getDouble("CreditLimit");
 
                                     for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
 
@@ -1020,7 +1038,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
                                             }
                                         }
                                     }
@@ -1131,7 +1149,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                                 for (int i = 0; i < getCartHeader.length(); i++) {
 
-                                    TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() {};
+                                    TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() {
+                                    };
 
                                     for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
 
@@ -1156,7 +1175,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
                                             }
                                         }
                                     }
@@ -1293,7 +1312,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
                                             }
                                         }
                                     }
@@ -1614,7 +1633,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                     cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                     cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                     cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                    cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
+                                                    cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
                                         }
                                     }
                                 }

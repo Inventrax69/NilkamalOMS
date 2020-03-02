@@ -16,7 +16,8 @@ public interface CartDetailsDAO {
     @Query("SELECT CartDetails.materialID,CartDetails.quantity," +
             "CartDetails.mCode,CartDetails.id,CartDetails.price,CartDetails.mDescription,CartDetails.deliveryDate,CartDetails.timeStamp,CartDetails.imgPath," +
             "CartDetails.cartDetailsId,CartDetails.cartHeaderId,CartDetails.isPriority,CartDetails.isInActive,CartDetails.customerId,CartDetails.isUpdated," +
-            "CartDetails.totalPrice,CartDetails.offerValue,CartDetails.offerItemCartDetailsID  FROM CartDetails JOIN CartHeader \n" +
+            "CartDetails.totalPrice,CartDetails.offerValue,CartDetails.offerItemCartDetailsID," +
+            "CartDetails.discountID,CartDetails.discountText,CartDetails.gst,CartDetails.tax,CartDetails.subtotal,CartDetails.HSNCode  FROM CartDetails JOIN CartHeader \n" +
             "ON CartDetails.cartHeaderId= CartHeader.cartHeaderID WHERE (CartDetails.offerItemCartDetailsID IS NULL OR CartDetails.offerItemCartDetailsID='-1') GROUP BY CartDetails.materialID")
     List<CartDetails> getAllCartItems();
 
@@ -42,7 +43,8 @@ public interface CartDetailsDAO {
     @Query("SELECT CartDetails.materialID,CartDetails.quantity," +
             "CartDetails.mCode,CartDetails.id,CartDetails.price,CartDetails.mDescription,CartDetails.deliveryDate,CartDetails.timeStamp,CartDetails.imgPath," +
             "CartDetails.cartDetailsId,CartDetails.cartHeaderId,CartDetails.isPriority,CartDetails.isInActive,CartDetails.customerId,CartDetails.isUpdated," +
-            "CartDetails.totalPrice,CartDetails.offerValue,CartDetails.offerItemCartDetailsID   FROM CartDetails JOIN CartHeader \n" +
+            "CartDetails.totalPrice,CartDetails.offerValue,CartDetails.offerItemCartDetailsID ," +
+            "CartDetails.discountID,CartDetails.discountText,CartDetails.gst,CartDetails.tax,CartDetails.subtotal,CartDetails.HSNCode  FROM CartDetails JOIN CartHeader \n" +
             "ON CartDetails.cartHeaderId = CartHeader.cartHeaderID WHERE CartHeader.isApproved = 0 AND (CartDetails.offerItemCartDetailsID IS NULL OR CartDetails.offerItemCartDetailsID='-1') GROUP BY CartDetails.materialID")
     List<CartDetails> getCartItemsWithOutApprovals();
 
@@ -80,7 +82,8 @@ public interface CartDetailsDAO {
             "CartDetails.mCode,CartDetails.id,CartDetails.price,CartDetails.mDescription,CartDetails.timeStamp,CartDetails.imgPath," +
             "CartDetails.cartDetailsId,CartDetails.cartHeaderId,CartDetails.isPriority,CartDetails.isInActive,CartDetails.deliveryDate," +
             "CartDetails.customerId,CartDetails.isUpdated," +
-            "CartDetails.totalPrice,CartDetails.offerValue,CartDetails.offerItemCartDetailsID FROM CartDetails JOIN CartHeader ON CartDetails.cartHeaderId= CartHeader.cartHeaderID " +
+            "CartDetails.totalPrice,CartDetails.offerValue,CartDetails.offerItemCartDetailsID," +
+            "CartDetails.discountID,CartDetails.discountText,CartDetails.gst,CartDetails.tax,CartDetails.subtotal,CartDetails.HSNCode FROM CartDetails JOIN CartHeader ON CartDetails.cartHeaderId= CartHeader.cartHeaderID " +
             "WHERE CartDetails.cartHeaderId =:cartHeaderId AND CartDetails.customerId=:customerId AND (CartDetails.offerItemCartDetailsID IS NULL OR CartDetails.offerItemCartDetailsID='-1') GROUP BY CartDetails.materialID")
     List<CartDetails> getCartItemsOfCustomer(int cartHeaderId,int customerId);
 

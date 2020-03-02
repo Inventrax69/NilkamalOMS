@@ -1116,6 +1116,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
                         } else {
 
                             try {
+
                                 JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
 
                                 db.cartDetailsDAO().deleteAll();
@@ -1123,8 +1124,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
                                 for (int i = 0; i < getCartHeader.length(); i++) {
 
-                                    TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() {
-                                    };
+                                    TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() {};
 
                                     for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
 

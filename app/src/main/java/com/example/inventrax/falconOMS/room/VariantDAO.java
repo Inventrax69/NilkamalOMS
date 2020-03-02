@@ -55,6 +55,10 @@ public interface VariantDAO {
     @Query("DELETE FROM variantTable WHERE materialID=:materialID")
     void deleteByMaterialID(String materialID);
 
+
+    @Query("SELECT COUNT(*) FROM variantTable WHERE materialID=:materialID")
+    int getCountByMaterialID(String materialID);
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void update(VariantTable variantTable);
 
@@ -68,6 +72,10 @@ public interface VariantDAO {
                             String mCode,String modelColor,String price,String discountCount,String discountId,
                             String discountDesc,String materialImgPath, String specsUrl,
                             String catalogUrl,String brochureUrl,String isOpenPrice,String stackSize,String packSize);
+
+
+    @Query("UPDATE varianttable SET discountCount=0,discountId=0,discountDesc=''")
+    void updateDiscount();
 
 
 }

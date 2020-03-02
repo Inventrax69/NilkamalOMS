@@ -108,6 +108,9 @@ public interface ItemDAO {
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insert(ItemTable itemTable);
 
+    @Query("SELECT COUNT(*) FROM ItemTable WHERE modelID=:modelID")
+    int getCountByModelID(String modelID);
+
   //  modelID,divisionID,segmentID,modelCode,modelDescription,imgPath,price,discountCount,discountId,discountDesc,timeStamp
 
     @Query("UPDATE itemtable SET modelID=:modelID,divisionID=:divisionID,segmentID=:segmentID," +
@@ -119,6 +122,10 @@ public interface ItemDAO {
 
     @Query("DELETE FROM ItemTable WHERE modelID=:modelID")
     void deleteByModelID(String modelID);
+
+
+    @Query("UPDATE itemtable SET discountId=0,discountDesc='',discountDesc=0")
+    void updateDiscount();
 
 
 }

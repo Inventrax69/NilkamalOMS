@@ -25,6 +25,10 @@ public class ItemListDTO  {
     @SerializedName("Filter")
     private String filter;
 
+
+    @SerializedName("CustomerID")
+    private String CustomerID;
+
     @SerializedName("Results")
     private List<ModelDTO> results;
 
@@ -125,4 +129,13 @@ public class ItemListDTO  {
     public void setFilter(String filter) {
         this.filter = filter;
     }
+
+    public String getCustomerID() {
+        return CustomerID;
+    }
+
+    public void setCustomerID(String customerID) {
+        CustomerID = customerID;
+    }
+
 }

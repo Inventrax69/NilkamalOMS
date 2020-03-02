@@ -6,14 +6,17 @@ package com.example.inventrax.falconOMS.fragments;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -65,6 +68,7 @@ import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.activities.LoginActivity;
 import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.adapters.OffersAdapter;
+import com.example.inventrax.falconOMS.adapters.PaginationAdapter;
 import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.Log.Logger;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
@@ -73,9 +77,12 @@ import com.example.inventrax.falconOMS.interfaces.ApiInterface;
 import com.example.inventrax.falconOMS.model.KeyValues;
 import com.example.inventrax.falconOMS.pojos.CartDetailsListDTO;
 import com.example.inventrax.falconOMS.pojos.CartHeaderListDTO;
+import com.example.inventrax.falconOMS.pojos.ItemListDTO;
+import com.example.inventrax.falconOMS.pojos.ModelDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
 import com.example.inventrax.falconOMS.pojos.PriceDTO;
+import com.example.inventrax.falconOMS.pojos.VariantDTO;
 import com.example.inventrax.falconOMS.pojos.productCatalogs;
 import com.example.inventrax.falconOMS.room.AppDatabase;
 import com.example.inventrax.falconOMS.room.CartDetails;
@@ -96,6 +103,7 @@ import com.example.inventrax.falconOMS.util.SnackbarUtils;
 import com.example.inventrax.falconOMS.util.ViewDialog;
 import com.example.inventrax.falconOMS.util.searchableSpinner.SearchableSpinner;
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -167,6 +175,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
     int count = 0;
     ViewDialog viewDialog;
     SharedPreferences sp;
+    ProgressDialog dialog1;
 
     @Override
     public void onStart() {
@@ -191,6 +200,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         return rootView;
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void loadFormControl() {
         // To enable Bottom navigation bar
         ((MainActivity) getActivity()).SetNavigationVisibility(true);
@@ -242,7 +252,6 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         txtCustomerName = (TextView) rootView.findViewById(R.id.txtCustomerName);
 
 
-
         if (userRoleName.equals("DTD")) {
             txtCustomerName.setVisibility(View.GONE);
         } else {
@@ -287,8 +296,47 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
         viewDialog = new ViewDialog(getActivity());
 
+
+
+        if(NetworkUtils.isInternetAvailable(getActivity())) {
+
+            new AsyncTask<Void, Integer, String>(){
+
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+                    dialog1=new ProgressDialog(getActivity());
+                    dialog1.setMessage("Doing something, please wait...");
+                    dialog1.show();
+                }
+
+                @Override
+                protected String doInBackground(Void... voids) {
+                    loadProductCatlog();
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(String s) {
+                    super.onPostExecute(s);
+                    if (dialog1.isShowing()) {
+                        dialog1.dismiss();
+                    }
+                }
+
+            }.execute();
+
+        }
+        else
+            loadCatlog();
+
+    }
+
+    void loadCatlog(){
+
         try {
             if (customerId.equals("") || customerId.isEmpty()) {
+
                 if (!db.itemDAO().getAllItemsAll(pagecount).isEmpty()) {
                     layoutManager = new LinearLayoutManager(getActivity());
                     recyclerView.setLayoutManager(layoutManager);
@@ -304,6 +352,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                     layoutManager = new LinearLayoutManager(getActivity());
                     recyclerView.setLayoutManager(layoutManager);
                 }
+
             } else {
                 if (!db.itemDAO().getAllItems(pagecount, customerId).isEmpty()) {
                     layoutManager = new LinearLayoutManager(getActivity());
@@ -364,7 +413,6 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                         updateToRecyclerView(db.itemDAO().getAllItemsASC(pagecount, customerId), 1);
                                 }
                             }
-
                         }
                     }
                 } else if (dy < 0) {
@@ -380,6 +428,159 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
 
         recyclerView.smoothScrollToPosition(0);
+    }
+
+
+    void loadProductCatlog(){
+
+        if (NetworkUtils.isInternetAvailable(getActivity())) {
+
+        } else {
+            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0007);
+            // soundUtils.alertSuccess(getActivity(),getBaseContext());
+            return;
+        }
+
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, getActivity());
+        ItemListDTO itemListDTO = new ItemListDTO();
+        itemListDTO.setSearchString(null);
+        itemListDTO.setFilter("0");
+        itemListDTO.setPageIndex(1);
+        itemListDTO.setPageSize(10);
+        itemListDTO.setHandheldRequest(true);
+        if(customerId.isEmpty() || customerId.equals(""))
+            itemListDTO.setCustomerID(null);
+        else
+            itemListDTO.setCustomerID(customerId);
+        message.setEntityObject(itemListDTO);
+
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
+
+       // ProgressDialogUtils.showProgressDialog("Please wait..");
+        call = apiService.ProductCatalog2(message);
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if ((core.getType().toString().equals("Exception"))) {
+
+                            OMSExceptionMessage omsExceptionMessage = null;
+
+                            for (OMSExceptionMessage oms : core.getOMSMessages()) {
+
+                                omsExceptionMessage = oms;
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showAlertType(omsExceptionMessage,getActivity(), getActivity());
+
+                            }
+
+                            dialog.dismiss();
+
+                        } else {
+
+                            try {
+
+                                LinkedTreeMap<?, ?> _lstItem = new LinkedTreeMap<String, String>();
+                                _lstItem = (LinkedTreeMap<String, String>) core.getEntityObject();
+
+                                List<ItemTable> itemTables = new ArrayList<>();
+                                ItemListDTO itemList;
+
+                                try {
+
+                                    itemList = new ItemListDTO(_lstItem.entrySet());
+                                    List<ModelDTO>  lstItem = itemList.getResults();
+
+                                    if (lstItem != null && lstItem.size() > 0) {
+
+                                        db.itemDAO().updateDiscount();
+                                        db.variantDAO().updateDiscount();
+
+                                        for (ModelDTO md : lstItem) {
+
+                                            if(db.itemDAO().getCountByModelID(md.getModelID())==0){
+                                                db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                        md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
+                                            }else{
+                                                db.itemDAO().updateByModelID(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                        md.getModelDescription(), md.getImgPath(),"", md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc(),"");
+                                            }
+
+                                            for (VariantDTO variantDTO : md.getVarientList()) {
+
+                                                if(db.variantDAO().getCountByMaterialID(variantDTO.getMaterialID())==0){
+                                                    db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
+                                                            variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                                                            variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
+                                                            variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
+                                                            variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
+                                                }else{
+                                                    db.variantDAO().updateByMaterialID(md.getModelID(), md.getDivisionID(),
+                                                            variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                                                            variantDTO.getMcode(), variantDTO.getModelColor(),"",
+                                                            variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(), variantDTO.getMaterialImgPath(),
+                                                            variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(),
+                                                            String.valueOf(variantDTO.getOpenPrice()), String.valueOf((int) Double.parseDouble(variantDTO.getStackSize())),"");
+                                                }
+                                            }
+                                        }
+
+                                        loadCatlog();
+
+                                    }else{
+
+                                        loadCatlog();
+
+                                    }
+
+                                    ProgressDialogUtils.closeProgressDialog();
+
+                                } catch (Exception e) {
+                                    common.showUserDefinedAlertType(errorMessages.EMC_0018, getActivity(), getActivity(), "Warning");
+                                }
+
+                            }catch (Exception ex){
+                                ProgressDialogUtils.closeProgressDialog();
+                            }
+                            ProgressDialogUtils.closeProgressDialog();
+                        }
+                        ProgressDialogUtils.closeProgressDialog();
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    if(NetworkUtils.isInternetAvailable(getActivity())){
+                        DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
+                    }else{
+                        DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+            });
+        } catch (Exception ex) {
+
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", getActivity());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
+        }
 
     }
 
@@ -475,6 +676,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
     @Override
     public boolean onQueryTextChange(String searchText) {
+
         List<ItemTable> filteredModelList = null;
         if (customerId.isEmpty() && customerId.equals(""))
             filteredModelList = filter(db.itemDAO().getAll(), searchText);
@@ -505,6 +707,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
             Logger.Log(ProductCatalogFragment.class.getName(), ex);
             return false;
         }
+
     }
 
     private List<ItemTable> filter(List<ItemTable> models, String query) {
@@ -1199,8 +1402,9 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         final AlertDialog d = new AlertDialog.Builder(getActivity())
                 .setView(promptView)
                 .setCancelable(false)
-                .setPositiveButton("OK", null) //Set to null. We override the onclick
-                //  .setNegativeButton("CLEAR", null)
+                .setPositiveButton("OK", null)
+                //Set to null. We override the onclick
+                //.setNegativeButton("CLEAR", null)
                 .create();
 
         d.setOnShowListener(new DialogInterface.OnShowListener() {
