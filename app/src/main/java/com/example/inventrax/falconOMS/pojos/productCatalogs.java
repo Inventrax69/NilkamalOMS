@@ -20,6 +20,9 @@ public class productCatalogs {
     @SerializedName("UserID")
     private String UserID;
 
+    @SerializedName("CreatedOn")
+    private String CreatedOn;
+
     @SerializedName("MaterialMasterID")
     private String MaterialMasterID;
 
@@ -38,10 +41,8 @@ public class productCatalogs {
     @SerializedName("DeliveryDate")
     private String DeliveryDate;
 
-
     @SerializedName("CustomerID")
     private String CustomerID;
-
 
     @SerializedName("PageIndex")
     private int pageIndex;
@@ -61,12 +62,12 @@ public class productCatalogs {
     @SerializedName("ShipToPartyCustomerID")
     private String ShipToPartyCustomerID;
 
-
     @SerializedName("MaterialPriorityID")
     private String MaterialPriorityID;
 
     @SerializedName("Results")
     private String Results;
+
 
 
     public productCatalogs() {
@@ -241,5 +242,13 @@ public class productCatalogs {
 
     public void setResults(String results) {
         Results = results;
+    }
+
+    public String getCreatedOn() {
+        return CreatedOn;
+    }
+
+    public void setCreatedOn(String createdOn) {
+        CreatedOn = createdOn;
     }
 }

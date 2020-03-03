@@ -25,7 +25,6 @@ public class ItemListDTO  {
     @SerializedName("Filter")
     private String filter;
 
-
     @SerializedName("CustomerID")
     private String CustomerID;
 

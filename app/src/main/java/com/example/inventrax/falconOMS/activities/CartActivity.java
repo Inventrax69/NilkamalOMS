@@ -260,7 +260,8 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
             sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, getApplicationContext());
             txtTimer.setVisibility(View.GONE);
-/*            try {
+            /*
+            try {
                 long timer = sharedPreferencesUtils.loadPreferenceAsLong(KeyValues.TIMER);
                 Calendar calendar = Calendar.getInstance();
                 long mills = calendar.getTimeInMillis();
@@ -268,7 +269,8 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             } catch (Exception e) {
                 txtTimer.setText("00:00");
                 txtTimer.setVisibility(View.GONE);
-            }*/
+            }
+            */
 
             anim = new AlphaAnimation(0.0f, 1.0f);
             anim.setDuration(500); //You can manage the blinking time with this parameter

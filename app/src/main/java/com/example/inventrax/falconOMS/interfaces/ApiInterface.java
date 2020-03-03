@@ -53,6 +53,9 @@ public interface ApiInterface {
     @POST("Master/SyncCustomerData")
     Call<OMSCoreMessage> SyncCustomerData(@Body OMSCoreMessage oRequest);
 
+    @POST("Master/SyncData")
+    Call<OMSCoreMessage> SyncData(@Body OMSCoreMessage oRequest);
+
     @POST("OrderAssistanceUpload")
     Call<OMSCoreMessage> OrderAssistanceUpload(@Body OMSCoreMessage oRequest);
 

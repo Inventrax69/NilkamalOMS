@@ -62,8 +62,11 @@ import com.example.inventrax.falconOMS.pojos.CartDetailsListDTO;
 import com.example.inventrax.falconOMS.pojos.CartHeaderListDTO;
 import com.example.inventrax.falconOMS.pojos.CustomerListDTO;
 import com.example.inventrax.falconOMS.pojos.ItemListResponse;
+import com.example.inventrax.falconOMS.pojos.ModelDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
+import com.example.inventrax.falconOMS.pojos.SyncDataDTO;
+import com.example.inventrax.falconOMS.pojos.VariantDTO;
 import com.example.inventrax.falconOMS.pojos.productCatalogs;
 import com.example.inventrax.falconOMS.room.AppDatabase;
 import com.example.inventrax.falconOMS.room.CartDetails;
@@ -71,6 +74,7 @@ import com.example.inventrax.falconOMS.room.CartHeader;
 import com.example.inventrax.falconOMS.room.CustomerTable;
 import com.example.inventrax.falconOMS.room.ItemTable;
 import com.example.inventrax.falconOMS.room.RoomAppDatabase;
+import com.example.inventrax.falconOMS.room.VariantTable;
 import com.example.inventrax.falconOMS.services.RestService;
 import com.example.inventrax.falconOMS.util.DialogUtils;
 import com.example.inventrax.falconOMS.util.ExceptionLoggerUtils;
@@ -87,7 +91,11 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -410,10 +418,21 @@ public class MainActivity extends AppCompatActivity {
 
         customerTimeStamp = "2019-08-27 19:08:18.630";
 
+
+        Date date = Calendar.getInstance().getTime();
+        //
+        // Display a date in day, month, year format
+        //
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String todaysdate = formatter.format(date);
+
+        Log.v("ABCDE", "" + todaysdate);
+
         if (NetworkUtils.isInternetAvailable(MainActivity.this)) {
             // syncItemData();
             // syncCustomerData();
             cartSyncAsync();
+            // SyncData();
         }
 
 
@@ -647,6 +666,155 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void SyncData() {
+
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.HHTCartDTO, MainActivity.this);
+        productCatalogs oDto = new productCatalogs();
+        oDto.setUserID(userId);
+        message.setEntityObject(oDto);
+
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
+
+        call = apiService.SyncData(message);
+
+        //ProgressDialogUtils.showProgressDialog("Please Wait");
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if ((core.getType().toString().equals("Exception"))) {
+
+                            OMSExceptionMessage omsExceptionMessage = null;
+
+                            for (OMSExceptionMessage oms : core.getOMSMessages()) {
+
+                                omsExceptionMessage = oms;
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showAlertType(omsExceptionMessage, MainActivity.this, MainActivity.this);
+
+                            }
+                            ProgressDialogUtils.closeProgressDialog();
+
+                        } else {
+
+                            try {
+                                if (core.getEntityObject() != null || !core.getEntityObject().toString().isEmpty()) {
+
+                                    SyncDataDTO syncDataDTO = new Gson().fromJson(core.getEntityObject().toString(), SyncDataDTO.class);
+
+                                    if (syncDataDTO.getCustomerMasters().size() > 0) {
+                                        for (int i = 0; i < syncDataDTO.getCustomerMasters().size(); i++) {
+                                            CustomerListDTO dd = syncDataDTO.getCustomerMasters().get(i);
+                                            if(syncDataDTO.getCustomerMasters().get(i).getAction().equals("A")){
+
+                                                CustomerTable customerTable = new CustomerTable(dd.getCustomerID(), dd.getCustomerName(), dd.getCustomerCode(),
+                                                        dd.getCustomerType(), dd.getCustomerTypeID(), dd.getDivision(), dd.getDivisionID().split("[.]")[0], dd.getConnectedDepot(), dd.getMobile(),
+                                                        dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(),dd.getCity());
+
+                                                db.customerDAO().insert(customerTable);
+
+                                            }else if(syncDataDTO.getCustomerMasters().get(i).getAction().equals("M")) {
+
+                                                db.customerDAO().updateByCustomerId(dd.getCustomerID(), dd.getCustomerName(), dd.getCustomerCode(),
+                                                        dd.getCustomerType(), dd.getCustomerTypeID(), dd.getDivision(), dd.getDivisionID().split("[.]")[0], dd.getConnectedDepot(), dd.getMobile(),
+                                                        dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(),dd.getCity(),"");
+
+                                            }else if(syncDataDTO.getCustomerMasters().get(i).getAction().equals("D")){
+
+                                                db.customerDAO().deleteByCustomerId(dd.getCustomerID());
+
+                                            }
+                                        }
+                                    }
+
+                                    if (syncDataDTO.getItemMasters().size() > 0) {
+                                        for (int i = 0; i < syncDataDTO.getItemMasters().size(); i++) {
+
+                                            ModelDTO md=syncDataDTO.getItemMasters().get(i);
+
+                                            if(syncDataDTO.getItemMasters().get(i).getAction().equals("A") || syncDataDTO.getItemMasters().get(i).getAction().equals("M")){
+
+                                                if(db.itemDAO().getCountByModelID(md.getModelID())==0){
+                                                    db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                            md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
+                                                }else{
+                                                    db.itemDAO().updateByModelID(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                            md.getModelDescription(), md.getImgPath(),"", md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc(),"");
+                                                }
+
+                                                for (VariantDTO variantDTO : md.getVarientList()) {
+
+                                                    if(variantDTO.getAction().equals("D")){
+                                                        db.variantDAO().deleteByMaterialID(variantDTO.getMaterialID());
+                                                    }else{
+                                                        if(db.variantDAO().getCountByMaterialID(variantDTO.getMaterialID())==0){
+                                                            db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
+                                                                    variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                                                                    variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
+                                                                    variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
+                                                                    variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
+                                                        }else{
+                                                            db.variantDAO().updateByMaterialID(md.getModelID(), md.getDivisionID(),
+                                                                    variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                                                                    variantDTO.getMcode(), variantDTO.getModelColor(),"",
+                                                                    variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(), variantDTO.getMaterialImgPath(),
+                                                                    variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(),
+                                                                    String.valueOf(variantDTO.getOpenPrice()), String.valueOf((int) Double.parseDouble(variantDTO.getStackSize())),"");
+                                                        }
+                                                    }
+                                                }
+                                            }else if(syncDataDTO.getItemMasters().get(i).getAction().equals("D")){
+                                                db.itemDAO().deleteByModelID(md.getModelID());
+                                            }
+                                        }
+                                    }
+                                }
+
+
+                            } catch (Exception e) {
+                                    //
+                            }
+                        }
+
+                        ProgressDialogUtils.closeProgressDialog();
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    if (NetworkUtils.isInternetAvailable(MainActivity.this)) {
+                        DialogUtils.showAlertDialog(MainActivity.this, errorMessages.EMC_0001);
+                    } else {
+                        DialogUtils.showAlertDialog(MainActivity.this, errorMessages.EMC_0014);
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+            });
+        } catch (Exception ex) {
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", MainActivity.this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(MainActivity.this, errorMessages.EMC_0003);
+        }
+
+    }
+
+
     public void syncCart(final String value) {
 
         OMSCoreMessage message = new OMSCoreMessage();
@@ -720,14 +888,14 @@ public class MainActivity extends AppCompatActivity {
 
                                                 CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
 
-                                               // String discountID,String discountText,String gst,String tax,String subtotal,String HSNCode
+                                                // String discountID,String discountText,String gst,String tax,String subtotal,String HSNCode
 
                                                 db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
                                                         cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0,
                                                         cart.getMaterialPriorityID(), cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
                                             }
 
                                         }
@@ -785,7 +953,7 @@ public class MainActivity extends AppCompatActivity {
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0,
                                                         cart.getMaterialPriorityID(), cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
 
                                                 productCatalogs cDto = new productCatalogs();
                                                 cDto.setMaterialMasterID(cart.getMaterialMasterID());
@@ -918,7 +1086,7 @@ public class MainActivity extends AppCompatActivity {
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
                                             }
                                         }
 
@@ -1008,7 +1176,6 @@ public class MainActivity extends AppCompatActivity {
             task.execute();
         }
     }
-
 
     public void deleteCartItemReservation() {
 

@@ -237,6 +237,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                 isItemAdded = getActivity().getIntent().getExtras().getBoolean(KeyValues.IS_ITEM_ADDED_TO_CART);
                 if (isItemAdded) {
                     if (NetworkUtils.isInternetAvailable(getActivity())) {
+
                     }
                 }
             }
@@ -270,10 +271,12 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
             getCustomerNames = db.customerDAO().getCustomerNames();
             userDivisionId = db.customerDAO().getUserDivisionCustTableId();
-            customerCodes = new ArrayList();
-            customerIds = new ArrayList();
+            customerCodes = new ArrayList<String>();
+            customerIds = new ArrayList<String>();
+
             customerCodes.add("Select Customer");
             customerIds.add("");
+
             for (int i = 0; i < userDivisionId.size(); i++) {
                 customerCodes.add(db.customerDAO().getCustomerCodesByString(userDivisionId.get(i)));
                 customerIds.add(db.customerDAO().getCustomerIdByString(userDivisionId.get(i)));
@@ -314,8 +317,9 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                 txtOrderFulfilment.setBackgroundTintList(ColorStateList.valueOf(getActivity().getResources().getColor(R.color.colorAccent)));
                 callCart();
             }
+
         } catch (Exception ex) {
-            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+
         }
 
     }
@@ -349,13 +353,16 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
             loadCart();
 
-            /* if (NetworkUtils.isInternetAvailable(getActivity())) {
+            /*
+            if (NetworkUtils.isInternetAvailable(getActivity())) {
 
             } else {
                 loadCart();
                 txtOrderFulfilment.setEnabled(false);
                 txtConfirmOrder.setEnabled(false);
-            }*/
+            }
+            */
+
         } else {
             changeLayout();
         }
