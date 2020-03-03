@@ -127,7 +127,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
             anim.setRepeatMode(Animation.REVERSE);
             anim.setRepeatCount(Animation.INFINITE);
             viewHolder.txtAvailableItem.startAnimation(anim);
-            viewHolder.txtPrice.setText(Html.fromHtml("Rs. :" + item.getSubTotal()));
+            viewHolder.txtPrice.setText(Html.fromHtml("Rs. :" + item.getPrice()));
           /*  if (item.getTotalPrice().equals(item.getOfferValue()))
                 viewHolder.txtPrice.setText(Html.fromHtml("Rs. :" + item.getTotalPrice()));
             else
