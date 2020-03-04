@@ -471,7 +471,7 @@ public class RefPopSCMApprovalAdapter extends RecyclerView.Adapter<RefPopSCMAppr
 
                                     if (core.getEntityObject() != null && !core.getEntityObject().toString().isEmpty()) {
                                         if (core.getEntityObject().equals("success")) {
-                                            MaterialDialogUtils.showUploadSuccessDialog(context, "Success");
+                                            MaterialDialogUtils.showUploadSuccessDialog(context, "Done");
                                             listener.onItemClick(position);
                                         } else {
                                             MaterialDialogUtils.showUploadErrorDialog(context, "Failed");
