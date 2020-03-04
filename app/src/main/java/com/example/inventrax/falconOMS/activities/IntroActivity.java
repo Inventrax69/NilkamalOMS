@@ -35,7 +35,7 @@ import java.util.List;
 public class IntroActivity extends AppCompatActivity {
 
     private ViewPager screenPager;
-    IntroViewPagerAdapter introViewPagerAdapter ;
+    IntroViewPagerAdapter introViewPagerAdapter;
     TabLayout tabIndicator;
     Button btnNext;
     int position = 0;
@@ -50,7 +50,6 @@ public class IntroActivity extends AppCompatActivity {
             Manifest.permission.INTERNET, Manifest.permission.WAKE_LOCK, Manifest.permission.VIBRATE, Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.CHANGE_NETWORK_STATE, Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
             Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECEIVE_SMS, Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS};
-
 
 
     @Override
@@ -68,7 +67,7 @@ public class IntroActivity extends AppCompatActivity {
         // when this activity is about to be launch we need to check if its openened before or not
 
         if (restorePrefData()) {
-            Intent mainActivity = new Intent(getApplicationContext(),SplashActivity.class );
+            Intent mainActivity = new Intent(getApplicationContext(), SplashActivity.class);
             startActivity(mainActivity);
             finish();
         }
@@ -187,8 +186,8 @@ public class IntroActivity extends AppCompatActivity {
                     screenPager.setCurrentItem(mList.size());
                 }
             });
-        }catch (Exception ex){
-           // Toast.makeText(this,  ex.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (Exception ex) {
+            // Toast.makeText(this,  ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -196,26 +195,26 @@ public class IntroActivity extends AppCompatActivity {
     private boolean restorePrefData() {
 
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(KeyValues.MY_PREFS,MODE_PRIVATE);
-        boolean isIntroActivityOpnendBefore = pref.getBoolean(KeyValues.IS_INTRO_OPENED,false);
-        return  isIntroActivityOpnendBefore;
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(KeyValues.MY_PREFS, MODE_PRIVATE);
+        boolean isIntroActivityOpnendBefore = pref.getBoolean(KeyValues.IS_INTRO_OPENED, false);
+        return isIntroActivityOpnendBefore;
 
     }
 
     private void savePrefsData() {
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(KeyValues.MY_PREFS,MODE_PRIVATE);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(KeyValues.MY_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean(KeyValues.IS_INTRO_OPENED,true);
+        editor.putBoolean(KeyValues.IS_INTRO_OPENED, true);
         editor.commit();
 
     }
 
     private void savePrefsData1() {
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(KeyValues.MY_PREFS,MODE_PRIVATE);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(KeyValues.MY_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean(KeyValues.IS_HINTS,true);
+        editor.putBoolean(KeyValues.IS_HINTS, true);
         editor.commit();
 
 

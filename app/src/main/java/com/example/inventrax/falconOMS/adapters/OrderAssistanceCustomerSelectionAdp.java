@@ -24,7 +24,6 @@ public class OrderAssistanceCustomerSelectionAdp extends RecyclerView.Adapter<Or
         this.context = applicationContext;
         this.items = itemArrayList;
         listener = mlistener;
-
     }
 
     @Override
@@ -40,11 +39,11 @@ public class OrderAssistanceCustomerSelectionAdp extends RecyclerView.Adapter<Or
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
 
         String custList = (String) items.get(i);
-        if(custList.split("-").length==2){
+        if (custList.split("-").length == 2) {
             viewHolder.txtCustmerName.setText(custList.split("-")[0]);
             viewHolder.txtCode.setText(custList.split("-")[1]);
-        }else{
-            viewHolder.txtCustmerName.setText(custList.split("-")[0]== null ? "" : custList.split("-")[0]);
+        } else {
+            viewHolder.txtCustmerName.setText(custList.split("-")[0] == null ? "" : custList.split("-")[0]);
             viewHolder.txtCode.setText(custList.split("-")[1] == null ? "" : custList.split("-")[1]);
         }
 

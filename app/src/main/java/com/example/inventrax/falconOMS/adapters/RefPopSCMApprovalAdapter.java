@@ -128,7 +128,8 @@ public class RefPopSCMApprovalAdapter extends RecyclerView.Adapter<RefPopSCMAppr
 
     }
 
-    public RefPopSCMApprovalAdapter() { }
+    public RefPopSCMApprovalAdapter() {
+    }
 
     @NonNull
     @Override

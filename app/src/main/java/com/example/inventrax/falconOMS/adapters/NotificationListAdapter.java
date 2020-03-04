@@ -53,14 +53,14 @@ public class NotificationListAdapter extends BaseAdapter {
 
         tvNotifTriggerName.setText(notification.getNotifTriggerName());
         tvNotifTriggerDescription.setText(notification.getNotifTriggerDescription());
-        tvCreatedOn.setText("Created On : "+ notification.getCreatedOn());
+        tvCreatedOn.setText("Created On : " + notification.getCreatedOn());
 
-        if(notification.getReference().isEmpty()){
+        if (notification.getReference().isEmpty()) {
             tvReference.setVisibility(View.GONE);
-        }else{
+        } else {
             tvReference.setVisibility(View.VISIBLE);
         }
-        tvReference.setText("Cart Ref No: "+ notification.getReference());
+        tvReference.setText("Cart Ref No: " + notification.getReference());
 
         return view;
     }

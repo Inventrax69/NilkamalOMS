@@ -24,7 +24,7 @@ public class OrderConfirmationAdapter extends RecyclerView.Adapter<OrderConfirma
     private Context context;
     private OnItemClickListener mlistener;
 
-    public OrderConfirmationAdapter(Context context, List<CartDetailsListDTO> cartItemList,OnItemClickListener mlistener) {
+    public OrderConfirmationAdapter(Context context, List<CartDetailsListDTO> cartItemList, OnItemClickListener mlistener) {
         this.context = context;
         this.cartItemList = cartItemList;
         this.mlistener = mlistener;
@@ -68,8 +68,8 @@ public class OrderConfirmationAdapter extends RecyclerView.Adapter<OrderConfirma
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtItemName, txtQty, txtDeliveryDate,isItemInactive;
-        private ImageView ivItem,ivDeleteItem;
+        private TextView txtItemName, txtQty, txtDeliveryDate, isItemInactive;
+        private ImageView ivItem, ivDeleteItem;
 
 
         public ViewHolder(View view) {

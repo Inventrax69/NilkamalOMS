@@ -1193,6 +1193,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                 startActivity(i);*/
 
                             } catch (Exception e) {
+                                viewDialog.hideDialog();
                                 Toast.makeText(getActivity(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -1205,6 +1206,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    viewDialog.hideDialog();
                     if(NetworkUtils.isInternetAvailable(getActivity())){
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
                     }else{
@@ -1655,9 +1657,9 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                     if (result.imgPath.equals("")) {
                         itemListView.ivItem.setImageResource(R.drawable.no_img);
                     } else {
-                        Picasso.with(context)
+                         Picasso.with(context)
                                 .load(result.imgPath)
-                                .placeholder(R.drawable.load)
+                                .placeholder(R.drawable.no_img)
                                 .into(itemListView.ivItem);
                     }
 

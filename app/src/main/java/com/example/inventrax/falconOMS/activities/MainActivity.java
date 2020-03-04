@@ -715,21 +715,21 @@ public class MainActivity extends AppCompatActivity {
                                     if (syncDataDTO.getCustomerMasters().size() > 0) {
                                         for (int i = 0; i < syncDataDTO.getCustomerMasters().size(); i++) {
                                             CustomerListDTO dd = syncDataDTO.getCustomerMasters().get(i);
-                                            if(syncDataDTO.getCustomerMasters().get(i).getAction().equals("A")){
+                                            if (syncDataDTO.getCustomerMasters().get(i).getAction().equals("A")) {
 
                                                 CustomerTable customerTable = new CustomerTable(dd.getCustomerID(), dd.getCustomerName(), dd.getCustomerCode(),
                                                         dd.getCustomerType(), dd.getCustomerTypeID(), dd.getDivision(), dd.getDivisionID().split("[.]")[0], dd.getConnectedDepot(), dd.getMobile(),
-                                                        dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(),dd.getCity());
+                                                        dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(), dd.getCity());
 
                                                 db.customerDAO().insert(customerTable);
 
-                                            }else if(syncDataDTO.getCustomerMasters().get(i).getAction().equals("M")) {
+                                            } else if (syncDataDTO.getCustomerMasters().get(i).getAction().equals("M")) {
 
                                                 db.customerDAO().updateByCustomerId(dd.getCustomerID(), dd.getCustomerName(), dd.getCustomerCode(),
                                                         dd.getCustomerType(), dd.getCustomerTypeID(), dd.getDivision(), dd.getDivisionID().split("[.]")[0], dd.getConnectedDepot(), dd.getMobile(),
-                                                        dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(),dd.getCity(),"");
+                                                        dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(), dd.getCity(), "");
 
-                                            }else if(syncDataDTO.getCustomerMasters().get(i).getAction().equals("D")){
+                                            } else if (syncDataDTO.getCustomerMasters().get(i).getAction().equals("D")) {
 
                                                 db.customerDAO().deleteByCustomerId(dd.getCustomerID());
 
@@ -740,49 +740,49 @@ public class MainActivity extends AppCompatActivity {
                                     if (syncDataDTO.getItemMasters().size() > 0) {
                                         for (int i = 0; i < syncDataDTO.getItemMasters().size(); i++) {
 
-                                            ModelDTO md=syncDataDTO.getItemMasters().get(i);
+                                            ModelDTO md = syncDataDTO.getItemMasters().get(i);
 
-                                            if(syncDataDTO.getItemMasters().get(i).getAction().equals("A") || syncDataDTO.getItemMasters().get(i).getAction().equals("M")){
+                                            /*  if(syncDataDTO.getItemMasters().get(i).getAction().equals("A") || syncDataDTO.getItemMasters().get(i).getAction().equals("M")){*/
 
-                                                if(db.itemDAO().getCountByModelID(md.getModelID())==0){
-                                                    db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
-                                                            md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
-                                                }else{
-                                                    db.itemDAO().updateByModelID(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
-                                                            md.getModelDescription(), md.getImgPath(),"", md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc(),"");
-                                                }
+                                            if (db.itemDAO().getCountByModelID(md.getModelID()) == 0) {
+                                                db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                        md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
+                                            } else {
+                                                db.itemDAO().updateByModelID(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                        md.getModelDescription(), md.getImgPath(), "", md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc(), "");
+                                            }
 
-                                                for (VariantDTO variantDTO : md.getVarientList()) {
+                                            for (VariantDTO variantDTO : md.getVarientList()) {
 
-                                                    if(variantDTO.getAction().equals("D")){
-                                                        db.variantDAO().deleteByMaterialID(variantDTO.getMaterialID());
-                                                    }else{
-                                                        if(db.variantDAO().getCountByMaterialID(variantDTO.getMaterialID())==0){
-                                                            db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
-                                                                    variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
-                                                                    variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
-                                                                    variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
-                                                                    variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
-                                                        }else{
-                                                            db.variantDAO().updateByMaterialID(md.getModelID(), md.getDivisionID(),
-                                                                    variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
-                                                                    variantDTO.getMcode(), variantDTO.getModelColor(),"",
-                                                                    variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(), variantDTO.getMaterialImgPath(),
-                                                                    variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(),
-                                                                    String.valueOf(variantDTO.getOpenPrice()), String.valueOf((int) Double.parseDouble(variantDTO.getStackSize())),"");
-                                                        }
+                                                if (variantDTO.getAction().equals("D")) {
+                                                    db.variantDAO().deleteByMaterialID(variantDTO.getMaterialID());
+                                                } else {
+                                                    if (db.variantDAO().getCountByMaterialID(variantDTO.getMaterialID()) == 0) {
+                                                        db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
+                                                                variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                                                                variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
+                                                                variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
+                                                                variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
+                                                    } else {
+                                                        db.variantDAO().updateByMaterialID(md.getModelID(), md.getDivisionID(),
+                                                                variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                                                                variantDTO.getMcode(), variantDTO.getModelColor(), "",
+                                                                variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(), variantDTO.getMaterialImgPath(),
+                                                                variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(),
+                                                                String.valueOf(variantDTO.getOpenPrice()), String.valueOf((int) Double.parseDouble(variantDTO.getStackSize())), "");
                                                     }
                                                 }
-                                            }else if(syncDataDTO.getItemMasters().get(i).getAction().equals("D")){
-                                                db.itemDAO().deleteByModelID(md.getModelID());
                                             }
+                                            /*}else if(syncDataDTO.getItemMasters().get(i).getAction().equals("D")){
+                                                db.itemDAO().deleteByModelID(md.getModelID());
+                                            }*/
                                         }
                                     }
                                 }
 
 
                             } catch (Exception e) {
-                                    //
+                                //
                             }
                         }
 
@@ -861,45 +861,55 @@ public class MainActivity extends AppCompatActivity {
 
                             try {
 
-                                JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
 
-                                /*
-                                db.cartHeaderDAO().deleteAllIsUpdated();
-                                db.cartDetailsDAO().deleteAllIsUpdated();
-                                db.cartHeaderDAO().deleteHeadersNotThereInCartDetails();
-                                */
+
+
+
+                                    /*
+                                    db.cartHeaderDAO().deleteAllIsUpdated();
+                                    db.cartDetailsDAO().deleteAllIsUpdated();
+                                    db.cartHeaderDAO().deleteHeadersNotThereInCartDetails();
+                                    */
 
                                 if (value.equals("1")) {
-                                    db.cartHeaderDAO().deleteAll();
-                                    db.cartDetailsDAO().deleteAll();
+                                    if (core.getEntityObject() != null) {
 
-                                    for (int i = 0; i < getCartHeader.length(); i++) {
+                                        JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
+                                        db.cartHeaderDAO().deleteAll();
+                                        db.cartDetailsDAO().deleteAll();
+
+                                        for (int i = 0; i < getCartHeader.length(); i++) {
 
 
-                                        for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
+                                            for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
 
-                                            CartHeaderListDTO cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
+                                                CartHeaderListDTO cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
 
-                                            db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
-                                                    cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
-                                                    cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
+                                                db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
+                                                        cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
+                                                        cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
 
-                                            for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
+                                                for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
 
-                                                CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
+                                                    CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
 
-                                                // String discountID,String discountText,String gst,String tax,String subtotal,String HSNCode
+                                                    // String discountID,String discountText,String gst,String tax,String subtotal,String HSNCode
 
-                                                db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
-                                                        cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
-                                                        cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
-                                                        cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0,
-                                                        cart.getMaterialPriorityID(), cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                    db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
+                                                            cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
+                                                            cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
+                                                            cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0,
+                                                            cart.getMaterialPriorityID(), cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
+                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                }
+
                                             }
 
                                         }
 
+                                    } else {
+                                        db.cartHeaderDAO().deleteAll();
+                                        db.cartDetailsDAO().deleteAll();
                                     }
 
                                     BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
@@ -910,7 +920,9 @@ public class MainActivity extends AppCompatActivity {
                                     textView.setText(String.valueOf(db.cartDetailsDAO().getCartDetailsCountIsApproved()));
                                     itemView.addView(notificationBadge);
 
+
                                 } else {
+
                                     cartList = new ArrayList<>();
                                     if (db.cartDetailsDAO().getCartItemsWithOutApprovals() != null) {
 
@@ -936,39 +948,42 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }
 
+                                    if (core.getEntityObject() != null) {
+                                        JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
 
-                                    for (int i = 0; i < getCartHeader.length(); i++) {
+                                        for (int i = 0; i < getCartHeader.length(); i++) {
 
 
-                                        for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
+                                            for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
 
-                                            CartHeaderListDTO cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
+                                                CartHeaderListDTO cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
 
-                                            for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
+                                                for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
 
-                                                CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
+                                                    CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
 
-                                                db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
-                                                        cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
-                                                        cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
-                                                        cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0,
-                                                        cart.getMaterialPriorityID(), cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                    db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
+                                                            cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
+                                                            cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
+                                                            cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0,
+                                                            cart.getMaterialPriorityID(), cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
+                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
 
-                                                productCatalogs cDto = new productCatalogs();
-                                                cDto.setMaterialMasterID(cart.getMaterialMasterID());
-                                                cDto.setMCode(cart.getMCode());
-                                                cDto.setQuantity(cart.getQuantity());
-                                                cDto.setCustomerID(String.valueOf(cartHeaderListDTO.getCustomerID()));
-                                                cDto.setImagePath(cart.getFileNames());
-                                                cDto.setPrice(cart.getPrice());
-                                                cDto.setShipToPartyCustomerID(String.valueOf(cartHeaderListDTO.getCustomerID()));
-                                                cDto.setCartDetailsID("0");
-                                                cDto.setMaterialPriorityID(String.valueOf(cart.getMaterialPriorityID()));
-                                                cDto.setDeliveryDate(cart.getExpectedDeliveryDate());
-                                                cDto.setCartHeaderID(Integer.parseInt(cart.getCartHeaderID()));
-                                                cartList.add(cDto);
+                                                    productCatalogs cDto = new productCatalogs();
+                                                    cDto.setMaterialMasterID(cart.getMaterialMasterID());
+                                                    cDto.setMCode(cart.getMCode());
+                                                    cDto.setQuantity(cart.getQuantity());
+                                                    cDto.setCustomerID(String.valueOf(cartHeaderListDTO.getCustomerID()));
+                                                    cDto.setImagePath(cart.getFileNames());
+                                                    cDto.setPrice(cart.getPrice());
+                                                    cDto.setShipToPartyCustomerID(String.valueOf(cartHeaderListDTO.getCustomerID()));
+                                                    cDto.setCartDetailsID("0");
+                                                    cDto.setMaterialPriorityID(String.valueOf(cart.getMaterialPriorityID()));
+                                                    cDto.setDeliveryDate(cart.getExpectedDeliveryDate());
+                                                    cDto.setCartHeaderID(Integer.parseInt(cart.getCartHeaderID()));
+                                                    cartList.add(cDto);
 
+                                                }
                                             }
                                         }
                                     }
@@ -977,6 +992,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
                                 ProgressDialogUtils.closeProgressDialog();
+
 
                             } catch (Exception e) {
                                 ProgressDialogUtils.closeProgressDialog();
@@ -1053,47 +1069,56 @@ public class MainActivity extends AppCompatActivity {
 
                             try {
 
+
                                 List<CartHeader> cartHeadersList = db.cartHeaderDAO().getCartHeadersForSTP();
 
-                                db.cartDetailsDAO().deleteAll();
-                                db.cartHeaderDAO().deleteAll();
-
                                 ProgressDialogUtils.closeProgressDialog();
+
                                 try {
 
-                                    JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
+                                    if (core.getEntityObject() != null) {
 
-                                    CartHeaderListDTO cartHeaderListDTO;
-                                    CartDetailsListDTO cart;
+                                        JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
+                                        db.cartDetailsDAO().deleteAll();
+                                        db.cartHeaderDAO().deleteAll();
 
-                                    for (int i = 0; i < getCartHeader.length(); i++) {
+                                        CartHeaderListDTO cartHeaderListDTO;
+                                        CartDetailsListDTO cart;
 
-                                        for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
-                                            cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
+                                        for (int i = 0; i < getCartHeader.length(); i++) {
 
-                                            if (cartHeaderListDTO.getListCartDetailsList().size() > 0) {
-                                                db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
-                                                        cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
-                                                        cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
-                                                db.cartHeaderDAO().updateIsUpdated(cartHeaderListDTO.getCustomerID(), 0);
+                                            for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
+                                                cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
+
+                                                if (cartHeaderListDTO.getListCartDetailsList().size() > 0) {
+                                                    db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
+                                                            cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
+                                                            cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
+                                                    db.cartHeaderDAO().updateIsUpdated(cartHeaderListDTO.getCustomerID(), 0);
+                                                }
+
+
+                                                for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
+                                                    cart = cartHeaderListDTO.getListCartDetailsList().get(k);
+                                                    db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
+                                                            cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
+                                                            cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
+                                                            cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
+                                                            cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
+                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                }
                                             }
 
-
-                                            for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
-                                                cart = cartHeaderListDTO.getListCartDetailsList().get(k);
-                                                db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
-                                                        cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
-                                                        cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
-                                                        cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
-                                                        cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
-                                            }
                                         }
 
-                                    }
+                                        for (int i = 0; i < cartHeadersList.size(); i++) {
+                                            db.cartHeaderDAO().updateShipToPatryAndIsPriority(cartHeadersList.get(i).customerID, cartHeadersList.get(i).shipToPartyId, cartHeadersList.get(i).isPriority);
+                                        }
 
-                                    for (int i = 0; i < cartHeadersList.size(); i++) {
-                                        db.cartHeaderDAO().updateShipToPatryAndIsPriority(cartHeadersList.get(i).customerID, cartHeadersList.get(i).shipToPartyId, cartHeadersList.get(i).isPriority);
+
+                                    } else {
+                                        db.cartDetailsDAO().deleteAll();
+                                        db.cartHeaderDAO().deleteAll();
                                     }
 
                                 } catch (JSONException e) {
@@ -1110,6 +1135,7 @@ public class MainActivity extends AppCompatActivity {
                                 TextView textView = notificationBadge.findViewById(R.id.counter_badge);
                                 textView.setText(String.valueOf(db.cartDetailsDAO().getCartDetailsCountIsApproved()));
                                 itemView.addView(notificationBadge);
+
 
                             } catch (Exception e) {
 

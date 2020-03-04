@@ -35,10 +35,10 @@ public class SCMExpandableListAdapter extends BaseExpandableListAdapter {
 
     AppDatabase db;
 
-    public SCMExpandableListAdapter(Context context, CartHeaderListDTO cartHeaderListDTO){
-        this.cartHeaderListDTO=cartHeaderListDTO;
-        this.deliveryDateDTOS=cartHeaderListDTO.getDeliveryDate();
-        this.context=context;
+    public SCMExpandableListAdapter(Context context, CartHeaderListDTO cartHeaderListDTO) {
+        this.cartHeaderListDTO = cartHeaderListDTO;
+        this.deliveryDateDTOS = cartHeaderListDTO.getDeliveryDate();
+        this.context = context;
         db = new RoomAppDatabase(this.context).getAppDatabase();
     }
 
@@ -85,15 +85,15 @@ public class SCMExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.excepted_delivery_date, null);
         }
-        TextView ex_delivery_date=view.findViewById(R.id.ex_delivery_date);
-        if(cartHeaderListDTO.getIsStockNotAvailable().equals("1")){
+        TextView ex_delivery_date = view.findViewById(R.id.ex_delivery_date);
+        if (cartHeaderListDTO.getIsStockNotAvailable().equals("1")) {
             ex_delivery_date.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             ex_delivery_date.setVisibility(View.VISIBLE);
         }
-        ex_delivery_date.setText( deliveryDateDTO.getFromDate() +" To "+ deliveryDateDTO.getToDate());
-        TextView item_count=view.findViewById(R.id.item_count);
-        item_count.setText("" +deliveryDateDTO.getListCartDetailsList().size() );
+        ex_delivery_date.setText(deliveryDateDTO.getFromDate() + " To " + deliveryDateDTO.getToDate());
+        TextView item_count = view.findViewById(R.id.item_count);
+        item_count.setText("" + deliveryDateDTO.getListCartDetailsList().size());
         return view;
     }
 
@@ -117,53 +117,53 @@ public class SCMExpandableListAdapter extends BaseExpandableListAdapter {
         TextView isItemInactive = view.findViewById(R.id.isItemInactive);
         TextView txtOfferAvaiable = view.findViewById(R.id.txtOfferAvaiable);
 
-        if(cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID())!=null){
-            if(cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID()).size()>0){
-              //  txtOfferAvaiable.setText(cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID()).size()+" offer items");
+        if (cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID()) != null) {
+            if (cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID()).size() > 0) {
+                //  txtOfferAvaiable.setText(cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID()).size()+" offer items");
                 txtOfferAvaiable.setText("Offer applied");
                 txtOfferAvaiable.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 txtOfferAvaiable.setVisibility(View.INVISIBLE);
             }
-        }else{
+        } else {
             txtOfferAvaiable.setVisibility(View.INVISIBLE);
         }
 
         txtOfferAvaiable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    final Dialog dialog = new Dialog(context);
-                    dialog.setContentView(R.layout.offer_item_recycler);
-                    dialog.setCancelable(false);
-                    Window window = dialog.getWindow();
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                    window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    final RecyclerView recyclerView;
-                    recyclerView = dialog.findViewById(R.id.recyclerView);
-                    recyclerView.setHasFixedSize(true);
+                final Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.offer_item_recycler);
+                dialog.setCancelable(false);
+                Window window = dialog.getWindow();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                final RecyclerView recyclerView;
+                recyclerView = dialog.findViewById(R.id.recyclerView);
+                recyclerView.setHasFixedSize(true);
 
-                    ImageView btnClOSE=dialog.findViewById(R.id.btnClOSE);
+                ImageView btnClOSE = dialog.findViewById(R.id.btnClOSE);
 
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-                    recyclerView.setLayoutManager(layoutManager);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+                recyclerView.setLayoutManager(layoutManager);
 
-                    final OfferItemsObjectAdapter offerItemsAdapter = new OfferItemsObjectAdapter(context, cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID()), new OfferItemsObjectAdapter.OnItemClickListener() {
-                        @Override
-                        public void OnItemClick(int pos) {
+                final OfferItemsObjectAdapter offerItemsAdapter = new OfferItemsObjectAdapter(context, cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID()), new OfferItemsObjectAdapter.OnItemClickListener() {
+                    @Override
+                    public void OnItemClick(int pos) {
 
-                        }
-                    });
+                    }
+                });
 
-                    recyclerView.setAdapter(offerItemsAdapter);
+                recyclerView.setAdapter(offerItemsAdapter);
 
-                    btnClOSE.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.dismiss();
-                        }
-                    });
+                btnClOSE.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
 
-                    dialog.show();
+                dialog.show();
 
             }
         });
@@ -176,7 +176,7 @@ public class SCMExpandableListAdapter extends BaseExpandableListAdapter {
         txtDeliveryDate.setText(cartDetailsListDTO.getActualDeliveryDate());
 
         if (NetworkUtils.isInternetAvailable(context)) {
-            String filePath=cartDetailsListDTO.getFileNames().split("[|]").length>0 ?
+            String filePath = cartDetailsListDTO.getFileNames().split("[|]").length > 0 ?
                     cartDetailsListDTO.getFileNames().split("[|]")[0] : "";
             Picasso.with(context)
                     .load(filePath)
@@ -190,7 +190,7 @@ public class SCMExpandableListAdapter extends BaseExpandableListAdapter {
             if (cartDetailsListDTO.getIsInActive()) {
                 isItemInactive.setVisibility(View.VISIBLE);
             } else {
-               isItemInactive.setVisibility(View.GONE);
+                isItemInactive.setVisibility(View.GONE);
             }
         } else {
             isItemInactive.setVisibility(View.GONE);
@@ -205,7 +205,7 @@ public class SCMExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    public interface OnDeleteClickListener{
+    public interface OnDeleteClickListener {
         public void onDeleteClickListener(int group, int child);
     }
 }

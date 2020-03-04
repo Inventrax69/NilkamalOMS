@@ -81,7 +81,8 @@ public class RefCreditListAdapter extends RecyclerView.Adapter<RefCreditListAdap
 
     }
 
-    public RefCreditListAdapter() { }
+    public RefCreditListAdapter() {
+    }
 
     @NonNull
     @Override
@@ -107,8 +108,8 @@ public class RefCreditListAdapter extends RecyclerView.Adapter<RefCreditListAdap
         viewHolder.checkBoxSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                for (int j = 0; j < approvalListDTOS1.size(); j++){
-                    checkBokItem.set(j,false);
+                for (int j = 0; j < approvalListDTOS1.size(); j++) {
+                    checkBokItem.set(j, false);
                     notifyItemChanged(j);
                 }
                 checkBokItem.set(i, b);
@@ -246,39 +247,39 @@ public class RefCreditListAdapter extends RecyclerView.Adapter<RefCreditListAdap
                         } else {
 
                             try {
-                                if(core.getEntityObject()!=null && !core.getEntityObject().toString().isEmpty()){
+                                if (core.getEntityObject() != null && !core.getEntityObject().toString().isEmpty()) {
 
 
-                                if (core.getEntityObject().equals("Success") || core.getEntityObject().equals("Failure")) {
+                                    if (core.getEntityObject().equals("Success") || core.getEntityObject().equals("Failure")) {
 
-                                    List<ApprovalListDTO> approvalListDTOSList = new ArrayList<>();
-                                    for (int i = 0; i < approvalListDTOS1.size(); i++) {
-                                        if (!checkBokItem.get(i)) {
-                                            approvalListDTOSList.add(approvalListDTOS1.get(i));
+                                        List<ApprovalListDTO> approvalListDTOSList = new ArrayList<>();
+                                        for (int i = 0; i < approvalListDTOS1.size(); i++) {
+                                            if (!checkBokItem.get(i)) {
+                                                approvalListDTOSList.add(approvalListDTOS1.get(i));
+                                            }
                                         }
-                                    }
 
-                                    approvalListDTOS1 = approvalListDTOSList;
-                                    checkBokItem = new ArrayList<>();
-                                    for (int i = 0; i < approvalListDTOS1.size(); i++)
-                                        checkBokItem.add(false);
+                                        approvalListDTOS1 = approvalListDTOSList;
+                                        checkBokItem = new ArrayList<>();
+                                        for (int i = 0; i < approvalListDTOS1.size(); i++)
+                                            checkBokItem.add(false);
 
-                                    checkBoxSelectAll.setChecked(false);
-                                    etRemarks.setText("");
-                                    if (type.equals("2")) {
-                                        MaterialDialogUtils.showUploadErrorDialog(context, "Rejected");
+                                        checkBoxSelectAll.setChecked(false);
+                                        etRemarks.setText("");
+                                        if (type.equals("2")) {
+                                            MaterialDialogUtils.showUploadErrorDialog(context, "Rejected");
+                                        } else {
+                                            MaterialDialogUtils.showUploadSuccessDialog(context, "Approved");
+                                        }
+
+                                        notifyDataSetChanged();
+                                        ((Activity) context).onBackPressed();
+
                                     } else {
-                                        MaterialDialogUtils.showUploadSuccessDialog(context, "Approved");
+                                        MaterialDialogUtils.showUploadSuccessDialog(context, "Failed");
                                     }
-
-                                    notifyDataSetChanged();
-                                    ((Activity) context).onBackPressed();
 
                                 } else {
-                                    MaterialDialogUtils.showUploadSuccessDialog(context, "Failed");
-                                }
-
-                                }else{
                                     MaterialDialogUtils.showUploadSuccessDialog(context, "Failed");
                                 }
 
@@ -295,9 +296,9 @@ public class RefCreditListAdapter extends RecyclerView.Adapter<RefCreditListAdap
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(context)){
+                    if (NetworkUtils.isInternetAvailable(context)) {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();

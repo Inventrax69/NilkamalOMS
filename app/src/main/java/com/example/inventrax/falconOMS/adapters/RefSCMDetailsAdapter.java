@@ -38,7 +38,8 @@ public class RefSCMDetailsAdapter extends RecyclerView.Adapter<RefSCMDetailsAdap
         listener = mlistener;
     }
 
-    public RefSCMDetailsAdapter() { }
+    public RefSCMDetailsAdapter() {
+    }
 
     @NonNull
     @Override
@@ -56,11 +57,11 @@ public class RefSCMDetailsAdapter extends RecyclerView.Adapter<RefSCMDetailsAdap
         viewHolder.txtItemDesc.setText(approvalListDTO.getDescription());
         viewHolder.txtQty.setText(String.valueOf(approvalListDTO.getQuantity()));
 
-        if(!approvalListDTOS.get(i).isStatus()){
+        if (!approvalListDTOS.get(i).isStatus()) {
             viewHolder.txtAdd.setText(context.getString(R.string.add));
             Drawable drawable = context.getResources().getDrawable(R.drawable.button_shape);
             viewHolder.txtAdd.setBackground(drawable);
-        }else{
+        } else {
             viewHolder.txtAdd.setText(context.getString(R.string.done));
             Drawable drawable = context.getResources().getDrawable(R.drawable.button_shape_green);
             viewHolder.txtAdd.setBackground(drawable);
@@ -75,7 +76,7 @@ public class RefSCMDetailsAdapter extends RecyclerView.Adapter<RefSCMDetailsAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtItemName, txtItemDesc, txtQty ,txtAdd;
+        TextView txtItemName, txtItemDesc, txtQty, txtAdd;
 
         public ViewHolder(View view) {
             super(view);
@@ -92,7 +93,7 @@ public class RefSCMDetailsAdapter extends RecyclerView.Adapter<RefSCMDetailsAdap
                     if (listener != null) {
                         int pos = getAdapterPosition();
                         if (pos != RecyclerView.NO_POSITION) {
-                            if(!approvalListDTOS.get(pos).isStatus())
+                            if (!approvalListDTOS.get(pos).isStatus())
                                 listener.onItemClick(pos);
                             else
                                 SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.snack_bar_action_layout), "Material already sent", ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);

@@ -42,12 +42,12 @@ public class OfferItemsAdapter extends RecyclerView.Adapter<OfferItemsAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
 
-        CartDetails cartDetails1=cartDetails.get(i);
+        CartDetails cartDetails1 = cartDetails.get(i);
 
         viewHolder.txtItemName.setText(cartDetails1.mCode);
         viewHolder.txtItemDesc.setText(cartDetails1.mDescription);
         viewHolder.etQtyCart.setText(cartDetails1.quantity);
-        viewHolder.txtPrice.setText("RS: "+cartDetails1.totalPrice);
+        viewHolder.txtPrice.setText("RS: " + cartDetails1.totalPrice);
         Picasso.with(context)
                 .load(cartDetails1.imgPath.split("[|]")[0])
                 .placeholder(R.drawable.no_img)

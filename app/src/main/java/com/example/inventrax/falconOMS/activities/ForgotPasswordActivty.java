@@ -230,9 +230,9 @@ public class ForgotPasswordActivty extends AppCompatActivity {
                                         }
                                     }
                                 }
-                            }catch (Exception ex){
+                            } catch (Exception ex) {
                                 ProgressDialogUtils.closeProgressDialog();
-                                Toast.makeText(ForgotPasswordActivty.this,  ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ForgotPasswordActivty.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -241,9 +241,9 @@ public class ForgotPasswordActivty extends AppCompatActivity {
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(ForgotPasswordActivty.this)){
+                    if (NetworkUtils.isInternetAvailable(ForgotPasswordActivty.this)) {
                         DialogUtils.showAlertDialog(ForgotPasswordActivty.this, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog(ForgotPasswordActivty.this, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();

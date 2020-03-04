@@ -172,7 +172,6 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             if (getIntent().getExtras() != null) {
 
                 isItemAdded = getIntent().getExtras().getBoolean(KeyValues.IS_ITEM_ADDED_TO_CART);
-
                 if (isItemAdded) {
                     if (NetworkUtils.isInternetAvailable(CartActivity.this)) {
                         // ((MainActivity) CartActivity.this).startTime();
@@ -329,7 +328,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             });
 
         } catch (Exception ex) {
-                //
+            //
         }
 
     }
@@ -403,7 +402,8 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) { }
+        switch (v.getId()) {
+        }
     }
 
     @Override

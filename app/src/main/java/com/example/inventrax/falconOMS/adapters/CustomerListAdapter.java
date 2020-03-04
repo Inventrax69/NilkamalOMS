@@ -101,7 +101,5 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
     // Item click listener interface
     public interface OnItemClickListener {
         void onItemClick(int pos);
-
-
     }
 }

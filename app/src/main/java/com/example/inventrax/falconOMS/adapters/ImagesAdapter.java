@@ -16,10 +16,10 @@ import java.util.List;
  * Created by padmaja on 13/07/19.
  */
 public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder> {
+
     private List items;
     private Context context;
     OnItemClickListener listener;
-
 
     public ImagesAdapter(Context applicationContext, List itemArrayList, OnItemClickListener mlistener) {
         this.context = applicationContext;

@@ -23,7 +23,7 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
     NestedScrollView nested;
 
 
-    public OffersAdapter(Context applicationContext, List discountDesc, List mCode,NestedScrollView nested) {
+    public OffersAdapter(Context applicationContext, List discountDesc, List mCode, NestedScrollView nested) {
         this.context = applicationContext;
         this.mCode = mCode;
         this.discountDesc = discountDesc;
@@ -31,10 +31,10 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
 
     }
 
-    public OffersAdapter(Context applicationContext, List discountDesc,NestedScrollView nested) {
+    public OffersAdapter(Context applicationContext, List discountDesc, NestedScrollView nested) {
         this.context = applicationContext;
         this.discountDesc = discountDesc;
-        mCode=new ArrayList();
+        mCode = new ArrayList();
         this.nested = nested;
 
     }
@@ -52,7 +52,7 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
     @Override
     public void onBindViewHolder(OffersAdapter.ViewHolder viewHolder, int i) {
 
-        if(mCode.size()>0)
+        if (mCode.size() > 0)
             viewHolder.skuName.setText((CharSequence) mCode.get(i));
 
         viewHolder.label.setText((CharSequence) discountDesc.get(i));
@@ -69,7 +69,7 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView label,skuName;
+        private TextView label, skuName;
 
 
         public ViewHolder(View view) {

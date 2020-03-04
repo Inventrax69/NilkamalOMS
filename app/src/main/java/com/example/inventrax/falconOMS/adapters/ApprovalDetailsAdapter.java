@@ -35,7 +35,7 @@ public class ApprovalDetailsAdapter extends RecyclerView.Adapter<ApprovalDetails
 
     public ApprovalDetailsAdapter(Context context, CartHeaderListDTO cartHeaderListDTO, OnItemClickListener mlistener) {
         this.context = context;
-        this.cartHeaderListDTO=cartHeaderListDTO;
+        this.cartHeaderListDTO = cartHeaderListDTO;
         this.cartItemList = cartHeaderListDTO.getListCartDetailsList();
         this.mlistener = mlistener;
     }
@@ -73,9 +73,9 @@ public class ApprovalDetailsAdapter extends RecyclerView.Adapter<ApprovalDetails
         }
 
 
-        if(cartItemList.get(i).getOfferItemCartDetailsID()==null){
+        if (cartItemList.get(i).getOfferItemCartDetailsID() == null) {
             viewHolder.ivOffer.setVisibility(View.GONE);
-        }else{
+        } else {
             viewHolder.ivOffer.setVisibility(View.VISIBLE);
         }
 
@@ -93,7 +93,7 @@ public class ApprovalDetailsAdapter extends RecyclerView.Adapter<ApprovalDetails
                 recyclerView = dialog.findViewById(R.id.recyclerView);
                 recyclerView.setHasFixedSize(true);
 
-                ImageView btnClOSE=dialog.findViewById(R.id.btnClOSE);
+                ImageView btnClOSE = dialog.findViewById(R.id.btnClOSE);
 
                 LinearLayoutManager layoutManager = new LinearLayoutManager(context);
                 recyclerView.setLayoutManager(layoutManager);
@@ -116,8 +116,8 @@ public class ApprovalDetailsAdapter extends RecyclerView.Adapter<ApprovalDetails
                     }
                 });
 
-                if(cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartItemList.get(i).getCartDetailsID())!=null)
-                  dialog.show();
+                if (cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartItemList.get(i).getCartDetailsID()) != null)
+                    dialog.show();
             }
         });
 
@@ -130,13 +130,13 @@ public class ApprovalDetailsAdapter extends RecyclerView.Adapter<ApprovalDetails
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtItemName, txtQty, txtDeliveryDate,isItemInactive;
-        private ImageView ivItem,ivDeleteItem,ivOffer;
+        private TextView txtItemName, txtQty, txtDeliveryDate, isItemInactive;
+        private ImageView ivItem, ivDeleteItem, ivOffer;
         View view;
 
         public ViewHolder(View view) {
             super(view);
-            this.view=view;
+            this.view = view;
             // Initializing views
             txtItemName = (TextView) view.findViewById(R.id.txtItemName);
             txtQty = (TextView) view.findViewById(R.id.txtQty);

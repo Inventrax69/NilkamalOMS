@@ -34,6 +34,7 @@ import retrofit2.Response;
  */
 
 public class Common {
+
     private OMSCoreMessage core;
     private Gson gson;
     String userId = null;

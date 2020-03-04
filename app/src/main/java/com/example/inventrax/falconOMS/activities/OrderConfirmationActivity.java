@@ -1117,39 +1117,45 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
                             try {
 
-                                JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
+                                if(core.getEntityObject() !=null) {
 
-                                db.cartDetailsDAO().deleteAll();
-                                db.cartHeaderDAO().deleteAll();
+                                    JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
 
-                                for (int i = 0; i < getCartHeader.length(); i++) {
+                                    db.cartDetailsDAO().deleteAll();
+                                    db.cartHeaderDAO().deleteAll();
 
-                                    TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() {};
+                                    for (int i = 0; i < getCartHeader.length(); i++) {
 
-                                    for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
+                                        TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() {};
 
-                                        CartHeaderListDTO cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
+                                        for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
 
-                                        db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
-                                                cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
-                                                cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
+                                            CartHeaderListDTO cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
 
-                                        for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
+                                            db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
+                                                    cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
+                                                    cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
 
-                                            CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
+                                            for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
 
-                                            db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
-                                                    cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
-                                                    cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
-                                                    cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
-                                                    cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                    cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
+                                                CartDetailsListDTO cart = cartHeaderListDTO.getListCartDetailsList().get(k);
+
+                                                db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
+                                                        cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
+                                                        cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
+                                                        cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
+                                                        cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
+                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
+                                            }
+
                                         }
 
                                     }
 
+                                }else{
+                                    db.cartDetailsDAO().deleteAll();
+                                    db.cartHeaderDAO().deleteAll();
                                 }
-
 
                                 SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, OrderConfirmationActivity.this);
                                 sharedPreferencesUtils.savePreference(KeyValues.TIMER, 0L);

@@ -65,7 +65,7 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
     private OnItemClickListener listener;
     private Calendar myCalendar;
     private int pos = 0;
-    private Button btnADD,btnSEND,btnCLEAR;
+    private Button btnADD, btnSEND, btnCLEAR;
     private ImageView btnClOSE;
     private double total_amount;
     private Dialog dialog;
@@ -95,9 +95,9 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
         this.btnCLEAR = dialog.findViewById(R.id.btnCLEAR);
         this.btnClOSE = dialog.findViewById(R.id.btnClOSE);
 
-        this.approvalListDTOInit=new ApprovalListDTO();
+        this.approvalListDTOInit = new ApprovalListDTO();
 
-        if (approvalListDTOS.size() > 0){
+        if (approvalListDTOS.size() > 0) {
 
             //  this.approvalListDTOInit = (ApprovalListDTO)approvalListDTOS.get(approvalListDTOS.size() - 1);
             this.approvalListDTOInit.setCartRefNo(approvalListDTOS.get(approvalListDTOS.size() - 1).getCartRefNo());
@@ -115,7 +115,7 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
             this.approvalListDTOInit.setAvailableCreditLimit(approvalListDTOS.get(approvalListDTOS.size() - 1).getAvailableCreditLimit());
             this.approvalListDTOInit.setTotalCreditLimit(approvalListDTOS.get(approvalListDTOS.size() - 1).getTotalCreditLimit());
             this.approvalListDTOInit.setRequiredCreditLimit(approvalListDTOS.get(approvalListDTOS.size() - 1).getRequiredCreditLimit());
-            this.total_amount = Double.valueOf(df1.format(Double.parseDouble(approvalListDTOS.get(approvalListDTOS.size()-1).getAmount())));
+            this.total_amount = Double.valueOf(df1.format(Double.parseDouble(approvalListDTOS.get(approvalListDTOS.size() - 1).getAmount())));
 
         }
 
@@ -123,7 +123,8 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
 
     }
 
-    public RefPopCreditListAdapter() { }
+    public RefPopCreditListAdapter() {
+    }
 
     @NonNull
     @Override
@@ -142,10 +143,10 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = df.format(c);
-        if(approvalListDTO.getExpectedDeliveryDate() == null){
+        if (approvalListDTO.getExpectedDeliveryDate() == null) {
             approvalListDTOS.get(i).setExpectedDeliveryDate(formattedDate);
         }
-        viewHolder.etDatePicker.setText( approvalListDTO.getExpectedDeliveryDate());
+        viewHolder.etDatePicker.setText(approvalListDTO.getExpectedDeliveryDate());
         viewHolder.myCustomEditTextListener.updatePosition(viewHolder.getAdapterPosition());
         double d = Double.parseDouble(String.valueOf(approvalListDTO.getAmount()));
         viewHolder.etPrice.setText(String.format("%.2f", d));
@@ -161,7 +162,7 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
         viewHolder.etPrice.setFocusable(false);
         viewHolder.etPrice.setFocusableInTouchMode(true);
 
-        pos=-1;
+        pos = -1;
         viewHolder.etDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -247,9 +248,9 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
                     ApprovalListDTO approvalListDTO1;
                     double amount = 0;
                     for (int p = 0; p < approvalListDTOS.size(); p++) {
-                        try{
+                        try {
                             amount = Double.valueOf(df1.format(amount)) + Double.valueOf(df1.format(Double.parseDouble(approvalListDTOS.get(p).getAmount())));
-                        }catch(Exception e){
+                        } catch (Exception e) {
                             Toast.makeText(context, "Enter valid number", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -293,9 +294,9 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
                     ApprovalListDTO approvalListDTO1;
                     double amount = 0;
                     for (int p = 0; p < approvalListDTOS.size(); p++) {
-                        try{
+                        try {
                             amount = amount + Double.parseDouble(approvalListDTOS.get(p).getAmount());
-                        }catch(Exception e){
+                        } catch (Exception e) {
                             Toast.makeText(context, "Enter valid number", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -322,7 +323,7 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
                             notifyItemInserted(approvalListDTOS.size() - 1);
                             notifyDataSetChanged();
                         } else {
-                           InsertCreditLimitCommitments();
+                            InsertCreditLimitCommitments();
                         }
                     } else {
                         Toast.makeText(context, "Amount Exceed", Toast.LENGTH_SHORT).show();
@@ -334,7 +335,7 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
                 @Override
                 public void onClick(View view) {
 
-                    approvalListDTOS=new ArrayList<>();
+                    approvalListDTOS = new ArrayList<>();
                     approvalListDTOS.add(approvalListDTOInit);
                     notifyDataSetChanged();
 
@@ -351,7 +352,7 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
                     bundle2.putString("type","5");
                     FragmentUtils.replaceFragmentWithBundle(fragmentActivity, R.id.container, new ApprovalsListFragment(),bundle2);
                     */
-                    approvalListDTOS=new ArrayList<>();
+                    approvalListDTOS = new ArrayList<>();
                     approvalListDTOS.add(approvalListDTOInit);
                     notifyDataSetChanged();
                     dialog.dismiss();
@@ -364,7 +365,8 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
 
         public void InsertCreditLimitCommitments() {
 
-            if (NetworkUtils.isInternetAvailable(context)) { } else {
+            if (NetworkUtils.isInternetAvailable(context)) {
+            } else {
                 DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0007);
                 return;
             }
@@ -399,7 +401,7 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
 
                                     omsExceptionMessage = oms;
                                     ProgressDialogUtils.closeProgressDialog();
-                                    common.showAlertType(omsExceptionMessage,(Activity) context, context);
+                                    common.showAlertType(omsExceptionMessage, (Activity) context, context);
 
                                 }
 
@@ -408,7 +410,7 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
                             } else {
                                 try {
 
-                                    if(core.getEntityObject()!=null && !core.getEntityObject().toString().isEmpty()){
+                                    if (core.getEntityObject() != null && !core.getEntityObject().toString().isEmpty()) {
 
 
                                         if (core.getEntityObject().equals("Success")) {
@@ -422,7 +424,7 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
                                             MaterialDialogUtils.showUploadErrorDialog(context, "Failed");
                                         }
 
-                                    }else{
+                                    } else {
                                         MaterialDialogUtils.showUploadErrorDialog(context, "Failed");
                                     }
 
@@ -440,7 +442,7 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
                                         MaterialDialogUtils.showUploadErrorDialog(context,"Failed");
                                     }*/
 
-                                }catch (Exception ex){
+                                } catch (Exception ex) {
 
                                 }
                                 ProgressDialogUtils.closeProgressDialog();
@@ -452,9 +454,9 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
                     // response object fails
                     @Override
                     public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                        if(NetworkUtils.isInternetAvailable(context)){
+                        if (NetworkUtils.isInternetAvailable(context)) {
                             DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0001);
-                        }else{
+                        } else {
                             DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0014);
                         }
                         ProgressDialogUtils.closeProgressDialog();
@@ -469,7 +471,7 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
                     e.printStackTrace();
                 }
                 ProgressDialogUtils.closeProgressDialog();
-                DialogUtils.showAlertDialog((Activity)context, errorMessages.EMC_0003);
+                DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0003);
             }
         }
     }
@@ -483,16 +485,18 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
         }
 
         @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            if(position==approvalListDTOS.size()-1)
+            if (position == approvalListDTOS.size() - 1)
                 approvalListDTOS.get(position).setAmount(charSequence.toString());
         }
 
         @Override
-        public void afterTextChanged(Editable editable) { }
+        public void afterTextChanged(Editable editable) {
+        }
 
     }
 

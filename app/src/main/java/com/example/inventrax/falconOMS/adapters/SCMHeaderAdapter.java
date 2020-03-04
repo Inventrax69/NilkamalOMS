@@ -196,7 +196,9 @@ public class SCMHeaderAdapter extends RecyclerView.Adapter<SCMHeaderAdapter.Item
         itemViewHolder.tv_Place.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(itemList.get(i).getIsCreditLimit()==1){
+                if(itemList.get(i).getIsInActive()==1){
+                    sendForApproval(itemList.get(i).getCartHeaderID(), "6");
+                } else if(itemList.get(i).getIsCreditLimit()==1){
                     sendForApproval(itemList.get(i).getCartHeaderID(), "5");
                 }else{
                     OrderConfirmation(new int[]{itemList.get(i).getCartHeaderID()});

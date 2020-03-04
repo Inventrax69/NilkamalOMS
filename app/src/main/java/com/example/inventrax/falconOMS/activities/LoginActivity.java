@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private List<ModelDTO> lstItem;
     private List<CustomerListDTO> customerList;
     RestService restService;
-    private String encryptedPass = "", customerIDs = "", userId = "",serviceUrlString= "";
+    private String encryptedPass = "", customerIDs = "", userId = "", serviceUrlString = "";
     private Resources resources;
     ServiceURL serviceURL;
     RelativeLayout main_relative, login_tool_relative;
@@ -131,11 +131,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        try{
+        try {
             overridePendingTransition(R.anim.fadein, R.anim.fadeout);
             loadFormControls();
             FirebaseMessaging.getInstance().subscribeToTopic("all");
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0016);
             return;
         }
@@ -165,7 +165,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             core = new OMSCoreMessage();
             resources = getResources();
 
-            firebase_token=FirebaseInstanceId.getInstance().getToken();
+            firebase_token = FirebaseInstanceId.getInstance().getToken();
 
             sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, getApplicationContext());
             languagespinner = (Spinner) findViewById(R.id.languagespinner);
@@ -173,16 +173,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     R.array.language_array, android.R.layout.simple_spinner_dropdown_item);
             languagespinner.setAdapter(adapter);
 
-            if(sharedPreferencesUtils.loadPreference(KeyValues.SELECTED_LANG)!=null){
-                if(sharedPreferencesUtils.loadPreference(KeyValues.SELECTED_LANG).equals("hi")){
-                    languagespinner.setSelection(2,false);
-                }else if(sharedPreferencesUtils.loadPreference(KeyValues.SELECTED_LANG).equals("te")){
-                    languagespinner.setSelection(1,false);
-                }else {
-                    languagespinner.setSelection(0,false);
+            if (sharedPreferencesUtils.loadPreference(KeyValues.SELECTED_LANG) != null) {
+                if (sharedPreferencesUtils.loadPreference(KeyValues.SELECTED_LANG).equals("hi")) {
+                    languagespinner.setSelection(2, false);
+                } else if (sharedPreferencesUtils.loadPreference(KeyValues.SELECTED_LANG).equals("te")) {
+                    languagespinner.setSelection(1, false);
+                } else {
+                    languagespinner.setSelection(0, false);
                 }
-            }else{
-                languagespinner.setSelection(0,false);
+            } else {
+                languagespinner.setSelection(0, false);
             }
 
             languagespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -193,30 +193,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         case 0:
                             LocaleHelper.setLocale(LoginActivity.this, "en");
                             // DialogUtils.showAlertDialog(LoginActivity.this, resources.getString(R.string.msg));
-                            sharedPreferencesUtils.savePreference(KeyValues.SELECTED_LANG,"en");
+                            sharedPreferencesUtils.savePreference(KeyValues.SELECTED_LANG, "en");
                             Selectedlanguage.setLanguage(1);
                             break;
                         case 1:
                             LocaleHelper.setLocale(LoginActivity.this, "te");
                             // DialogUtils.showAlertDialog(LoginActivity.this, resources.getString(R.string.msg));
-                            sharedPreferencesUtils.savePreference(KeyValues.SELECTED_LANG,"te");
+                            sharedPreferencesUtils.savePreference(KeyValues.SELECTED_LANG, "te");
                             Selectedlanguage.setLanguage(2);
                             break;
                         case 2:
                             LocaleHelper.setLocale(LoginActivity.this, "hi");
                             // DialogUtils.showAlertDialog(LoginActivity.this, resources.getString(R.string.msg));
-                            sharedPreferencesUtils.savePreference(KeyValues.SELECTED_LANG,"hi");
+                            sharedPreferencesUtils.savePreference(KeyValues.SELECTED_LANG, "hi");
                             Selectedlanguage.setLanguage(3);
                             break;
 
                     }
                     Configuration newConfig = new Configuration();
-                    newConfig.locale=getResources().getConfiguration().locale;
+                    newConfig.locale = getResources().getConfiguration().locale;
                     onConfigurationChanged(newConfig);
                 }
 
                 @Override
-                public void onNothingSelected(AdapterView<?> parent) { }
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
 
             });
 
@@ -291,7 +292,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             setKeyboardListener();
 
         } catch (Exception ex) {
-            DialogUtils.showAlertDialog(LoginActivity.this,  errorMessages.EMC_0016);
+            DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0016);
             return;
         }
     }
@@ -301,6 +302,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private final int DefaultKeyboardDP = 100;
     // Lollipop includes button bar in the root. Add height of button bar (48dp) to maxDiff
     private final int EstimatedKeyboardDP = DefaultKeyboardDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+
     public final void setKeyboardListener() {
 
         final View activityRootView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
@@ -365,11 +367,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             e.printStackTrace();
                         }
 
-                        new AsyncTask<Void, Integer, String>(){
+                        new AsyncTask<Void, Integer, String>() {
 
                             @Override
                             protected String doInBackground(Void... voids) {
-                                validateUserSession();
+                                synchronized (this) {
+                                    validateUserSession();
+                                }
                                 return null;
                             }
                         }.execute();
@@ -390,8 +394,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     } else {
 
                     }
-                }else {
-                    DialogUtils.showAlertDialog(LoginActivity.this,errorMessages.EMC_0017);
+                } else {
+                    DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0017);
                 }
                 break;
         }
@@ -443,7 +447,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                 omsExceptionMessage = oms;
                                 ProgressDialogUtils.closeProgressDialog();
-                                common.showAlertType(omsExceptionMessage,LoginActivity.this, LoginActivity.this);
+                                common.showAlertType(omsExceptionMessage, LoginActivity.this, LoginActivity.this);
 
                             }
 
@@ -496,7 +500,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         startActivity(intent);
                                         finish();
 
-                                    }else{
+                                    } else {
 
                                         sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
                                         sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
@@ -514,7 +518,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     common.showUserDefinedAlertType(errorMessages.EMC_0018, LoginActivity.this, LoginActivity.this, "Warning");
                                 }
 
-                            }catch (Exception ex){
+                            } catch (Exception ex) {
                                 dialog.dismiss();
                                 ProgressDialogUtils.closeProgressDialog();
                             }
@@ -528,9 +532,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(LoginActivity.this)){
+                    if (NetworkUtils.isInternetAvailable(LoginActivity.this)) {
                         DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
@@ -552,7 +556,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void getCustomerList() {
 
-        if (NetworkUtils.isInternetAvailable(LoginActivity.this)) { } else {
+        if (NetworkUtils.isInternetAvailable(LoginActivity.this)) {
+        } else {
             DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0007);
             return;
         }
@@ -630,7 +635,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                         customerTables.add(new CustomerTable(dd.getCustomerID(), dd.getCustomerName(), dd.getCustomerCode(),
                                                 dd.getCustomerType(), dd.getCustomerTypeID(), dd.getDivision(), dd.getDivisionID().split("[.]")[0], dd.getConnectedDepot(), dd.getMobile(),
-                                                dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(),dd.getCity()));
+                                                dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(), dd.getCity()));
 
                                         db.userDivisionCustDAO().insert(new UserDivisionCustTable(dd.getCustomerID(), dd.getDivisionID().split("[.]")[0]));
 
@@ -654,17 +659,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         db.customerDAO().deleteAll();
                                         db.customerDAO().insertAll(customerTables);
 
-                                        new AsyncTask<Void, Integer, String>(){
+                                        new AsyncTask<Void, Integer, String>() {
 
                                             @Override
                                             protected String doInBackground(Void... voids) {
-                                                getProductCatalog();
+                                                synchronized (this) {
+                                                    getProductCatalog();
+                                                }
                                                 return null;
                                             }
                                         }.execute();
 
 
-                                    }else{
+                                    } else {
 
                                         dialog.dismiss();
 
@@ -682,7 +689,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                 ProgressDialogUtils.closeProgressDialog();
 
-                            }catch (Exception ex){
+                            } catch (Exception ex) {
 
                                 ProgressDialogUtils.closeProgressDialog();
 
@@ -698,9 +705,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(LoginActivity.this)){
+                    if (NetworkUtils.isInternetAvailable(LoginActivity.this)) {
                         DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
@@ -760,9 +767,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         Call<OMSCoreMessage> call = null;
         ApiInterface apiService;
-        try{
+        try {
             apiService = RestService.getClient().create(ApiInterface.class);
-        }catch (Exception e){
+        } catch (Exception e) {
             DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0015);
             return;
         }
@@ -818,7 +825,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         sharedPreferencesUtils.savePreference(KeyValues.CUSTOMER_IDS, gson.toJson(login.getCustomers()));
                                         sharedPreferencesUtils.savePreference(KeyValues.USER_ROLE_NAME, login.getUserRoleName());
                                         // sharedPreferencesUtils.savePreference(KeyValues.CUSTOMER_IDS, gson.toJson(login.getCustomers()));
-                                    }else{
+                                    } else {
                                         DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0002);
                                         return;
                                     }
@@ -827,17 +834,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, false);
                                     sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, false);
 
-                                /*  if(db.itemDAO().getCount()<=0 && db.customerDAO().getCustomerCount()<=0) {*/
+                                    /*  if(db.itemDAO().getCount()<=0 && db.customerDAO().getCustomerCount()<=0) {*/
 
-                                        db.cartDetailsDAO().deleteAll();
-                                        db.cartHeaderDAO().deleteAll();
+                                    db.cartDetailsDAO().deleteAll();
+                                    db.cartHeaderDAO().deleteAll();
 
-                                        setProgressDialog();
-                                    new AsyncTask<Void, Integer, String>(){
+                                    setProgressDialog();
+
+                                    new AsyncTask<Void, Integer, String>() {
 
                                         @Override
                                         protected String doInBackground(Void... voids) {
-                                            getCustomerList();
+                                            synchronized (this) {
+                                                getCustomerList();
+                                            }
                                             return null;
                                         }
                                     }.execute();
@@ -879,11 +889,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         startActivity(intent);
                                         finish();
                                     }*/
-                                }
-                                else{
+                                } else {
                                     DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0002);
                                 }
-                            }catch (Exception ex){
+                            } catch (Exception ex) {
                                 ProgressDialogUtils.closeProgressDialog();
                             }
                         }
@@ -893,9 +902,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(LoginActivity.this)){
+                    if (NetworkUtils.isInternetAvailable(LoginActivity.this)) {
                         DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
@@ -921,10 +930,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
 
         @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
 
         @Override
         public void afterTextChanged(Editable editable) {

@@ -32,11 +32,12 @@ public class CartMaterialHeaderAdapter extends RecyclerView.Adapter<CartMaterial
         this.customerPartnerDTOS = customerPartnerDTOS;
         this.context = context;
         this.activity = activity;
-        this.cartFragment=cartFragment;
-        this.mlistener=mlistener;
+        this.cartFragment = cartFragment;
+        this.mlistener = mlistener;
     }
 
-    public CartMaterialHeaderAdapter() { }
+    public CartMaterialHeaderAdapter() {
+    }
 
     @NonNull
     @Override
@@ -74,23 +75,23 @@ public class CartMaterialHeaderAdapter extends RecyclerView.Adapter<CartMaterial
         itemViewHolder.rvSubItem.setAdapter(cartMaterialdetailsAdapter);
         itemViewHolder.rvSubItem.setRecycledViewPool(viewPool);
 
-        if(customerPartnerDTOS.get(i).getIsProcessID().equals("1")){
+        if (customerPartnerDTOS.get(i).getIsProcessID().equals("1")) {
             itemViewHolder.rOQ.setChecked(true);
         }
-        if(customerPartnerDTOS.get(i).getIsProcessID().equals("2")){
+        if (customerPartnerDTOS.get(i).getIsProcessID().equals("2")) {
             itemViewHolder.rAQ.setChecked(true);
         }
 
         itemViewHolder.rIsProcessId.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int pos) {
-                if(itemViewHolder.rOQ.getId()==radioGroup.getCheckedRadioButtonId()){
+                if (itemViewHolder.rOQ.getId() == radioGroup.getCheckedRadioButtonId()) {
                     customerPartnerDTOS.get(i).setIsProcessID("1");
-                    mlistener.onChangeIsProcessID(i,"1");
+                    mlistener.onChangeIsProcessID(i, "1");
                 }
-                if(itemViewHolder.rAQ.getId()==radioGroup.getCheckedRadioButtonId()){
+                if (itemViewHolder.rAQ.getId() == radioGroup.getCheckedRadioButtonId()) {
                     customerPartnerDTOS.get(i).setIsProcessID("2");
-                    mlistener.onChangeIsProcessID(i,"2");
+                    mlistener.onChangeIsProcessID(i, "2");
                 }
             }
         });
@@ -107,8 +108,8 @@ public class CartMaterialHeaderAdapter extends RecyclerView.Adapter<CartMaterial
         private TextView customerName;
         private RecyclerView rvSubItem;
         private RadioGroup rIsProcessId;
-        private RadioButton rOQ,rAQ;
-        
+        private RadioButton rOQ, rAQ;
+
         ItemViewHolder(View itemView) {
             super(itemView);
             customerName = itemView.findViewById(R.id.tv_customerName);
@@ -136,7 +137,8 @@ public class CartMaterialHeaderAdapter extends RecyclerView.Adapter<CartMaterial
 
     public interface OnItemClickListener {
         void onItemClick(int pos);
-        void onChangeIsProcessID(int pos,String IsProcessID);
+
+        void onChangeIsProcessID(int pos, String IsProcessID);
     }
 
 }

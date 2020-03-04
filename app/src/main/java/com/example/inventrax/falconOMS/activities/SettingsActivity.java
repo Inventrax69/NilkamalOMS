@@ -28,8 +28,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private String classCode = "WMSCore_Android_Activity_002";
     private TextInputLayout inputLayoutServiceUrl;
     private EditText inputService;
-    private Button btnSave,btnClose;
-    private String url=null;
+    private Button btnSave, btnClose;
+    private String url = null;
     AppDatabase db;
     private SharedPreferencesUtils sharedPreferencesUtils;
     ServiceURL serviceUrl = new ServiceURL();
@@ -42,12 +42,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    public void loadFormControls()
-    {
-        btnSave=(Button)findViewById(R.id.btnSave);
-        btnClose=(Button)findViewById(R.id.btnClose);
+    public void loadFormControls() {
+        btnSave = (Button) findViewById(R.id.btnSave);
+        btnClose = (Button) findViewById(R.id.btnClose);
         inputLayoutServiceUrl = (TextInputLayout) findViewById(R.id.txtInputLayoutServiceUrl);
-        inputService = (EditText)findViewById(R.id.etServiceUrl);
+        inputService = (EditText) findViewById(R.id.etServiceUrl);
 
         btnSave.setOnClickListener(this);
         btnClose.setOnClickListener(this);
@@ -61,10 +60,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnSave:
 
-                if(!inputService.getText().toString().isEmpty()) {
+                if (!inputService.getText().toString().isEmpty()) {
                     serviceUrl.setServiceUrl("");
                     SharedPreferences sp = this.getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
                     sharedPreferencesUtils.removePreferences(KeyValues.SETTINGS_URL);
@@ -81,10 +80,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     startActivity(intent);
                     finish();
 
-                   // DialogUtils.showAlertDialog(SettingsActivity.this,new ErrorMessages().EMC_0021);
+                    // DialogUtils.showAlertDialog(SettingsActivity.this,new ErrorMessages().EMC_0021);
 
-                }else {
-                    DialogUtils.showAlertDialog(SettingsActivity.this,new ErrorMessages().EMC_0022);
+                } else {
+                    DialogUtils.showAlertDialog(SettingsActivity.this, new ErrorMessages().EMC_0022);
                 }
 
 

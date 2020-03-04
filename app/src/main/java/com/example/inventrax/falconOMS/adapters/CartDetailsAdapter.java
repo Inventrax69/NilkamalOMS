@@ -111,7 +111,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
         viewHolder.txtItemDesc.setText(item.getMDescription());
 
         viewHolder.etQtyCart.setText(item.getQuantity());
-        final boolean getUpdateCount=db.cartHeaderDetailsDao().getUpdateCount();
+        final boolean getUpdateCount = db.cartHeaderDetailsDao().getUpdateCount();
         if (!getUpdateCount) {
             viewHolder.txtPrice.setText("");
             txtOrderFulfilment.setText(context.getString(R.string.sync_cart));
@@ -137,10 +137,10 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
         viewHolder.isItemInactive.setVisibility(View.GONE);
         //viewHolder.txtPriority.setText(""+item.getMaterialPriorityID());
 
-        if(cartDetails.size()>0){
-            viewHolder.txtOfferAvaiable.setText(cartDetails.size()+" offer items");
+        if (cartDetails.size() > 0) {
+            viewHolder.txtOfferAvaiable.setText(cartDetails.size() + " offer items");
             viewHolder.txtOfferAvaiable.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             viewHolder.txtOfferAvaiable.setVisibility(View.INVISIBLE);
         }
 
@@ -213,9 +213,9 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
         viewHolder.txtAvailableItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!getUpdateCount){
+                if (!getUpdateCount) {
                     SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.coordinatorLayout), "Sync cart to online", ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
-                }else{
+                } else {
                     GetStock(cartItemList.get(i).getCartDetailsID());
                 }
             }
@@ -224,9 +224,9 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
         viewHolder.txtOfferAvaiable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!getUpdateCount){
+                if (!getUpdateCount) {
                     SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.coordinatorLayout), "Sync cart to online", ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
-                }else{
+                } else {
                     final Dialog dialog = new Dialog(context);
                     dialog.setContentView(R.layout.offer_item_recycler);
                     dialog.setCancelable(false);
@@ -237,7 +237,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
                     recyclerView = dialog.findViewById(R.id.recyclerView);
                     recyclerView.setHasFixedSize(true);
 
-                    ImageView btnClOSE=dialog.findViewById(R.id.btnClOSE);
+                    ImageView btnClOSE = dialog.findViewById(R.id.btnClOSE);
 
                     LinearLayoutManager layoutManager = new LinearLayoutManager(context);
                     recyclerView.setLayoutManager(layoutManager);
@@ -318,13 +318,13 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
 
                                 final List<AvailableStockDTO> availableStockDTOS = new ArrayList<>();
 
-                                if(getAvailableStockDTO != null && getAvailableStockDTO.length()>0){
+                                if (getAvailableStockDTO != null && getAvailableStockDTO.length() > 0) {
                                     for (int i = 0; i < getAvailableStockDTO.length(); i++) {
                                         availableStockDTO = new Gson().fromJson(getAvailableStockDTO.getJSONObject(i).toString(), AvailableStockDTO.class);
                                         availableStockDTOS.add(availableStockDTO);
                                     }
 
-                                    if(availableStockDTOS.size()> 0){
+                                    if (availableStockDTOS.size() > 0) {
 
                                         final Dialog dialog = new Dialog(context);
                                         dialog.setContentView(R.layout.avaible_stock_recycler);
@@ -336,7 +336,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
                                         credit_recycler = dialog.findViewById(R.id.recyclerView);
                                         credit_recycler.setHasFixedSize(true);
 
-                                        ImageView btnClOSE=dialog.findViewById(R.id.btnClOSE);
+                                        ImageView btnClOSE = dialog.findViewById(R.id.btnClOSE);
 
                                         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
                                         credit_recycler.setLayoutManager(layoutManager);
@@ -359,11 +359,11 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
 
                                         dialog.show();
 
-                                    }else{
+                                    } else {
                                         SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.coordinatorLayout), "No Stock Available", ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
                                     }
 
-                                }else{
+                                } else {
                                     SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.coordinatorLayout), "No Stock Available", ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
                                 }
 
@@ -380,9 +380,9 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(context)){
+                    if (NetworkUtils.isInternetAvailable(context)) {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
@@ -400,11 +400,6 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
     }
 
 
-
-
-
-
-
     @Override
     public int getItemCount() {
         return cartItemList.size();
@@ -412,9 +407,9 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
 
     public class SubItemViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtItemName, txtItemDesc, txtPrice, isItemInactive,txtAvailableItem,txtOfferAvaiable;
+        private TextView txtItemName, txtItemDesc, txtPrice, isItemInactive, txtAvailableItem, txtOfferAvaiable;
         private EditText etQtyCart;
-        private ImageView ivItem, ivDeleteItem, imageEdit, txtPriority,ivAvailableItem;
+        private ImageView ivItem, ivDeleteItem, imageEdit, txtPriority, ivAvailableItem;
 
         public SubItemViewHolder(View view) {
             super(view);

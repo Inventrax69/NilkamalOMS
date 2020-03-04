@@ -39,7 +39,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.context = applicationContext;
         listener = mlistener;
         this.isgrid = isgrid;
-        itemsList=new ArrayList<>();
+        itemsList = new ArrayList<>();
         this.activity = activity;
     }
 
@@ -81,7 +81,6 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
 
-
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
@@ -95,9 +94,9 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 itemListView.txtItemDesc.setText(result.modelDescription);
                 //itemListView.txtPrice.setText("Rs" + " " + result.price + "/-");
 
-                if(result.imgPath.equals("")){
+                if (result.imgPath.equals("")) {
                     itemListView.ivItem.setImageResource(R.drawable.no_img);
-                }else {
+                } else {
                     Picasso.with(context)
                             .load(result.imgPath)
                             .placeholder(R.drawable.no_img)
@@ -106,18 +105,16 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                 if (NetworkUtils.isInternetAvailable(context)) {
 
-                    if(!result.discountCount.isEmpty() && !result.discountCount.equalsIgnoreCase("0")){
+                    if (!result.discountCount.isEmpty() && !result.discountCount.equalsIgnoreCase("0")) {
                         itemListView.tvScheme.setClickable(true);
                         itemListView.tvScheme.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         itemListView.tvScheme.setVisibility(View.GONE);
                     }
 
                 } else {
                     itemListView.tvScheme.setVisibility(View.GONE);
                 }
-
-
 
 
                 break;
@@ -209,7 +206,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      * Main list's content ViewHolder
      */
     public class ItemListView extends RecyclerView.ViewHolder {
-        private TextView txtItemName, txtItemDesc, txtPrice, txtDiscount,tvScheme;
+        private TextView txtItemName, txtItemDesc, txtPrice, txtDiscount, tvScheme;
         private ImageView ivItem;
         private Button ivAddToCart;
 

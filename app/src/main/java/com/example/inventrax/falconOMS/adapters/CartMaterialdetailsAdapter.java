@@ -28,7 +28,8 @@ public class CartMaterialdetailsAdapter extends RecyclerView.Adapter<CartMateria
         listener = mlistener;
     }
 
-    public CartMaterialdetailsAdapter(){ }
+    public CartMaterialdetailsAdapter() {
+    }
 
     @NonNull
     @Override
@@ -46,8 +47,8 @@ public class CartMaterialdetailsAdapter extends RecyclerView.Adapter<CartMateria
 
         viewHolder.txtMCode.setText(cardMaterialDTO.getMCode().trim());
         viewHolder.txtMDescription.setText(cardMaterialDTO.getMDescription().trim());
-        viewHolder.txtOrderQuantity.setText(""+cardMaterialDTO.getOrderQuantity());
-        viewHolder.txtAvailableQuantity.setText(""+cardMaterialDTO.getAvailableQuantity());
+        viewHolder.txtOrderQuantity.setText("" + cardMaterialDTO.getOrderQuantity());
+        viewHolder.txtAvailableQuantity.setText("" + cardMaterialDTO.getAvailableQuantity());
 
     }
 
@@ -59,15 +60,15 @@ public class CartMaterialdetailsAdapter extends RecyclerView.Adapter<CartMateria
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView  txtMCode,txtMDescription,txtOrderQuantity,txtAvailableQuantity;
+        TextView txtMCode, txtMDescription, txtOrderQuantity, txtAvailableQuantity;
 
         public ViewHolder(View view) {
             super(view);
 
-            txtMCode =(TextView)view.findViewById(R.id.txtMCode);
-            txtMDescription =(TextView)view.findViewById(R.id.txtMDescription);
-            txtOrderQuantity =(TextView)view.findViewById(R.id.txtOrderQuantity);
-            txtAvailableQuantity =(TextView)view.findViewById(R.id.txtAvailableQuantity);
+            txtMCode = (TextView) view.findViewById(R.id.txtMCode);
+            txtMDescription = (TextView) view.findViewById(R.id.txtMDescription);
+            txtOrderQuantity = (TextView) view.findViewById(R.id.txtOrderQuantity);
+            txtAvailableQuantity = (TextView) view.findViewById(R.id.txtAvailableQuantity);
 
 
             //on item click

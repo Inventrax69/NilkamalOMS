@@ -675,10 +675,9 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                 }
             });
         } catch (Exception ex) {
-
+            viewDialog.hideDialog();
             try {
                 ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", getActivity());
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

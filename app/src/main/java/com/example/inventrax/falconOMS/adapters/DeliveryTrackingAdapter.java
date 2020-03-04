@@ -20,17 +20,16 @@ import java.util.ArrayList;
  * Created by padmaja on 13/07/19.
  */
 public class DeliveryTrackingAdapter extends RecyclerView.Adapter<DeliveryTrackingAdapter.ViewHolder> {
+
     private ArrayList items;
     private Context context;
-
 
     public DeliveryTrackingAdapter(Context applicationContext, ArrayList itemArrayList) {
         this.context = applicationContext;
         this.items = itemArrayList;
-
     }
 
-    public  DeliveryTrackingAdapter(){
+    public DeliveryTrackingAdapter() {
 
     }
 
@@ -54,17 +53,17 @@ public class DeliveryTrackingAdapter extends RecyclerView.Adapter<DeliveryTracki
 
         if (timeLineModel.getStatus().equals(OrderStatus.INACTIVE)) {
             ((ViewHolder) viewHolder).timeline.setMarkerColor(R.color.gray);
-        } else if (timeLineModel.getStatus().equals(OrderStatus.ACTIVE)){
+        } else if (timeLineModel.getStatus().equals(OrderStatus.ACTIVE)) {
             ((ViewHolder) viewHolder).timeline.setMarker(context.getDrawable(R.drawable.check_circle_yellow));
-        }else if (timeLineModel.getStatus().equals(OrderStatus.PENDING)){
+        } else if (timeLineModel.getStatus().equals(OrderStatus.PENDING)) {
             ((ViewHolder) viewHolder).timeline.setMarker(context.getDrawable(R.drawable.pending));
-        }else {
+        } else {
             ((ViewHolder) viewHolder).timeline.setMarker(context.getDrawable(R.drawable.check_circle_img));
         }
 
-        int j = items.size()-1;
-        if(j==i){
-            ((ViewHolder) viewHolder).timeline.setEndLineColor(0,0);
+        int j = items.size() - 1;
+        if (j == i) {
+            ((ViewHolder) viewHolder).timeline.setEndLineColor(0, 0);
         }
 
 
@@ -77,7 +76,7 @@ public class DeliveryTrackingAdapter extends RecyclerView.Adapter<DeliveryTracki
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TimelineView timeline;
-        private TextView text_timeline_date,text_timeline_title;
+        private TextView text_timeline_date, text_timeline_title;
 
 
         public ViewHolder(View view) {
@@ -90,8 +89,8 @@ public class DeliveryTrackingAdapter extends RecyclerView.Adapter<DeliveryTracki
 
 
             timeline.setMarkerColor(R.color.yellow);
-            timeline.setEndLineColor(R.color.colorAccent,1);
-            timeline.setStartLineColor(R.color.colorAccent,1);
+            timeline.setEndLineColor(R.color.colorAccent, 1);
+            timeline.setStartLineColor(R.color.colorAccent, 1);
             timeline.setMarkerSize(90);
         }
     }

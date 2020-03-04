@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
 import com.example.inventrax.falconOMS.R;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,9 +29,9 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
     private File[] files;
     private Dialog popupDialog;
 
-    public FileListAdapter(Context context, File[] files){
-        this.context=context;
-        this.files=files;
+    public FileListAdapter(Context context, File[] files) {
+        this.context = context;
+        this.files = files;
     }
 
     @NonNull
@@ -42,16 +44,16 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
-        String fileExtension=getFileExtension(files[position]);
+        String fileExtension = getFileExtension(files[position]);
 
-        if(fileExtension.equals("jpg")){
+        if (fileExtension.equals("jpg")) {
             holder.imageRelative.setVisibility(View.VISIBLE);
             holder.pdfRelative.setVisibility(View.GONE);
             Bitmap imageBitmap = BitmapFactory.decodeFile(files[position].getAbsolutePath());
             holder.imageimageView.setImageBitmap(imageBitmap);
             int color = Color.parseColor("#FFFFFF"); // The color u want
             holder.imageEye.setColorFilter(color);
-        }else{
+        } else {
             holder.imageRelative.setVisibility(View.GONE);
             holder.pdfRelative.setVisibility(View.VISIBLE);
 
@@ -74,7 +76,7 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
                 popupDialog.setCancelable(true);
                 popupDialog.setContentView(R.layout.image_view);
 
-                ImageView imageimageView=(ImageView)popupDialog.findViewById(R.id.imageimageView);
+                ImageView imageimageView = (ImageView) popupDialog.findViewById(R.id.imageimageView);
                 Bitmap imageBitmap = BitmapFactory.decodeFile(files[position].getAbsolutePath());
                 imageimageView.setImageBitmap(imageBitmap);
 
@@ -87,20 +89,19 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
             @Override
             public void onClick(View view) {
 
-                if(getFileExtension(files[position]).equalsIgnoreCase("pdf")){
+                if (getFileExtension(files[position]).equalsIgnoreCase("pdf")) {
                     popupDialog = new Dialog(context);
                     popupDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     popupDialog.setCancelable(true);
                     popupDialog.setContentView(R.layout.pdf_view);
-                }
-                else {
+                } else {
 
                     popupDialog = new Dialog(context);
                     popupDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     popupDialog.setCancelable(true);
                     popupDialog.setContentView(R.layout.image_view);
 
-                    ImageView imageimageView=(ImageView)popupDialog.findViewById(R.id.imageimageView);
+                    ImageView imageimageView = (ImageView) popupDialog.findViewById(R.id.imageimageView);
                     Bitmap imageBitmap = BitmapFactory.decodeFile(files[position].getAbsolutePath());
                     imageimageView.setImageBitmap(imageBitmap);
 
@@ -138,16 +139,17 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
     }
 
 
-    public String getFileExtension(File file){
-        String fileName=file.getPath().substring(file.getPath().lastIndexOf("/")+1);
-        return fileName.substring(fileName.lastIndexOf(".")+1);
+    public String getFileExtension(File file) {
+        String fileName = file.getPath().substring(file.getPath().lastIndexOf("/") + 1);
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
     private byte[] fullyReadFileToBytes(File f) throws IOException {
         int size = (int) f.length();
         byte[] bytes = new byte[size];
         byte[] tmpBuff = new byte[size];
-        FileInputStream fis= new FileInputStream(f);;
+        FileInputStream fis = new FileInputStream(f);
+        ;
         try {
 
             int read = fis.read(bytes, 0, size);
@@ -159,7 +161,7 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
                     remain -= read;
                 }
             }
-        }  catch (IOException e){
+        } catch (IOException e) {
             throw e;
         } finally {
             fis.close();
@@ -167,7 +169,6 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
 
         return bytes;
     }
-
 
 
     @Override
@@ -178,22 +179,22 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         // TextView filename;
-        RelativeLayout imageRelative,pdfRelative;
-        ImageView imageimageView,imageEye,delete;
+        RelativeLayout imageRelative, pdfRelative;
+        ImageView imageimageView, imageEye, delete;
         //PDFView pdfView;
         ImageView pdfView;
         View view;
 
         public ViewHolder(View view) {
             super(view);
-           // filename=view.findViewById(R.id.filename);
-            this.view=view;
-            imageRelative=view.findViewById(R.id.imageRelative);
-            pdfRelative=view.findViewById(R.id.pdfRelative);
-            imageimageView=view.findViewById(R.id.imageimageView);
-            pdfView=view.findViewById(R.id.pdfView);
-            imageEye=view.findViewById(R.id.imageEye);
-            delete=view.findViewById(R.id.delete);
+            // filename=view.findViewById(R.id.filename);
+            this.view = view;
+            imageRelative = view.findViewById(R.id.imageRelative);
+            pdfRelative = view.findViewById(R.id.pdfRelative);
+            imageimageView = view.findViewById(R.id.imageimageView);
+            pdfView = view.findViewById(R.id.pdfView);
+            imageEye = view.findViewById(R.id.imageEye);
+            delete = view.findViewById(R.id.delete);
 
         }
     }

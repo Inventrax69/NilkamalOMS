@@ -24,7 +24,6 @@ public class SchemsAndDiscountsAdapter extends RecyclerView.Adapter<SchemsAndDis
     public SchemsAndDiscountsAdapter(Context applicationContext, ArrayList items) {
         this.context = applicationContext;
         this.items = items;
-
     }
 
 

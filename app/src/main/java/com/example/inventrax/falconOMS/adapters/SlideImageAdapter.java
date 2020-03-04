@@ -23,9 +23,9 @@ public class SlideImageAdapter extends PagerAdapter {
     private Context context;
 
 
-    public SlideImageAdapter(Context context,ArrayList<ImageModel> IMAGES) {
+    public SlideImageAdapter(Context context, ArrayList<ImageModel> IMAGES) {
         this.context = context;
-        this.IMAGES=IMAGES;
+        this.IMAGES = IMAGES;
         inflater = LayoutInflater.from(context);
     }
 

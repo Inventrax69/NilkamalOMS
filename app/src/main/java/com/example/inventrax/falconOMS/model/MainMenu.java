@@ -26,8 +26,6 @@ public class MainMenu {
         this.displayName = displayName;
     }
 
-
-
     public int getOrderNumber() {
         return orderNumber;
     }

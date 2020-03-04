@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.pojos.AvailableStockDTO;
 
@@ -38,11 +37,11 @@ public class AvailableStockAdapter extends RecyclerView.Adapter<AvailableStockAd
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
 
-        AvailableStockDTO availableStockDTO=availableStockDTOS.get(i);
+        AvailableStockDTO availableStockDTO = availableStockDTOS.get(i);
 
         viewHolder.txtSiteNo.setText(availableStockDTO.getSiteCode());
         viewHolder.txtSiteName.setText(availableStockDTO.getSiteName());
-        viewHolder.txtAvaQty.setText(""+(int)Double.parseDouble(""+availableStockDTO.getAvailableQty()));
+        viewHolder.txtAvaQty.setText("" + (int) Double.parseDouble("" + availableStockDTO.getAvailableQty()));
 
 
     }

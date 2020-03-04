@@ -142,14 +142,14 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
         txtReject.setOnClickListener(this);
 
         if (cartHeaderId.equals("")) {
-            if (type.equals("23")) {
+            if (type.equals("23") || type.equals("6")) {
                 ApprovalistSCMRF(cartHeaderListDTO.getCartHeaderID() + "|" + type);
             } else {
                 ApprovelItemList(cartHeaderListDTO.getCartHeaderID() + "|" + type);
             }
 
         } else {
-            if (type.equals("23")) {
+            if (type.equals("23") || type.equals("6")) {
                 ApprovalistSCMRF(cartHeaderId + "|" + type);
             } else {
                 ApprovelItemList(cartHeaderId + "|" + type);
@@ -353,6 +353,7 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                                 refListAdapter = new RefSCMDetailsAdapter(getActivity(), approvalListDTOS, type, new RefSCMDetailsAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(final int pos) {
+
                                         dialog = new Dialog(getActivity());
                                         dialog.setContentView(R.layout.dialog_scm_recycler);
                                         dialog.setCancelable(false);

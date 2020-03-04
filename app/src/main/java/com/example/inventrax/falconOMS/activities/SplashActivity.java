@@ -235,7 +235,7 @@ public class SplashActivity extends Activity {
             try {
                 int versionNumber = info.versionCode;
                 String versionName = info.versionName;
-            }catch (Exception e){
+            } catch (Exception e) {
                 //DialogUtils.showAlertDialog(SplashActivity.this,"Failed to update the app");
             }
 
@@ -391,11 +391,11 @@ public class SplashActivity extends Activity {
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-            if(isError){
-                if (status != 200){
+            if (isError) {
+                if (status != 200) {
                     navigateToMainScreen();
                 }
-            }else {
+            } else {
                 navigateToMainScreen();
             }
 

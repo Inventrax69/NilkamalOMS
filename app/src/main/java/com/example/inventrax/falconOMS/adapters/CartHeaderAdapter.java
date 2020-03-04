@@ -69,11 +69,11 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
     AlertDialog alert;
     CartFragment cartFragment;
 
-    public CartHeaderAdapter(List<CartHeaderListDTO> itemList, Context context, Activity activity,CartFragment cartFragment) {
+    public CartHeaderAdapter(List<CartHeaderListDTO> itemList, Context context, Activity activity, CartFragment cartFragment) {
         this.itemList = itemList;
         this.context = context;
         this.activity = activity;
-        this.cartFragment=cartFragment;
+        this.cartFragment = cartFragment;
         db = new RoomAppDatabase(this.context).getAppDatabase();
         SharedPreferences sp = context.getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
         userId = sp.getString(KeyValues.USER_ID, "");
@@ -84,7 +84,8 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
         core = new OMSCoreMessage();
     }
 
-    public CartHeaderAdapter() { }
+    public CartHeaderAdapter() {
+    }
 
 
     @NonNull
@@ -104,7 +105,7 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
         itemViewHolder.creditLimit.setText(String.valueOf((int) headerListDTO.getCreditLimit()));
 
         String value = db.customerDAO().getAllCustomerCodeById(cartHeader.shipToPartyId);
-        value =  (value == null || value.isEmpty()) ? db.customerDAO().getAllCustomerCode(cartHeader.customerID) : value;
+        value = (value == null || value.isEmpty()) ? db.customerDAO().getAllCustomerCode(cartHeader.customerID) : value;
         itemViewHolder.txtShipToPatry.setText(value);
 
         List customerCodes = new ArrayList();
@@ -132,7 +133,7 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
                 if (NetworkUtils.isInternetAvailable(context)) {
                     deleteCartItem(pos, i);
                 } else {
-                    deleteItem(pos, i,1);
+                    deleteItem(pos, i, 1);
                 }
             }
         });
@@ -166,10 +167,10 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
         itemViewHolder.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(cartHeader.shipToPartyId==0)
-                    showShipToPartyDialog(cartHeader.customerID,cartHeader.cartHeaderID,i);
+                if (cartHeader.shipToPartyId == 0)
+                    showShipToPartyDialog(cartHeader.customerID, cartHeader.cartHeaderID, i);
                 else {
-                    db.cartHeaderDAO().updateShipToPatry(cartHeader.customerID,cartHeader.cartHeaderID,"0");
+                    db.cartHeaderDAO().updateShipToPatry(cartHeader.customerID, cartHeader.cartHeaderID, "0");
                     itemList.get(i).setShipToPartyID("0");
                     notifyItemChanged(i);
                     notifyDataSetChanged();
@@ -179,7 +180,8 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
     }
 
     String sCustomerId;
-    protected void showShipToPartyDialog(final int customerID, final int cartHeaderID,final int i) {
+
+    protected void showShipToPartyDialog(final int customerID, final int cartHeaderID, final int i) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View promptView = layoutInflater.inflate(R.layout.shiptoparty_dialog, null);
@@ -221,7 +223,7 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
 
                     @Override
                     public void onClick(View view) {
-                        db.cartHeaderDAO().updateShipToPatry(customerID,cartHeaderID,sCustomerId);
+                        db.cartHeaderDAO().updateShipToPatry(customerID, cartHeaderID, sCustomerId);
                         itemList.get(i).setShipToPartyID(sCustomerId);
                         notifyItemChanged(i);
                         notifyDataSetChanged();
@@ -242,7 +244,7 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
 
         OMSCoreMessage message = new OMSCoreMessage();
         message = common.SetAuthentication(EndpointConstants.HHTCartDTO, context);
-        CartDetailsListDTO cartDetailsListDTO=new CartDetailsListDTO();
+        CartDetailsListDTO cartDetailsListDTO = new CartDetailsListDTO();
         cartDetailsListDTO.setCartDetailsID(cartdetailsid);
         cartDetailsListDTO.setUserID(userId);
         cartDetailsListDTO.setCustomerID(customerID);
@@ -275,7 +277,7 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
 
                                     omsExceptionMessage = oms;
                                     ProgressDialogUtils.closeProgressDialog();
-                                    common.showAlertType(omsExceptionMessage, (Activity)context, context);
+                                    common.showAlertType(omsExceptionMessage, (Activity) context, context);
                                 }
                                 ProgressDialogUtils.closeProgressDialog();
 
@@ -307,9 +309,9 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(context)){
+                    if (NetworkUtils.isInternetAvailable(context)) {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
@@ -328,35 +330,35 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
 
     private void deleteItem(int pos, int i, int flag) {
 
-       String cartDetailsid = itemList.get(i).getListCartDetailsList().get(pos).getCartDetailsID();
-       String cartHeaderid = itemList.get(i).getListCartDetailsList().get(pos).getCartHeaderID();
-       int customerID = itemList.get(i).getCustomerID();
+        String cartDetailsid = itemList.get(i).getListCartDetailsList().get(pos).getCartDetailsID();
+        String cartHeaderid = itemList.get(i).getListCartDetailsList().get(pos).getCartHeaderID();
+        int customerID = itemList.get(i).getCustomerID();
 
 
-            db.cartDetailsDAO().deleteItem(itemList.get(i).getListCartDetailsList().get(pos).getMaterialMasterID());
-            if(flag==1){
-                db.cartHeaderDAO().updateIsUpdated(customerID,1);
+        db.cartDetailsDAO().deleteItem(itemList.get(i).getListCartDetailsList().get(pos).getMaterialMasterID());
+        if (flag == 1) {
+            db.cartHeaderDAO().updateIsUpdated(customerID, 1);
+        }
+        itemList.get(i).getListCartDetailsList().remove(pos);
+
+        if (itemList.get(i).getListCartDetailsList().size() == 0) {
+            itemList.remove(i);
+            notifyItemRemoved(i);
+            if (itemList.size() == 0) {
+                db.cartHeaderDAO().deleteCartHeader(cartHeaderid);
+                cartFragment.changeLayout();
             }
-            itemList.get(i).getListCartDetailsList().remove(pos);
-
-            if (itemList.get(i).getListCartDetailsList().size() == 0) {
-                itemList.remove(i);
-                notifyItemRemoved(i);
-                if (itemList.size() == 0) {
-                    db.cartHeaderDAO().deleteCartHeader(cartHeaderid);
-                    cartFragment.changeLayout();
-                }
-                if (itemList.size() == 1) {
-                    TextView txtOrderFulfilment=activity.findViewById(R.id.txtOrderFulfilment);
-                    txtOrderFulfilment.setEnabled(true);
-                    txtOrderFulfilment.setVisibility(View.VISIBLE);
-                    txtOrderFulfilment.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorAccent)));
-                }
-            }else{
-                notifyItemChanged(i);
+            if (itemList.size() == 1) {
+                TextView txtOrderFulfilment = activity.findViewById(R.id.txtOrderFulfilment);
+                txtOrderFulfilment.setEnabled(true);
+                txtOrderFulfilment.setVisibility(View.VISIBLE);
+                txtOrderFulfilment.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorAccent)));
             }
+        } else {
+            notifyItemChanged(i);
+        }
 
-            notifyDataSetChanged();
+        notifyDataSetChanged();
 
     }
 
@@ -417,9 +419,9 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(context)){
+                    if (NetworkUtils.isInternetAvailable(context)) {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();

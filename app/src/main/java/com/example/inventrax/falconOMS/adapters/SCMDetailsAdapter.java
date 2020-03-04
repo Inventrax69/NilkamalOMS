@@ -71,8 +71,8 @@ public class SCMDetailsAdapter extends RecyclerView.Adapter<SCMDetailsAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtItemName, txtQty, txtDeliveryDate,isItemInactive;
-        private ImageView ivItem,ivDeleteItem;
+        private TextView txtItemName, txtQty, txtDeliveryDate, isItemInactive;
+        private ImageView ivItem, ivDeleteItem;
 
         public ViewHolder(View view) {
             super(view);

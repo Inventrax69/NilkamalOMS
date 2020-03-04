@@ -28,10 +28,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         this.context = applicationContext;
         this.items = items;
         listener = mlistener;
-
     }
 
-    public ItemAdapter(){
+    public ItemAdapter() {
 
     }
 
@@ -55,16 +54,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         viewHolder.txtItemDesc.setText(variantTable.mDescription);
         //itemListView.txtPrice.setText("Rs" + " " + result.price + "/-");
 
-        if(variantTable.materialImgPath.equals("")){
+        if (variantTable.materialImgPath.equals("")) {
             viewHolder.ivItem.setImageResource(R.drawable.no_img);
-        }else {
+        } else {
 
-            if(variantTable.materialImgPath.split("[|]").length>0){
+            if (variantTable.materialImgPath.split("[|]").length > 0) {
                 Picasso.with(context)
                         .load(variantTable.materialImgPath.split("[|]")[0])
                         .placeholder(R.drawable.no_img)
                         .into(viewHolder.ivItem);
-            }else {
+            } else {
                 Picasso.with(context)
                         .load(variantTable.materialImgPath)
                         .placeholder(R.drawable.no_img)

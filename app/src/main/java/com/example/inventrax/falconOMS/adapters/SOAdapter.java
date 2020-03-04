@@ -77,6 +77,7 @@ public class SOAdapter extends RecyclerView.Adapter<SOAdapter.ViewHolder> {
 
         }
     }
+
     // Item click listener interface
     public interface OnItemClickListener {
         void onItemClick(int pos);

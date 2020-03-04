@@ -33,16 +33,17 @@ public class RefDetailsAdapter extends RecyclerView.Adapter<RefDetailsAdapter.Vi
     OnCheckValues onCheckValuesListener;
     String type;
 
-    public RefDetailsAdapter(Context applicationContext, List<ApprovalListDTO> approvalListDTOS, String type, OnItemClickListener mlistener, OnApprovalUpdate onApprovalListener,OnCheckValues onCheckValuesListener) {
+    public RefDetailsAdapter(Context applicationContext, List<ApprovalListDTO> approvalListDTOS, String type, OnItemClickListener mlistener, OnApprovalUpdate onApprovalListener, OnCheckValues onCheckValuesListener) {
         this.context = applicationContext;
         this.approvalListDTOS = approvalListDTOS;
         this.type = type;
         listener = mlistener;
         this.onApprovalListener = onApprovalListener;
-        this.onCheckValuesListener=onCheckValuesListener;
+        this.onCheckValuesListener = onCheckValuesListener;
     }
 
-    public RefDetailsAdapter() { }
+    public RefDetailsAdapter() {
+    }
 
     @NonNull
     @Override
@@ -50,7 +51,7 @@ public class RefDetailsAdapter extends RecyclerView.Adapter<RefDetailsAdapter.Vi
         View view;
         if (type.equals("4")) {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.approval_credit_details, viewGroup, false);
-        }else{
+        } else {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.approval_inactive_details, viewGroup, false);
         }
         return new ViewHolder(view);
@@ -93,10 +94,12 @@ public class RefDetailsAdapter extends RecyclerView.Adapter<RefDetailsAdapter.Vi
         viewHolder.txtPrice.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -121,7 +124,7 @@ public class RefDetailsAdapter extends RecyclerView.Adapter<RefDetailsAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtItemName, txtItemDesc, txtQty, txtPrice, txtBasePrice,lblBasePrice,lblPrice;
+        TextView txtItemName, txtItemDesc, txtQty, txtPrice, txtBasePrice, lblBasePrice, lblPrice;
 
         public ViewHolder(View view) {
             super(view);

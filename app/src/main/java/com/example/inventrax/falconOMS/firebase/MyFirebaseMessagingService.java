@@ -32,7 +32,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private Context context;
     SharedPreferencesUtils sharedPreferencesUtils;
-    private String nType = "", operation = "", type = "", ID = "",Link="";
+    private String nType = "", operation = "", type = "", ID = "", Link = "";
     AppDatabase db;
 
     @Override
@@ -88,12 +88,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         if (nType.equalsIgnoreCase("3")) {
-            showNotification(type,ID,Link);
+            showNotification(type, ID, Link);
         }
 
     }
 
-    private void showNotification(String notificationText,String ID,String Link) {
+    private void showNotification(String notificationText, String ID, String Link) {
 
         String NOTIFICATION_CHANNEL_ID = "OMS";
 
@@ -119,7 +119,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
         SharedPreferences prefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
-        boolean value= prefs.getBoolean(KeyValues.IS_CUSTOMER_LOADED,false);
+        boolean value = prefs.getBoolean(KeyValues.IS_CUSTOMER_LOADED, false);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(KeyValues.IS_NOTIFICATION_AVAILABLE, true);
         editor.commit();

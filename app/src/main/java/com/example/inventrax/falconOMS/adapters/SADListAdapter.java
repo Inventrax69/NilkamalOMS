@@ -369,9 +369,9 @@ public class SADListAdapter extends RecyclerView.Adapter<SADListAdapter.ViewHold
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(context)){
+                    if (NetworkUtils.isInternetAvailable(context)) {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();

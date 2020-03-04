@@ -105,7 +105,7 @@ public class ApprovalHeaderAdapter extends RecyclerView.Adapter<ApprovalHeaderAd
             itemViewHolder.rvSubItem.setClickable(false);
             itemViewHolder.customerName.setTextColor(context.getResources().getColor(R.color.safron));
             itemViewHolder.rvSubItem.setEnabled(false);
-        }else if(headerListDTO.getIsInActive()>0){
+        } else if (headerListDTO.getIsInActive() > 0) {
             itemViewHolder.customerName.setTextColor(Color.RED);
             itemViewHolder.rvSubItem.setClickable(false);
             itemViewHolder.rvSubItem.setEnabled(false);
@@ -123,7 +123,7 @@ public class ApprovalHeaderAdapter extends RecyclerView.Adapter<ApprovalHeaderAd
             DateFormat targetFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
             date = originalFormat.parse(headerListDTO.getCreatedOn());
             String formattedDate = targetFormat.format(date);
-            itemViewHolder.tv_CreatedOn.setText("Created on : "+ formattedDate);
+            itemViewHolder.tv_CreatedOn.setText("Created on : " + formattedDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -143,7 +143,7 @@ public class ApprovalHeaderAdapter extends RecyclerView.Adapter<ApprovalHeaderAd
             @Override
             public void onDeletClick(int pos) {
 
-                if ((itemList.get(i).getIsInActive()==1 || itemList.get(i).getIsCreditLimit() == 1) &&
+                if ((itemList.get(i).getIsInActive() == 1 || itemList.get(i).getIsCreditLimit() == 1) &&
                         (itemList.get(i).getIsApproved() == 1 || itemList.get(i).getIsApproved() == 3 || itemList.get(i).getIsApproved() == 7)) {
 
                     final AlertDialog.Builder builder;
@@ -186,9 +186,11 @@ public class ApprovalHeaderAdapter extends RecyclerView.Adapter<ApprovalHeaderAd
         db.cartDetailsDAO().deleteItem(itemList.get(i).getListCartDetailsList().get(pos).getMaterialMasterID());
         itemList.get(i).getListCartDetailsList().remove(pos);
 
-        if(itemList.get(i).getListCartDetailsList().size()==0){
+        if (itemList.get(i).getListCartDetailsList().size() == 0) {
             itemList.remove(i);
         }
+
+        db.cartHeaderDAO().updateIsUpdated(itemList.get(i).getCustomerID(),1);
 
         notifyItemChanged(i);
         notifyDataSetChanged();
@@ -254,9 +256,9 @@ public class ApprovalHeaderAdapter extends RecyclerView.Adapter<ApprovalHeaderAd
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(context)){
+                    if (NetworkUtils.isInternetAvailable(context)) {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
@@ -281,7 +283,7 @@ public class ApprovalHeaderAdapter extends RecyclerView.Adapter<ApprovalHeaderAd
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
-        private TextView customerName, creditLimit, tv_Status,tv_CreatedOn;
+        private TextView customerName, creditLimit, tv_Status, tv_CreatedOn;
         private RecyclerView rvSubItem;
 
         ItemViewHolder(View itemView) {
@@ -295,81 +297,81 @@ public class ApprovalHeaderAdapter extends RecyclerView.Adapter<ApprovalHeaderAd
 
     }
 
-    private String getStatus(CartHeaderListDTO headerListDTO){
+    private String getStatus(CartHeaderListDTO headerListDTO) {
 
         // Is Approved = 1
-        if(headerListDTO.getIsApproved()== 1 && headerListDTO.getIsInActive()==1 )
+        if (headerListDTO.getIsApproved() == 1 && headerListDTO.getIsInActive() == 1)
             return "In active Approval (In-Process)";
-        else if(headerListDTO.getIsApproved()== 1 && headerListDTO.getIsOpenPrice()==1 )
+        else if (headerListDTO.getIsApproved() == 1 && headerListDTO.getIsOpenPrice() == 1)
             return "Open Price Approval (In-Progress)";
-        else if(headerListDTO.getIsApproved()== 1 && headerListDTO.getIsStockNotAvailable().equals("1"))
+        else if (headerListDTO.getIsApproved() == 1 && headerListDTO.getIsStockNotAvailable().equals("1"))
             return "Stock not available Approval (In-Progress)";
-        else if(headerListDTO.getIsApproved()== 1 && headerListDTO.getIsCreditLimit()==1 )
+        else if (headerListDTO.getIsApproved() == 1 && headerListDTO.getIsCreditLimit() == 1)
             return "Credit Limit Approval (In-Process)";
-        // Is Approved = 2
-        else if(headerListDTO.getIsApproved()== 2 && headerListDTO.getIsInActive()==1 )
+            // Is Approved = 2
+        else if (headerListDTO.getIsApproved() == 2 && headerListDTO.getIsInActive() == 1)
             return "In active Approval (Rejected)";
-        else if(headerListDTO.getIsApproved()== 2 && headerListDTO.getIsOpenPrice()==1 )
+        else if (headerListDTO.getIsApproved() == 2 && headerListDTO.getIsOpenPrice() == 1)
             return "Open Price Approval (Rejected)";
-        else if(headerListDTO.getIsApproved()== 2 && headerListDTO.getIsStockNotAvailable().equals("1"))
+        else if (headerListDTO.getIsApproved() == 2 && headerListDTO.getIsStockNotAvailable().equals("1"))
             return "Stock not available Approval (Rejected)";
-        else if(headerListDTO.getIsApproved()== 2 && headerListDTO.getIsCreditLimit()==1 )
+        else if (headerListDTO.getIsApproved() == 2 && headerListDTO.getIsCreditLimit() == 1)
             return "Credit Limit Approval (Rejected)";
-        // Is Approved = 3
-        else if(headerListDTO.getIsApproved()== 3 && headerListDTO.getIsInActive()==1  )
+            // Is Approved = 3
+        else if (headerListDTO.getIsApproved() == 3 && headerListDTO.getIsInActive() == 1)
             return "In active Approval (Initiated)";
-        else if(headerListDTO.getIsApproved()== 3 && headerListDTO.getIsOpenPrice()==1 )
+        else if (headerListDTO.getIsApproved() == 3 && headerListDTO.getIsOpenPrice() == 1)
             return "Open Price Approval (Initiated)";
-        else if(headerListDTO.getIsApproved()== 3 && headerListDTO.getIsStockNotAvailable().equals("1"))
+        else if (headerListDTO.getIsApproved() == 3 && headerListDTO.getIsStockNotAvailable().equals("1"))
             return "Stock not available Approval (Initiated)";
-        else if(headerListDTO.getIsApproved()== 3 && headerListDTO.getIsCreditLimit()==1 )
+        else if (headerListDTO.getIsApproved() == 3 && headerListDTO.getIsCreditLimit() == 1)
             return "Credit Limit Approval (Initiated)";
-        // Is Approved = 4
-        else if(headerListDTO.getIsApproved()== 4 && headerListDTO.getIsInActive()==1  )
+            // Is Approved = 4
+        else if (headerListDTO.getIsApproved() == 4 && headerListDTO.getIsInActive() == 1)
             return "In active Approval (Approved)";
-        else if(headerListDTO.getIsApproved()== 4 && headerListDTO.getIsOpenPrice()==1 )
+        else if (headerListDTO.getIsApproved() == 4 && headerListDTO.getIsOpenPrice() == 1)
             return "Open Price Approval (Approved)";
-        else if(headerListDTO.getIsApproved()== 4 && headerListDTO.getIsStockNotAvailable().equals("1"))
+        else if (headerListDTO.getIsApproved() == 4 && headerListDTO.getIsStockNotAvailable().equals("1"))
             return "Stock not available Approval (Approved)";
-        else if(headerListDTO.getIsApproved()== 4 && headerListDTO.getIsCreditLimit()==1 )
+        else if (headerListDTO.getIsApproved() == 4 && headerListDTO.getIsCreditLimit() == 1)
             return "Credit Limit Approval (Approved)";
-        // Is Approved = 5
-        else if(headerListDTO.getIsApproved()== 5 && headerListDTO.getIsInActive()==1  )
+            // Is Approved = 5
+        else if (headerListDTO.getIsApproved() == 5 && headerListDTO.getIsInActive() == 1)
             return "In active Approval (Cancelled)";
-        else if(headerListDTO.getIsApproved()== 5 && headerListDTO.getIsOpenPrice()==1 )
+        else if (headerListDTO.getIsApproved() == 5 && headerListDTO.getIsOpenPrice() == 1)
             return "Open Price Approval (Cancelled)";
-        else if(headerListDTO.getIsApproved()== 5 && headerListDTO.getIsStockNotAvailable().equals("1"))
+        else if (headerListDTO.getIsApproved() == 5 && headerListDTO.getIsStockNotAvailable().equals("1"))
             return "Stock not available Approval (Cancelled)";
-        else if(headerListDTO.getIsApproved()== 5 && headerListDTO.getIsCreditLimit()==1 )
+        else if (headerListDTO.getIsApproved() == 5 && headerListDTO.getIsCreditLimit() == 1)
             return "Credit Limit Approval (Cancelled)";
-        // Is Approved = 6
-        else if(headerListDTO.getIsApproved()== 6 && headerListDTO.getIsInActive()==1  )
+            // Is Approved = 6
+        else if (headerListDTO.getIsApproved() == 6 && headerListDTO.getIsInActive() == 1)
             return "In active Approval (Auto Closed)";
-        else if(headerListDTO.getIsApproved()== 6 && headerListDTO.getIsOpenPrice()==1 )
+        else if (headerListDTO.getIsApproved() == 6 && headerListDTO.getIsOpenPrice() == 1)
             return "Open Price Approval (Auto Closed)";
-        else if(headerListDTO.getIsApproved()== 6 && headerListDTO.getIsStockNotAvailable().equals("1"))
+        else if (headerListDTO.getIsApproved() == 6 && headerListDTO.getIsStockNotAvailable().equals("1"))
             return "Stock not available Approval (Auto Closed)";
-        else if(headerListDTO.getIsApproved()== 6 && headerListDTO.getIsCreditLimit()==1 )
+        else if (headerListDTO.getIsApproved() == 6 && headerListDTO.getIsCreditLimit() == 1)
             return "Credit Limit Approval (Auto Closed)";
-        // Is Approved = 7
-        else if(headerListDTO.getIsApproved()==7 && headerListDTO.getIsInActive()==1  )
+            // Is Approved = 7
+        else if (headerListDTO.getIsApproved() == 7 && headerListDTO.getIsInActive() == 1)
             return "In active Approval (Escalated)";
-        else if(headerListDTO.getIsApproved()== 7 && headerListDTO.getIsOpenPrice()==1 )
+        else if (headerListDTO.getIsApproved() == 7 && headerListDTO.getIsOpenPrice() == 1)
             return "Open Price Approval (Escalated)";
-        else if(headerListDTO.getIsApproved()== 7 && headerListDTO.getIsStockNotAvailable().equals("1"))
+        else if (headerListDTO.getIsApproved() == 7 && headerListDTO.getIsStockNotAvailable().equals("1"))
             return "Stock not available Approval (Escalated)";
-        else if(headerListDTO.getIsApproved()==7 && headerListDTO.getIsCreditLimit()==1 )
+        else if (headerListDTO.getIsApproved() == 7 && headerListDTO.getIsCreditLimit() == 1)
             return "Credit Limit Approval (Escalated)";
-        // Is Approved = 0
-        else if(headerListDTO.getIsApproved()==0 && headerListDTO.getIsInActive()==1 )
+            // Is Approved = 0
+        else if (headerListDTO.getIsApproved() == 0 && headerListDTO.getIsInActive() == 1)
             return "In active Approval Required";
-        else if(headerListDTO.getIsApproved()== 7 && headerListDTO.getIsOpenPrice()==1 )
+        else if (headerListDTO.getIsApproved() == 7 && headerListDTO.getIsOpenPrice() == 1)
             return "Open Price Approval Required";
-        else if(headerListDTO.getIsApproved()== 7 && headerListDTO.getIsStockNotAvailable().equals("1"))
+        else if (headerListDTO.getIsApproved() == 7 && headerListDTO.getIsStockNotAvailable().equals("1"))
             return "Stock not available Approval Required";
-        else if(headerListDTO.getIsApproved()==0 && headerListDTO.getIsCreditLimit()==1 )
+        else if (headerListDTO.getIsApproved() == 0 && headerListDTO.getIsCreditLimit() == 1)
             return "Credit Limit Approval Required";
-        else if(headerListDTO.getIsApproved()==0  && headerListDTO.getIsInActive()==0 && headerListDTO.getIsCreditLimit()==0)
+        else if (headerListDTO.getIsApproved() == 0 && headerListDTO.getIsInActive() == 0 && headerListDTO.getIsCreditLimit() == 0)
             return "Check For Fulfilment Options";
         else return "";
 

@@ -31,7 +31,8 @@ public class RefListAdapter extends RecyclerView.Adapter<RefListAdapter.ViewHold
         listener = mlistener;
     }
 
-    public RefListAdapter(){ }
+    public RefListAdapter() {
+    }
 
     @NonNull
     @Override
@@ -71,17 +72,17 @@ public class RefListAdapter extends RecyclerView.Adapter<RefListAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView  txtCRef,txtCName,txtCCode,txtDate;
+        TextView txtCRef, txtCName, txtCCode, txtDate;
         ImageView ivItem;
 
         public ViewHolder(View view) {
             super(view);
 
-            txtCRef =(TextView)view.findViewById(R.id.txtCRef);
-            txtCCode =(TextView)view.findViewById(R.id.txtCCode);
-            txtCName =(TextView)view.findViewById(R.id.txtCName);
-            txtDate =(TextView)view.findViewById(R.id.txtDate);
-            ivItem =(ImageView)view.findViewById(R.id.ivItem);
+            txtCRef = (TextView) view.findViewById(R.id.txtCRef);
+            txtCCode = (TextView) view.findViewById(R.id.txtCCode);
+            txtCName = (TextView) view.findViewById(R.id.txtCName);
+            txtDate = (TextView) view.findViewById(R.id.txtDate);
+            ivItem = (ImageView) view.findViewById(R.id.ivItem);
 
             //on item click
             view.setOnClickListener(new View.OnClickListener() {

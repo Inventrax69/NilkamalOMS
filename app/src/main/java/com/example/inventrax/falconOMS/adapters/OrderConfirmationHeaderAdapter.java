@@ -69,10 +69,10 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
     AlertDialog alert;
     private OMSCoreMessage core;
     private ErrorMessages errorMessages;
-    private double total,total_tax;
+    private double total, total_tax;
     private static DecimalFormat df2 = new DecimalFormat("#.##");
     Animation anim = new AlphaAnimation(0.0f, 1.0f);
-    boolean setBlink =false;
+    boolean setBlink = false;
 
     public OrderConfirmationHeaderAdapter(List<CartHeaderListDTO> itemList, Context context, Activity activity) {
         this.itemList = itemList;
@@ -86,7 +86,8 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
         errorMessages = new ErrorMessages();
     }
 
-    public OrderConfirmationHeaderAdapter() { }
+    public OrderConfirmationHeaderAdapter() {
+    }
 
     @NonNull
     @Override
@@ -104,8 +105,8 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
         itemViewHolder.customerName.setText(headerListDTO.getCustomerName());
         itemViewHolder.creditLimit.setText(String.valueOf((int) headerListDTO.getCreditLimit()));
         df2.setRoundingMode(RoundingMode.DOWN);
-        itemViewHolder.tv_total.setText("Sub total : "+ "Rs. "+df2.format(Double.parseDouble(headerListDTO.getTotalPrice())));
-        itemViewHolder.tv_total_tax.setText("Total with tax : "+ "Rs. "+df2.format(Double.parseDouble(headerListDTO.getTotalPriceWithTax())));
+        itemViewHolder.tv_total.setText("Sub total : " + "Rs. " + df2.format(Double.parseDouble(headerListDTO.getTotalPrice())));
+        itemViewHolder.tv_total_tax.setText("Total with tax : " + "Rs. " + df2.format(Double.parseDouble(headerListDTO.getTotalPriceWithTax())));
 
         if (headerListDTO.getIsCreditLimit() > 0) {
             itemViewHolder.customerName.setTextColor(Color.RED);
@@ -119,7 +120,7 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
 
         itemViewHolder.tv_Status.setText(getStatus(headerListDTO));
 
-        if(setBlink){
+        if (setBlink) {
             Animation anim = new AlphaAnimation(0.0f, 1.0f);
             anim.setDuration(500); //You can manage the blinking time with this parameter
             anim.setStartOffset(20);
@@ -153,10 +154,10 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
             @Override
             public void onDeleteClickListener(int group, int child) {
 
-                if(NetworkUtils.isInternetAvailable(context)){
-                    Log.v("ABCDE","onDeleteClickListener");
+                if (NetworkUtils.isInternetAvailable(context)) {
+                    Log.v("ABCDE", "onDeleteClickListener");
                     DeleteItemFromCart(itemList.get(i).getCartHeaderID(), itemList.get(i).getDeliveryDate().get(group).getListCartDetailsList().get(child).getCartDetailsID(), i, group, child);
-                }else {
+                } else {
                     SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.coordinatorLayout), "Please enable internet", ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
                 }
 
@@ -166,7 +167,7 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
         itemViewHolder.expandableDeliveryDate.setAdapter(expandableListAdapter);
         if (headerListDTO.getDeliveryDate().size() > 0 && i == 0)
             itemViewHolder.expandableDeliveryDate.expandGroup(0);
-            itemViewHolder.expandableDeliveryDate.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+        itemViewHolder.expandableDeliveryDate.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             int previousGroup = -1;
 
             @Override
@@ -206,7 +207,7 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
 
         call = apiService.DeleteItemFromCart(message);
 
-        Log.v("ABCDE_M",new Gson().toJson(message));
+        Log.v("ABCDE_M", new Gson().toJson(message));
 
         try {
             //Getting response from the method
@@ -235,18 +236,18 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
 
                             ProgressDialogUtils.closeProgressDialog();
 
-                            Log.v("ABCDE_O",new Gson().toJson(core.getEntityObject()));
+                            Log.v("ABCDE_O", new Gson().toJson(core.getEntityObject()));
 
                             try {
 
 
-                                if(core.getEntityObject().toString().equals("2")){
+                                if (core.getEntityObject().toString().equals("2")) {
                                     db.cartHeaderDAO().deleteCartHeader(String.valueOf(cartHeaderID));
                                     db.cartDetailsDAO().deleteItemByCartDetailsId(cartDetailsID);
                                     ProgressDialogUtils.closeProgressDialog();
-                                    Intent intent = new Intent(((Activity)context), CartActivity.class);
-                                    ((Activity)context).startActivity(intent);
-                                    ((Activity)context).finish();
+                                    Intent intent = new Intent(((Activity) context), CartActivity.class);
+                                    ((Activity) context).startActivity(intent);
+                                    ((Activity) context).finish();
                                     return;
                                 }
 
@@ -263,13 +264,14 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
                                     }
                                 }
 
-                                if(cartHeader.size()>0){
-                                    total = 0.0;total_tax=0.0;
+                                if (cartHeader.size() > 0) {
+                                    total = 0.0;
+                                    total_tax = 0.0;
                                     for (int i = 0; i < cartHeader.size(); i++) {
-                                        if(cartHeader.get(i).getIsApproved()==0){
+                                        if (cartHeader.get(i).getIsApproved() == 0) {
 
-                                            total += Double.parseDouble(cartHeader.get(i).getTotalPrice()==null ? "0" : cartHeader.get(i).getTotalPrice());
-                                            total_tax += Double.parseDouble(cartHeader.get(i).getTotalPriceWithTax() ==null ? "0" : cartHeader.get(i).getTotalPriceWithTax());
+                                            total += Double.parseDouble(cartHeader.get(i).getTotalPrice() == null ? "0" : cartHeader.get(i).getTotalPrice());
+                                            total_tax += Double.parseDouble(cartHeader.get(i).getTotalPriceWithTax() == null ? "0" : cartHeader.get(i).getTotalPriceWithTax());
 
                                             /* for (int j = 0; j < cartHeader.get(i).getDeliveryDate().size(); j++) {
                                                 for (int k = 0; k < cartHeader.get(i).getDeliveryDate().get(j).getListCartDetailsList().size(); k++) {
@@ -297,22 +299,22 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
                                         notifyItemChanged(pos);
                                     } else {
                                         itemList.get(pos).getDeliveryDate().remove(group);
-                                        if(itemList.get(pos).getDeliveryDate().size() > 0 ){
+                                        if (itemList.get(pos).getDeliveryDate().size() > 0) {
                                             notifyItemChanged(pos);
-                                        }else{
+                                        } else {
                                             itemList.remove(pos);
                                             db.cartHeaderDAO().deleteCartHeader(String.valueOf(cartHeaderID));
                                             notifyItemRemoved(pos);
                                         }
                                     }
 
-                                     // df2.setRoundingMode(RoundingMode.DOWN);
+                                    // df2.setRoundingMode(RoundingMode.DOWN);
 /*                                  ((TextView)((Activity)context).findViewById(R.id.txtTotalAmt)).setText(""+df2.format(total));
                                     ((TextView)((Activity)context).findViewById(R.id.txtTotalAmtTax)).setText(""+df2.format(total_tax));
                                     ((TextView)((Activity)context).findViewById(R.id.txtTaxes)).setText(""+df2.format(total_tax-total)); */
-                                    ((TextView)((Activity)context).findViewById(R.id.txtTotalAmt)).setText("Rs." + String.format( "%.2f", total )+ "/-");
-                                    ((TextView)((Activity)context).findViewById(R.id.txtTotalAmtTax)).setText("Rs." + String.format( "%.2f", total_tax ) + "/-");
-                                    ((TextView)((Activity)context).findViewById(R.id.txtTaxes)).setText("Rs." + String.format( "%.2f", total_tax - total ) + "/-");
+                                    ((TextView) ((Activity) context).findViewById(R.id.txtTotalAmt)).setText("Rs." + String.format("%.2f", total) + "/-");
+                                    ((TextView) ((Activity) context).findViewById(R.id.txtTotalAmtTax)).setText("Rs." + String.format("%.2f", total_tax) + "/-");
+                                    ((TextView) ((Activity) context).findViewById(R.id.txtTaxes)).setText("Rs." + String.format("%.2f", total_tax - total) + "/-");
 
                                     notifyDataSetChanged();
 
@@ -330,9 +332,9 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(context)){
+                    if (NetworkUtils.isInternetAvailable(context)) {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
@@ -357,7 +359,7 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView customerName, creditLimit, tv_Status,tv_total,tv_total_tax;
+        private TextView customerName, creditLimit, tv_Status, tv_total, tv_total_tax;
         //private RecyclerView rvSubItem;
         ExpandableListView expandableDeliveryDate;
 
