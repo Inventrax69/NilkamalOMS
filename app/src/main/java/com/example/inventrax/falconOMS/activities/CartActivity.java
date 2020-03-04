@@ -49,7 +49,6 @@ import com.example.inventrax.falconOMS.util.SharedPreferencesUtils;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -363,10 +362,12 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (id) {
             case R.id.action_logout: {
+
                 Intent intent = new Intent(CartActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
+
             }
             break;
 

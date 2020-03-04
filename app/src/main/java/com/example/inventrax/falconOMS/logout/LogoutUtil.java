@@ -36,7 +36,7 @@ public class LogoutUtil {
         try
         {
             Intent loginIntent = new Intent(activity, LoginActivity.class);
-            loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(loginIntent);
             new SharedPreferencesUtils(KeyValues.MY_PREFS, context).savePreference(KeyValues.IS_CUSTOMER_LOADED, false);
             activity.finish();

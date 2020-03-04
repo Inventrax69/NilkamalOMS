@@ -432,7 +432,7 @@ public class MainActivity extends AppCompatActivity {
             // syncItemData();
             // syncCustomerData();
             cartSyncAsync();
-            // SyncData();
+            //SyncData();
         }
 
 
@@ -672,6 +672,7 @@ public class MainActivity extends AppCompatActivity {
         message = common.SetAuthentication(EndpointConstants.HHTCartDTO, MainActivity.this);
         productCatalogs oDto = new productCatalogs();
         oDto.setUserID(userId);
+        oDto.setCreatedOn("2020-02-17 17:50:23.857");
         message.setEntityObject(oDto);
 
         Call<OMSCoreMessage> call = null;

@@ -127,18 +127,28 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
             anim.setRepeatMode(Animation.REVERSE);
             anim.setRepeatCount(Animation.INFINITE);
             viewHolder.txtAvailableItem.startAnimation(anim);
-            viewHolder.txtPrice.setText(Html.fromHtml("Rs. :" + item.getPrice()));
+            viewHolder.txtPrice.setText(Html.fromHtml("Rs. :" + item.getOfferValue()));
           /*  if (item.getTotalPrice().equals(item.getOfferValue()))
                 viewHolder.txtPrice.setText(Html.fromHtml("Rs. :" + item.getTotalPrice()));
             else
                 viewHolder.txtPrice.setText(Html.fromHtml("Rs. : <strike>" + item.getTotalPrice() + "</strike> " + item.getOfferValue()));*/
         }
 
-        viewHolder.isItemInactive.setVisibility(View.GONE);
+       // viewHolder.isItemInactive.setVisibility(View.GONE);
+
+        if (item.getIsInActive() != null) {
+            if (item.getIsInActive()) {
+                viewHolder.isItemInactive.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.isItemInactive.setVisibility(View.GONE);
+            }
+        } else {
+            viewHolder.isItemInactive.setVisibility(View.GONE);
+        }
         //viewHolder.txtPriority.setText(""+item.getMaterialPriorityID());
 
         if (cartDetails.size() > 0) {
-            viewHolder.txtOfferAvaiable.setText(cartDetails.size() + " offer items");
+            viewHolder.txtOfferAvaiable.setText("Offer item (s)");
             viewHolder.txtOfferAvaiable.setVisibility(View.VISIBLE);
         } else {
             viewHolder.txtOfferAvaiable.setVisibility(View.INVISIBLE);

@@ -336,9 +336,11 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
 
 
         db.cartDetailsDAO().deleteItem(itemList.get(i).getListCartDetailsList().get(pos).getMaterialMasterID());
-        if (flag == 1) {
+        /*if (flag == 1) {
             db.cartHeaderDAO().updateIsUpdated(customerID, 1);
-        }
+        }*/
+        db.cartHeaderDAO().updateIsUpdated(customerID, 1);
+
         itemList.get(i).getListCartDetailsList().remove(pos);
 
         if (itemList.get(i).getListCartDetailsList().size() == 0) {
