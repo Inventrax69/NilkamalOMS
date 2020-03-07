@@ -499,43 +499,51 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                 try {
 
                                     itemList = new ItemListDTO(_lstItem.entrySet());
-                                    List<ModelDTO> lstItem = itemList.getResults();
+                                    final List<ModelDTO> lstItem = itemList.getResults();
 
                                     if (lstItem != null && lstItem.size() > 0) {
 
-                                        db.itemDAO().updateDiscount();
-                                        db.variantDAO().updateDiscount();
+                                        new AsyncTask<Void, String, Integer>() {
+                                            @Override
+                                            protected Integer doInBackground(Void... voids) {
+                                                db.itemDAO().updateDiscount();
+                                                db.variantDAO().updateDiscount();
 
-                                        for (ModelDTO md : lstItem) {
+                                                for (ModelDTO md : lstItem) {
 
-                                            if (db.itemDAO().getCountByModelID(md.getModelID()) == 0) {
-                                                db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
-                                                        md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
-                                            } else {
-                                                db.itemDAO().updateByModelID(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
-                                                        md.getModelDescription(), md.getImgPath(), "", md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc(), "");
-                                            }
+                                                    if (db.itemDAO().getCountByModelID(md.getModelID()) == 0) {
+                                                        db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                                md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
+                                                    } else {
+                                                        db.itemDAO().updateByModelID(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                                md.getModelDescription(), md.getImgPath(), "", md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc(), "");
+                                                    }
 
-                                            for (VariantDTO variantDTO : md.getVarientList()) {
+                                                    for (VariantDTO variantDTO : md.getVarientList()) {
 
-                                                if (db.variantDAO().getCountByMaterialID(variantDTO.getMaterialID()) == 0) {
-                                                    db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
-                                                            variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
-                                                            variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
-                                                            variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
-                                                            variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
-                                                } else {
-                                                    db.variantDAO().updateByMaterialID(md.getModelID(), md.getDivisionID(),
-                                                            variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
-                                                            variantDTO.getMcode(), variantDTO.getModelColor(), "",
-                                                            variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(), variantDTO.getMaterialImgPath(),
-                                                            variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(),
-                                                            String.valueOf(variantDTO.getOpenPrice()), String.valueOf((int) Double.parseDouble(variantDTO.getStackSize())), "");
+                                                        if (db.variantDAO().getCountByMaterialID(variantDTO.getMaterialID()) == 0) {
+                                                            db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
+                                                                    variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                                                                    variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
+                                                                    variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
+                                                                    variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
+                                                        } else {
+                                                            db.variantDAO().updateByMaterialID(md.getModelID(), md.getDivisionID(),
+                                                                    variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                                                                    variantDTO.getMcode(), variantDTO.getModelColor(), "",
+                                                                    variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(), variantDTO.getMaterialImgPath(),
+                                                                    variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(),
+                                                                    String.valueOf(variantDTO.getOpenPrice()), String.valueOf((int) Double.parseDouble(variantDTO.getStackSize())), "");
+                                                        }
+                                                    }
                                                 }
-                                            }
-                                        }
 
-                                        loadCatlog();
+                                                loadCatlog();
+
+                                                return null;
+                                            }
+                                        }.execute();
+
 
                                     } else {
 

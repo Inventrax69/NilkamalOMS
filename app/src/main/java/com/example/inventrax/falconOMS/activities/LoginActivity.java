@@ -477,7 +477,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             protected String doInBackground(Void... voids) {
                                                 synchronized (this) {
 
-
                                                     db.itemDAO().deleteAll();
                                                     db.variantDAO().deleteAll();
 
