@@ -129,7 +129,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
     UserDivisionCustTable userDivisionCustTable;
     private String specsUrl = "", catalogUrl = "", brochureUrl = "", price = "", conditionType = "", shipToParty = "", customerId = "";
     private boolean isCustomerMatched = false, isFromSearchResult = false;
-    private int materialDivisionId ;
+    private int materialDivisionId;
 
     AlertDialog dialog;
 
@@ -149,6 +149,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
     SharedPreferences sp;
     ViewDialog viewDialog;
+    String sMaterailId = "", sPartnerId = "";
 
 
     @Nullable
@@ -182,13 +183,12 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         materialDivisionId = getArguments().getInt(KeyValues.MATERIAL_DIVISION_ID);
 
 
-
         varient = new ArrayList<>();
 
         db = new RoomAppDatabase(getActivity()).getAppDatabase();
 
         // Handling Product Catalog result when non DTD/ChannelPartner case
-        if(!sp.getString(KeyValues.USER_ROLE_NAME,"").equalsIgnoreCase(KeyValues.USER_ROLE_NAME_DTD)){
+        if (!sp.getString(KeyValues.USER_ROLE_NAME, "").equalsIgnoreCase(KeyValues.USER_ROLE_NAME_DTD)) {
             if (getArguments().getString(KeyValues.CUSTOMER_ID) != null) {
                 if (!getArguments().getString(KeyValues.CUSTOMER_ID).isEmpty() || getArguments().getString(KeyValues.CUSTOMER_ID) != null)
                     customerId = getArguments().getString(KeyValues.CUSTOMER_ID);
@@ -311,7 +311,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         }
 
         // Handling Intelli-Search result when non DTD/ChannelPartner case
-        if(!sp.getString(KeyValues.USER_ROLE_NAME,"").equalsIgnoreCase(KeyValues.USER_ROLE_NAME_DTD)) {
+        if (!sp.getString(KeyValues.USER_ROLE_NAME, "").equalsIgnoreCase(KeyValues.USER_ROLE_NAME_DTD)) {
             if (materialDivisionId != 0) {
                 showShipToPartyDialog();
             }
@@ -606,59 +606,74 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
                                     // JSONObject getObjectCartHeader = new JSONObject((String) core.getEntityObject());
                                     // JSONObject getObjectCartHeader = new JSONObject(new Gson().toJson(core.getEntityObject()));
-                                    JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
+                                    if (core.getEntityObject() != null) {
+                                        JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
 
-                                    CartHeaderListDTO cartHeaderListDTO;
-                                    CartDetailsListDTO cart;
+                                        CartHeaderListDTO cartHeaderListDTO;
+                                        CartDetailsListDTO cart;
 
-                                    for (int i = 0; i < getCartHeader.length(); i++) {
+                                        for (int i = 0; i < getCartHeader.length(); i++) {
 
-                                        for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
-                                            cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
+                                            for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
+                                                cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
 
-                                            if (cartHeaderListDTO.getListCartDetailsList().size() > 0)
-                                                db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
-                                                        cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
-                                                        cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
-                                            db.cartHeaderDAO().updateIsUpdated(cartHeaderListDTO.getCustomerID(), 0);
-                                            for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
-                                                cart = cartHeaderListDTO.getListCartDetailsList().get(k);
+                                                if (cartHeaderListDTO.getListCartDetailsList().size() > 0)
+                                                    db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
+                                                            cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
+                                                            cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
+                                                db.cartHeaderDAO().updateIsUpdated(cartHeaderListDTO.getCustomerID(), 0);
+                                                for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
+                                                    cart = cartHeaderListDTO.getListCartDetailsList().get(k);
 
-                                                db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
-                                                        cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
-                                                        cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
-                                                        cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
-                                                        cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
+                                                    db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
+                                                            cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
+                                                            cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
+                                                            cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
+                                                            cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
+                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                }
+                                            }
+
+                                        }
+
+                                        for (int i = 0; i < cartHeadersList.size(); i++) {
+                                            db.cartHeaderDAO().updateShipToPatryAndIsPriority(cartHeadersList.get(i).customerID, cartHeadersList.get(i).shipToPartyId, cartHeadersList.get(i).isPriority);
+                                        }
+
+
+                                        Calendar calendar = Calendar.getInstance();
+                                        long mills = calendar.getTimeInMillis();
+                                        sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, getActivity());
+                                        sharedPreferencesUtils.savePreference("timer", mills);
+                                        long timer = sharedPreferencesUtils.loadPreferenceAsLong("timer");
+                                        ((MainActivity) getActivity()).startTime(300000 - (mills - timer));
+
+                                        viewDialog.hideDialog();
+
+                                        if(!sMaterailId.isEmpty() && !sPartnerId.isEmpty()){
+                                            if(db.cartDetailsDAO().getMaterialCount(sPartnerId,sMaterailId)==0){
+                                                SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Item is not available in your supply chain network.", ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
+                                            }else{
+                                                Intent i = new Intent(getActivity(), CartActivity.class);
+                                                i.putExtra(KeyValues.IS_ITEM_ADDED_TO_CART, true);
+                                                startActivity(i);
+                                                // SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Item added to cart", ContextCompat.getColor(getActivity(), R.color.dark_green), Snackbar.LENGTH_SHORT);
                                             }
                                         }
 
-                                    }
 
-                                    for (int i = 0; i < cartHeadersList.size(); i++) {
-                                        db.cartHeaderDAO().updateShipToPatryAndIsPriority(cartHeadersList.get(i).customerID, cartHeadersList.get(i).shipToPartyId, cartHeadersList.get(i).isPriority);
+                                    } else {
+                                        viewDialog.hideDialog();
+                                        SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Item is not available in your supply chain network.", ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
                                     }
 
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
+                                    viewDialog.hideDialog();
                                 }
 
 
-                                Calendar calendar = Calendar.getInstance();
-                                long mills = calendar.getTimeInMillis();
-                                sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, getActivity());
-                                sharedPreferencesUtils.savePreference("timer", mills);
-                                long timer = sharedPreferencesUtils.loadPreferenceAsLong("timer");
-                                ((MainActivity) getActivity()).startTime(300000 - (mills - timer));
-
-                                viewDialog.hideDialog();
-
-                                Intent i = new Intent(getActivity(), CartActivity.class);
-                                i.putExtra(KeyValues.IS_ITEM_ADDED_TO_CART, true);
-                                startActivity(i);
-
                             } catch (Exception e) {
-
+                                viewDialog.hideDialog();
                             }
 
                         }
@@ -693,8 +708,10 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         switch (v.getId()) {
 
             case R.id.txtAddtoCart:
+                sMaterailId = "";
+                sPartnerId = "";
 
-                if(!sp.getString(KeyValues.USER_ROLE_NAME,"").equalsIgnoreCase(KeyValues.USER_ROLE_NAME_DTD)){
+                if (!sp.getString(KeyValues.USER_ROLE_NAME, "").equalsIgnoreCase(KeyValues.USER_ROLE_NAME_DTD)) {
                     partnerId = customerId;
                 }
 
@@ -754,6 +771,9 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                                         CartHeader cartHeader = db.cartHeaderDAO().getCartHeaderByCustomerID(Integer.valueOf(partnerId));
                                         productCatalogs.setCartHeaderID(cartHeader.cartHeaderID);
                                     }
+
+                                    sMaterailId = selectedVariant.materialID;
+                                    sPartnerId = partnerId;
                                     cartList.add(productCatalogs);
 
                                 } else {
@@ -768,7 +788,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                                             db.cartDetailsDAO().insert(new CartDetails("0", selectedVariant.materialID, selectedVariant.mCode,
                                                     selectedVariant.mDescription, "", etQty.getText().toString(), selectedVariantImage,
                                                     "0", false, "0", Integer.valueOf(partnerId), 1, prioity, "0", "0", null,
-                                                    "0","","0","0","0","0"));
+                                                    "0", "", "0", "0", "0", "0"));
                                         } else {
                                             String qty = db.cartDetailsDAO().getQantity(selectedVariant.materialID, partnerId, "0");
                                             int total_qty = Integer.parseInt(qty) + Integer.parseInt(etQty.getText().toString());
@@ -780,7 +800,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                                             db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeader.cartHeaderID), selectedVariant.materialID, selectedVariant.mCode,
                                                     selectedVariant.mDescription, "", etQty.getText().toString(), selectedVariantImage,
                                                     "0", false, "0", Integer.valueOf(partnerId), 1, prioity, "0", "0", null,
-                                                    "0","","0","0","0","0"));
+                                                    "0", "", "0", "0", "0", "0"));
                                         } else {
                                             String qty = db.cartDetailsDAO().getQantity(selectedVariant.materialID, partnerId, String.valueOf(cartHeader.cartHeaderID));
                                             int total_qty = Integer.parseInt(qty) + Integer.parseInt(etQty.getText().toString());
@@ -1117,7 +1137,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                     public void onClick(View view) {
 
                         /*if (!customerId.isEmpty() || customerId != null) {
-*//*                            Bundle bundle = new Bundle();
+                         *//*                            Bundle bundle = new Bundle();
                             bundle.putString("customerId", customerId);
                             FragmentUtils.replaceFragmentWithBackStackWithBundle(getActivity(), R.id.container, new ProductCatalogFragment(), bundle);*//*
 

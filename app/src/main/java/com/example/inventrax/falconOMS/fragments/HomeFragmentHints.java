@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.activities.MainActivity;
+import com.example.inventrax.falconOMS.activities.SyncMasterDataActivity;
 import com.example.inventrax.falconOMS.adapters.MainMenuViewAdapter;
 import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
@@ -289,14 +290,17 @@ public class HomeFragmentHints extends Fragment {
 
         switch (id) {
             case R.id.action_sync_info: {
-                progress = new ProgressDialog(getActivity());
+                /*progress = new ProgressDialog(getActivity());
                 progress.setMessage(getActivity().getString(R.string.data_sync));
                 progress.setCancelable(false);
-                progress.show();
+                progress.show();*/
 
-                if (!isCartSynced && !isCustSynced && !isItemSynced) {
+                /*if (!isCartSynced && !isCustSynced && !isItemSynced) {
                     getCustomerList();
-                }
+                }*/
+
+                Intent syncActivity = new Intent(getActivity(), SyncMasterDataActivity.class);
+                startActivity(syncActivity);
 
             }
             break;

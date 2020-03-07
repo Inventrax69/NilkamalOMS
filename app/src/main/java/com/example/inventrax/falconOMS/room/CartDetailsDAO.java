@@ -142,4 +142,7 @@ public interface CartDetailsDAO {
     @Query("SELECT sum((quantity*price)) as total FROM CartDetails WHERE cartHeaderId IN (SELECT cartHeaderId FROM CartHeader WHERE isApproved=0 )")
     int getTotal();
 
+    @Query("SELECT COUNT(*) FROM CartDetails WHERE cartHeaderId IN (SELECT cartHeaderId FROM CartHeader WHERE customerId=:customerId) AND materialID = :materialID")
+    int getMaterialCount(String customerId,String materialID);
+
 }

@@ -222,6 +222,7 @@
     <string name="enterQty">Please enter quantity</string>
     <string name="dashboard">Dashboard</string>
     <string name="launch_string">Please wait, It takes few minutes to download the data, please do not close the app until it launches main screen</string>
+    <string name="sync_string">Please wait, It takes few minutes to download the data, please do not close the app</string>
 
 
     <string name="e_info">E-information</string>

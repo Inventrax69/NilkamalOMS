@@ -4,8 +4,6 @@ package com.example.inventrax.falconOMS.fragments;
  * Created by Padmaja on 04/07/2019.
  */
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
@@ -30,7 +28,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
@@ -51,7 +48,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -68,7 +64,6 @@ import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.activities.LoginActivity;
 import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.adapters.OffersAdapter;
-import com.example.inventrax.falconOMS.adapters.PaginationAdapter;
 import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.Log.Logger;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
@@ -176,6 +171,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
     ViewDialog viewDialog;
     SharedPreferences sp;
     ProgressDialog dialog1;
+    String sMaterailId="",sPartnerId="";
 
     @Override
     public void onStart() {
@@ -307,7 +303,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                 protected void onPreExecute() {
                     super.onPreExecute();
                     dialog1 = new ProgressDialog(getActivity());
-                    dialog1.setMessage("Doing something, please wait...");
+                    dialog1.setMessage("Fetching items...");
                     dialog1.show();
                 }
 
@@ -804,6 +800,9 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                     @Override
                     public void onClick(View v) {
 
+                        sMaterailId="";
+                        sPartnerId="";
+
                         if (db.userDivisionCustDAO().getAll().size() == 0) {
 
                             SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "No customer is mapped. Please contact support team", ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);
@@ -872,6 +871,8 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                                     CartHeader cartHeader = db.cartHeaderDAO().getCartHeaderByCustomerID(Integer.valueOf(partnerId));
                                                     productCatalogs.setCartHeaderID(cartHeader.cartHeaderID);
                                                 }
+                                                sMaterailId=selectedVariant.materialID;
+                                                sPartnerId=partnerId;
                                                 cartList.add(productCatalogs);
                                             } else {
 
@@ -1152,57 +1153,70 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
                                 ProgressDialogUtils.closeProgressDialog();
                                 try {
+                                    if(core.getEntityObject()!= null) {
 
-                                    JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
+                                        JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
 
-                                    CartHeaderListDTO cartHeaderListDTO;
-                                    CartDetailsListDTO cart;
+                                        CartHeaderListDTO cartHeaderListDTO;
+                                        CartDetailsListDTO cart;
 
-                                    for (int i = 0; i < getCartHeader.length(); i++) {
+                                        for (int i = 0; i < getCartHeader.length(); i++) {
 
-                                        for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
-                                            cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
+                                            for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
+                                                cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
 
-                                            if (cartHeaderListDTO.getListCartDetailsList().size() > 0) {
-                                                db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
-                                                        cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
-                                                        cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
-                                                db.cartHeaderDAO().updateIsUpdated(cartHeaderListDTO.getCustomerID(), 0);
-                                            }
+                                                if (cartHeaderListDTO.getListCartDetailsList().size() > 0) {
+                                                    db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
+                                                            cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
+                                                            cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
+                                                    db.cartHeaderDAO().updateIsUpdated(cartHeaderListDTO.getCustomerID(), 0);
+                                                }
 
 
-                                            for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
-                                                cart = cartHeaderListDTO.getListCartDetailsList().get(k);
-                                                db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
-                                                        cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
-                                                        cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
-                                                        cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
-                                                        cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
+                                                    cart = cartHeaderListDTO.getListCartDetailsList().get(k);
+                                                    db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
+                                                            cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
+                                                            cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
+                                                            cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
+                                                            cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
+                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                }
+
                                             }
 
                                         }
 
-                                    }
+                                        for (int i = 0; i < cartHeadersList.size(); i++) {
+                                            db.cartHeaderDAO().updateShipToPatryAndIsPriority(cartHeadersList.get(i).customerID, cartHeadersList.get(i).shipToPartyId, cartHeadersList.get(i).isPriority);
+                                        }
 
-                                    for (int i = 0; i < cartHeadersList.size(); i++) {
-                                        db.cartHeaderDAO().updateShipToPatryAndIsPriority(cartHeadersList.get(i).customerID, cartHeadersList.get(i).shipToPartyId, cartHeadersList.get(i).isPriority);
-                                    }
+                                        Calendar calendar = Calendar.getInstance();
+                                        long mills = calendar.getTimeInMillis();
 
+                                        sharedPreferencesUtils.savePreference("timer", mills);
+                                        long timer = sharedPreferencesUtils.loadPreferenceAsLong("timer");
+                                        ((MainActivity) getActivity()).startTime(300000 - (mills - timer));
+
+                                        viewDialog.hideDialog();
+                                        if(!sMaterailId.isEmpty() && !sPartnerId.isEmpty()){
+                                            if(db.cartDetailsDAO().getMaterialCount(sPartnerId,sMaterailId)==0){
+                                                SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Item is not available in your supply chain network.", ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
+                                            }else{
+                                                updateCartItemsCount();
+                                                SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Item added to cart", ContextCompat.getColor(getActivity(), R.color.dark_green), Snackbar.LENGTH_SHORT);
+                                            }
+                                        }
+
+                                    }else {
+                                        viewDialog.hideDialog();
+                                        SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Item is not available in your supply chain network.", ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
+                                    }
                                 } catch (JSONException e) {
-
+                                    viewDialog.hideDialog();
                                 }
 
 
-                                Calendar calendar = Calendar.getInstance();
-                                long mills = calendar.getTimeInMillis();
-
-                                sharedPreferencesUtils.savePreference("timer", mills);
-                                long timer = sharedPreferencesUtils.loadPreferenceAsLong("timer");
-                                ((MainActivity) getActivity()).startTime(300000 - (mills - timer));
-
-                                viewDialog.hideDialog();
-                                SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Item added to cart", ContextCompat.getColor(getActivity(), R.color.dark_green), Snackbar.LENGTH_SHORT);
 
                                 /*BottomNavigationMenuView menuView = (BottomNavigationMenuView) ((BottomNavigationView) getActivity().findViewById(R.id.navigation)).getChildAt(0);
                                 BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(1);
@@ -1212,7 +1226,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                 textView.setText(String.valueOf(db.cartDetailsDAO().getCartDetailsCountIsApproved()));
                                 itemView.addView(notificationBadge);*/
 
-                                updateCartItemsCount();
+
 
 
 

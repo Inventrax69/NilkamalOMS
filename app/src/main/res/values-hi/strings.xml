@@ -234,6 +234,7 @@
     <string name="enterQty">Please enter quantity</string>
     <string name="dashboard">डैशबोर्ड</string>
     <string name="launch_string">कृपया प्रतीक्षा करें, डेटा डाउनलोड करने में कुछ मिनट लगते हैं, कृपया मुख्य स्क्रीन लॉन्च करने वाले ऐप को बंद न करें</string>
+    <string name="sync_string">Please wait, It takes few minutes to download the data, please do not close the app</string>
 
 
     <string name="e_info">ई जानकारी</string>
