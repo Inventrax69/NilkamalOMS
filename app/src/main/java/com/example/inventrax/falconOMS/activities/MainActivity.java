@@ -244,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
 /*        Intent intent = new Intent();
         intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
 
@@ -598,6 +599,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
+
             case R.id.action_logout: {
                 logoutUtil.doLogout(MainActivity.this, MainActivity.this);
             }

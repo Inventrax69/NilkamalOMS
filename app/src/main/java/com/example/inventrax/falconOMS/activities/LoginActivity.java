@@ -130,7 +130,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         try {
             overridePendingTransition(R.anim.fadein, R.anim.fadeout);
             loadFormControls();
@@ -471,34 +470,48 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                     if (lstItem != null && lstItem.size() > 0) {
 
-                                        db.itemDAO().deleteAll();
-                                        db.variantDAO().deleteAll();
 
-                                        for (ModelDTO md : lstItem) {
+                                        new AsyncTask<Void, Integer, String>() {
 
-                                            db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
-                                                    md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
+                                            @Override
+                                            protected String doInBackground(Void... voids) {
+                                                synchronized (this) {
 
-                                            for (VariantDTO variantDTO : md.getVarientList()) {
 
-                                                db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
-                                                        variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
-                                                        variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
-                                                        variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
-                                                        variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
+                                                    db.itemDAO().deleteAll();
+                                                    db.variantDAO().deleteAll();
 
+                                                    for (ModelDTO md : lstItem) {
+
+                                                        db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                                md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
+
+                                                        for (VariantDTO variantDTO : md.getVarientList()) {
+
+                                                            db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
+                                                                    variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                                                                    variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
+                                                                    variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
+                                                                    variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
+
+                                                        }
+
+                                                    }
+
+                                                    dialog.dismiss();
+
+                                                    sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
+                                                    sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
+
+                                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+
+
+                                                }
+                                                return null;
                                             }
-
-                                        }
-
-                                        dialog.dismiss();
-
-                                        sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
-                                        sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
-
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                        }.execute();
 
                                     } else {
 
@@ -656,14 +669,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     customerList = lstDto;
                                     if (customerList != null && customerList.size() > 0) {
 
-                                        db.customerDAO().deleteAll();
-                                        db.customerDAO().insertAll(customerTables);
-
                                         new AsyncTask<Void, Integer, String>() {
 
                                             @Override
                                             protected String doInBackground(Void... voids) {
                                                 synchronized (this) {
+                                                    db.customerDAO().deleteAll();
+                                                    db.customerDAO().insertAll(customerTables);
                                                     getProductCatalog();
                                                 }
                                                 return null;
@@ -841,6 +853,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                     setProgressDialog();
 
+
+                                    /**
+                                     * Waits if necessary for the computation to complete, and then
+                                     * retrieves its result.
+                                     *
+                                     * @return The computed result.
+                                     *
+                                     * @throws CancellationException If the computation was cancelled.
+                                     * @throws ExecutionException If the computation threw an exception.
+                                     * @throws InterruptedException If the current thread was interrupted
+                                     *         while waiting.
+                                     */
                                     new AsyncTask<Void, Integer, String>() {
 
                                         @Override

@@ -42,7 +42,6 @@ public class IntroActivity extends AppCompatActivity {
     Button btnGetStarted;
     Animation btnAnim;
     TextView tvSkip;
-
     public static final int MULTIPLE_PERMISSIONS = 15;
     // if the android mobile version is greater than 6.0 we are giving the following permissions
     String[] permissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.GET_ACCOUNTS, Manifest.permission.ACCESS_FINE_LOCATION,

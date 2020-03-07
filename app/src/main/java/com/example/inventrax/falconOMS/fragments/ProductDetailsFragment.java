@@ -398,6 +398,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
         if (NetworkUtils.isInternetAvailable(getActivity())) {
             getPrice();
+
         }
 
     }

@@ -389,9 +389,7 @@ public class HomeFragmentHints extends Fragment {
 
     public void getCustomerList() {
 
-        if (NetworkUtils.isInternetAvailable(getActivity())) {
-
-        }
+        if (NetworkUtils.isInternetAvailable(getActivity())) { }
         else {
             DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0007);
             // soundUtils.alertSuccess(getActivity(),getBaseContext());

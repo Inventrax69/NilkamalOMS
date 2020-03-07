@@ -154,7 +154,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
     private AppCompatButton ivAddToCartBottom;
     private ImageView ivItemBottom;
     private SearchableSpinner spinnerColorSelectionBottom;
-    private TextView txtItemNameBottom, txtTimer,txtCustomerName;
+    private TextView txtItemNameBottom, txtTimer, txtCustomerName;
     private EditText etQtyBottom, etPrice;
     private PaginationAdapter mAdapter;
     private Common common;
@@ -195,7 +195,10 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
         rootView = inflater.inflate(R.layout.productcatalog_fragment, container, false);
         isgrid = false;
-        try { loadFormControl(); } catch (Exception e) { }
+        try {
+            loadFormControl();
+        } catch (Exception e) {
+        }
 
         return rootView;
     }
@@ -256,7 +259,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
             txtCustomerName.setVisibility(View.GONE);
         } else {
             txtCustomerName.setVisibility(View.VISIBLE);
-            if(db.customerDAO().getAllCustomerName(customerId)==null)
+            if (db.customerDAO().getAllCustomerName(customerId) == null)
                 txtCustomerName.setText("");
             else
                 txtCustomerName.setText(db.customerDAO().getCustomerCode(customerId));
@@ -296,16 +299,14 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
         viewDialog = new ViewDialog(getActivity());
 
+        if (NetworkUtils.isInternetAvailable(getActivity())) {
 
-
-        if(NetworkUtils.isInternetAvailable(getActivity())) {
-
-            new AsyncTask<Void, Integer, String>(){
+            new AsyncTask<Void, Integer, String>() {
 
                 @Override
                 protected void onPreExecute() {
                     super.onPreExecute();
-                    dialog1=new ProgressDialog(getActivity());
+                    dialog1 = new ProgressDialog(getActivity());
                     dialog1.setMessage("Doing something, please wait...");
                     dialog1.show();
                 }
@@ -319,20 +320,19 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                 @Override
                 protected void onPostExecute(String s) {
                     super.onPostExecute(s);
-                    if (dialog1.isShowing()) {
+/*                    if (dialog1.isShowing()) {
                         dialog1.dismiss();
-                    }
+                    }*/
                 }
 
             }.execute();
 
-        }
-        else
+        } else
             loadCatlog();
 
     }
 
-    void loadCatlog(){
+    void loadCatlog() {
 
         try {
             if (customerId.equals("") || customerId.isEmpty()) {
@@ -431,7 +431,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
     }
 
 
-    void loadProductCatlog(){
+    void loadProductCatlog() {
 
         if (NetworkUtils.isInternetAvailable(getActivity())) {
 
@@ -449,7 +449,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         itemListDTO.setPageIndex(1);
         itemListDTO.setPageSize(10);
         itemListDTO.setHandheldRequest(true);
-        if(customerId.isEmpty() || customerId.equals(""))
+        if (customerId.isEmpty() || customerId.equals(""))
             itemListDTO.setCustomerID(null);
         else
             itemListDTO.setCustomerID(customerId);
@@ -458,7 +458,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         Call<OMSCoreMessage> call = null;
         ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
 
-       // ProgressDialogUtils.showProgressDialog("Please wait..");
+        // ProgressDialogUtils.showProgressDialog("Please wait..");
         call = apiService.ProductCatalog2(message);
 
         try {
@@ -480,7 +480,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
                                 omsExceptionMessage = oms;
                                 ProgressDialogUtils.closeProgressDialog();
-                                common.showAlertType(omsExceptionMessage,getActivity(), getActivity());
+                                common.showAlertType(omsExceptionMessage, getActivity(), getActivity());
 
                             }
 
@@ -499,7 +499,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                 try {
 
                                     itemList = new ItemListDTO(_lstItem.entrySet());
-                                    List<ModelDTO>  lstItem = itemList.getResults();
+                                    List<ModelDTO> lstItem = itemList.getResults();
 
                                     if (lstItem != null && lstItem.size() > 0) {
 
@@ -508,36 +508,36 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
                                         for (ModelDTO md : lstItem) {
 
-                                            if(db.itemDAO().getCountByModelID(md.getModelID())==0){
+                                            if (db.itemDAO().getCountByModelID(md.getModelID()) == 0) {
                                                 db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
                                                         md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
-                                            }else{
+                                            } else {
                                                 db.itemDAO().updateByModelID(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
-                                                        md.getModelDescription(), md.getImgPath(),"", md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc(),"");
+                                                        md.getModelDescription(), md.getImgPath(), "", md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc(), "");
                                             }
 
                                             for (VariantDTO variantDTO : md.getVarientList()) {
 
-                                                if(db.variantDAO().getCountByMaterialID(variantDTO.getMaterialID())==0){
+                                                if (db.variantDAO().getCountByMaterialID(variantDTO.getMaterialID()) == 0) {
                                                     db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
                                                             variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
                                                             variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
                                                             variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
                                                             variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
-                                                }else{
+                                                } else {
                                                     db.variantDAO().updateByMaterialID(md.getModelID(), md.getDivisionID(),
                                                             variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
-                                                            variantDTO.getMcode(), variantDTO.getModelColor(),"",
+                                                            variantDTO.getMcode(), variantDTO.getModelColor(), "",
                                                             variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(), variantDTO.getMaterialImgPath(),
                                                             variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(),
-                                                            String.valueOf(variantDTO.getOpenPrice()), String.valueOf((int) Double.parseDouble(variantDTO.getStackSize())),"");
+                                                            String.valueOf(variantDTO.getOpenPrice()), String.valueOf((int) Double.parseDouble(variantDTO.getStackSize())), "");
                                                 }
                                             }
                                         }
 
                                         loadCatlog();
 
-                                    }else{
+                                    } else {
 
                                         loadCatlog();
 
@@ -549,7 +549,18 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                     common.showUserDefinedAlertType(errorMessages.EMC_0018, getActivity(), getActivity(), "Warning");
                                 }
 
-                            }catch (Exception ex){
+
+                                if (dialog1.isShowing()) {
+                                    dialog1.dismiss();
+                                }
+
+
+                            } catch (Exception ex) {
+
+                                if (dialog1.isShowing()) {
+                                    dialog1.dismiss();
+                                }
+
                                 ProgressDialogUtils.closeProgressDialog();
                             }
                             ProgressDialogUtils.closeProgressDialog();
@@ -562,15 +573,24 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(getActivity())){
+
+                    if (dialog1.isShowing()) {
+                        dialog1.dismiss();
+                    }
+
+                    if (NetworkUtils.isInternetAvailable(getActivity())) {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
                 }
             });
         } catch (Exception ex) {
+
+            if (dialog1.isShowing()) {
+                dialog1.dismiss();
+            }
 
             try {
                 ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", getActivity());
@@ -613,7 +633,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
             itemc.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             if (userRoleName.equals("DTD")) {
                 itemc.setVisible(false);
-            } else{
+            } else {
                 itemc.setVisible(true);
             }
 
@@ -686,7 +706,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-       // List<ItemTable> sample= db.itemDAO().getFilterAll(searchText);
+        // List<ItemTable> sample= db.itemDAO().getFilterAll(searchText);
 
         try {
             // data set changed
@@ -696,7 +716,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
             if (customerId.isEmpty() && customerId.equals(""))
                 updateToRecyclerView(db.itemDAO().getFilterAll(searchText), 2);
             else
-                updateToRecyclerView(db.itemDAO().getFilterAllByCustomer(searchText,customerId), 2);
+                updateToRecyclerView(db.itemDAO().getFilterAllByCustomer(searchText, customerId), 2);
 
             if (TextUtils.isEmpty(searchText)) {
                 updateToRecyclerView(itemsList, 2);
@@ -785,7 +805,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                             behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                             frame.setVisibility(View.GONE);
 
-                            if(!sp.getString(KeyValues.USER_ROLE_NAME,"").equalsIgnoreCase(KeyValues.USER_ROLE_NAME_DTD)){
+                            if (!sp.getString(KeyValues.USER_ROLE_NAME, "").equalsIgnoreCase(KeyValues.USER_ROLE_NAME_DTD)) {
                                 partnerId = customerId;
                             }
 
@@ -794,7 +814,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
                                 if (!etQtyBottom.getText().toString().isEmpty()) {
 
-                                    if (Integer.parseInt(etQtyBottom.getText().toString())!=0) {
+                                    if (Integer.parseInt(etQtyBottom.getText().toString()) != 0) {
 
                                         if (selectedVariant != null) {
 
@@ -854,26 +874,26 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                                     prioity = 1;
                                                 }
                                                 if (header_count == 0) {
-                                                    db.cartHeaderDAO().insert(new CartHeader(Integer.parseInt(partnerId), db.customerDAO().getAllCustomerName(partnerId), 0.0, 0, 0, 0, 0, 0, "","",""));
+                                                    db.cartHeaderDAO().insert(new CartHeader(Integer.parseInt(partnerId), db.customerDAO().getAllCustomerName(partnerId), 0.0, 0, 0, 0, 0, 0, "", "", ""));
                                                     if (db.cartDetailsDAO().getCartDetailsCountByMaterialId(Integer.parseInt(partnerId), 0, Integer.parseInt(selectedVariant.materialID)) == 0) {
                                                         db.cartDetailsDAO().insert(new CartDetails("0", selectedVariant.materialID, selectedVariant.mCode,
                                                                 selectedVariant.mDescription, "", etQtyBottom.getText().toString(), selectedVariantImage,
-                                                                "0", false, "0", Integer.valueOf(partnerId), 1, prioity,"0","0",null,
-                                                                "0","","0","0","0","0"));
+                                                                "0", false, "0", Integer.valueOf(partnerId), 1, prioity, "0", "0", null,
+                                                                "0", "", "0", "0", "0", "0"));
                                                     } else {
                                                         String qty = db.cartDetailsDAO().getQantity(selectedVariant.materialID, partnerId, "0");
                                                         int total_qty = Integer.parseInt(qty) + Integer.parseInt(etQtyBottom.getText().toString());
                                                         db.cartDetailsDAO().updateQantity(String.valueOf(total_qty), selectedVariant.materialID, partnerId, "0");
                                                     }
-                                                   // cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()
+                                                    // cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()
 
                                                 } else {
                                                     CartHeader cartHeader = db.cartHeaderDAO().getCartHeaderByCustomerID(Integer.valueOf(partnerId));
                                                     if (db.cartDetailsDAO().getCartDetailsCountByMaterialId(Integer.parseInt(partnerId), cartHeader.cartHeaderID, Integer.parseInt(selectedVariant.materialID)) == 0) {
                                                         db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeader.cartHeaderID), selectedVariant.materialID, selectedVariant.mCode,
                                                                 selectedVariant.mDescription, "", etQtyBottom.getText().toString(), selectedVariantImage,
-                                                                "0", false, "0", Integer.valueOf(partnerId), 1, prioity,"0","0",null,
-                                                                "0","","0","0","0","0"));
+                                                                "0", false, "0", Integer.valueOf(partnerId), 1, prioity, "0", "0", null,
+                                                                "0", "", "0", "0", "0", "0"));
                                                     } else {
                                                         String qty = db.cartDetailsDAO().getQantity(selectedVariant.materialID, partnerId, String.valueOf(cartHeader.cartHeaderID));
                                                         int total_qty = Integer.parseInt(qty) + Integer.parseInt(etQtyBottom.getText().toString());
@@ -1048,9 +1068,9 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(getActivity())){
+                    if (NetworkUtils.isInternetAvailable(getActivity())) {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
@@ -1138,7 +1158,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                             if (cartHeaderListDTO.getListCartDetailsList().size() > 0) {
                                                 db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
                                                         cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
-                                                        cartHeaderListDTO.getTotalPrice(),cartHeaderListDTO.getTotalPriceWithTax()));
+                                                        cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
                                                 db.cartHeaderDAO().updateIsUpdated(cartHeaderListDTO.getCustomerID(), 0);
                                             }
 
@@ -1149,8 +1169,8 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                                         cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
-                                                        cart.getTotalPrice(),cart.getOfferValue(),cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
+                                                        cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
                                             }
 
                                         }
@@ -1207,9 +1227,9 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
                     viewDialog.hideDialog();
-                    if(NetworkUtils.isInternetAvailable(getActivity())){
+                    if (NetworkUtils.isInternetAvailable(getActivity())) {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
@@ -1227,7 +1247,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
     }
 
 
-    private void updateCartItemsCount(){
+    private void updateCartItemsCount() {
 
         SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Item added to cart", ContextCompat.getColor(getActivity(), R.color.dark_green), Snackbar.LENGTH_SHORT);
 
@@ -1392,7 +1412,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 // customerListDropDown.getSelectedItem().toString();
                 customerId = customerIds.get(i);
-                sharedPreferencesUtils.savePreference(KeyValues.SELECTED_CUSTOMER_ID_GLOBAL,customerId);
+                sharedPreferencesUtils.savePreference(KeyValues.SELECTED_CUSTOMER_ID_GLOBAL, customerId);
             }
 
             @Override
@@ -1607,7 +1627,8 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
             this.activity = activity;
         }
 
-        public PaginationAdapter(boolean isgrid) { }
+        public PaginationAdapter(boolean isgrid) {
+        }
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -1657,7 +1678,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                     if (result.imgPath.equals("")) {
                         itemListView.ivItem.setImageResource(R.drawable.no_img);
                     } else {
-                         Picasso.with(context)
+                        Picasso.with(context)
                                 .load(result.imgPath)
                                 .placeholder(R.drawable.no_img)
                                 .into(itemListView.ivItem);
