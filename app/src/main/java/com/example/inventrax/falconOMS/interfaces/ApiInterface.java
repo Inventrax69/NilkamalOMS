@@ -6,8 +6,8 @@ package com.example.inventrax.falconOMS.interfaces;
  * Purpose	: Web Service URL's and Web Methods
  */
 
-import com.example.inventrax.falconOMS.model.KeyValues;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -38,7 +38,7 @@ public interface ApiInterface {
     @POST("Master/ProductCatalog")
     Call<OMSCoreMessage> ProductCatalog(@Body OMSCoreMessage oRequest);
 
-   @POST("Master/ProductCatalog2")
+    @POST("Master/ProductCatalog2")
     Call<OMSCoreMessage> ProductCatalog2(@Body OMSCoreMessage oRequest);
 
     @POST("Master/GetCustomerList")
@@ -199,5 +199,8 @@ public interface ApiInterface {
 
     @GET
     Call<ResponseBody> fetchUrl(@Url String url);
+
+    @POST("Master/Varient")
+    Call<OMSCoreMessage> Varient(@Body OMSCoreMessage oRequest);
 
 }

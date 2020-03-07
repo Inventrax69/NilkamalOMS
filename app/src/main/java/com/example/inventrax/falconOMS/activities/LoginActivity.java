@@ -496,7 +496,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                     for (ModelDTO md : lstItem) {
 
                                                         itemTableList.add(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
-                                                                md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
+                                                                md.getModelDescription(), md.getImgPath(), "0", "0", ""));
 /*                                                        db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
                                                                 md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));*/
 
@@ -506,7 +506,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                             variantTableList.add(new VariantTable(md.getModelID(), md.getDivisionID(),
                                                                     variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
                                                                     variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
-                                                                    variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
+                                                                    "0", "0", "",
                                                                     variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
 
                                                         }

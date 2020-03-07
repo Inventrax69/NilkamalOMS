@@ -69,6 +69,7 @@ import com.example.inventrax.falconOMS.pojos.CartHeaderListDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
 import com.example.inventrax.falconOMS.pojos.PriceDTO;
+import com.example.inventrax.falconOMS.pojos.VariantDTO;
 import com.example.inventrax.falconOMS.pojos.productCatalogs;
 import com.example.inventrax.falconOMS.room.AppDatabase;
 import com.example.inventrax.falconOMS.room.CartDetails;
@@ -308,6 +309,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
             selectedVar = variantTable.modelColor;
 
             isFromSearchResult = true;
+
         }
 
         // Handling Intelli-Search result when non DTD/ChannelPartner case
@@ -398,6 +400,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
         if (NetworkUtils.isInternetAvailable(getActivity())) {
             getPrice();
+            getVariants();
 
         }
 
@@ -549,6 +552,99 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         }
     }
 
+    public void getVariants() {
+
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, getActivity());
+        PriceDTO oDto = new PriceDTO();
+        oDto.setMaterialMasterID(materialId);
+        oDto.setModelID(modelId);
+        oDto.setCustomerID(partnerId);
+        oDto.setResults("");
+
+        message.setEntityObject(oDto);
+
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
+
+        call = apiService.Varient(message);
+        ProgressDialogUtils.showProgressDialog("Please Wait");
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+                    ProgressDialogUtils.closeProgressDialog();
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if ((core.getType().toString().equals("Exception"))) {
+
+                            OMSExceptionMessage omsExceptionMessage = null;
+
+                            for (OMSExceptionMessage oms : core.getOMSMessages()) {
+
+                                omsExceptionMessage = oms;
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showAlertType(omsExceptionMessage, getActivity(), getActivity());
+                            }
+
+
+                        } else {
+
+                            List<VariantDTO> variants = new ArrayList<>();
+
+
+                           if(core.getEntityObject()!=null){
+                               try {
+
+                                   JSONArray getApprovalListDTO = new JSONArray((ArrayList) core.getEntityObject());
+                                   if(getApprovalListDTO.length()>0){
+                                       VariantDTO variantDTO=new VariantDTO();
+                                     for(int i=0;i<getApprovalListDTO.length();i++){
+                                        variantDTO= new Gson().fromJson(getApprovalListDTO.get(i).toString(),VariantDTO.class);
+                                     }
+
+
+                                   }
+
+                               } catch (Exception e) {
+
+                               }
+
+                           }
+
+
+                            ProgressDialogUtils.closeProgressDialog();
+                        }
+                        ProgressDialogUtils.closeProgressDialog();
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0002);
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+            });
+        } catch (Exception ex) {
+
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", getActivity());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
+        }
+    }
+
     public void addToCart() {
 
         viewDialog.showDialog();
@@ -650,10 +746,10 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
                                         viewDialog.hideDialog();
 
-                                        if(!sMaterailId.isEmpty() && !sPartnerId.isEmpty()){
-                                            if(db.cartDetailsDAO().getMaterialCount(sPartnerId,sMaterailId)==0){
+                                        if (!sMaterailId.isEmpty() && !sPartnerId.isEmpty()) {
+                                            if (db.cartDetailsDAO().getMaterialCount(sPartnerId, sMaterailId) == 0) {
                                                 SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Item is not available in your supply chain network.", ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
-                                            }else{
+                                            } else {
                                                 Intent i = new Intent(getActivity(), CartActivity.class);
                                                 i.putExtra(KeyValues.IS_ITEM_ADDED_TO_CART, true);
                                                 startActivity(i);

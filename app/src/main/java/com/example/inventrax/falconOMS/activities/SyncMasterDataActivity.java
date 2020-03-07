@@ -22,6 +22,7 @@ import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
 import com.example.inventrax.falconOMS.common.constants.ErrorMessages;
 import com.example.inventrax.falconOMS.interfaces.ApiInterface;
+import com.example.inventrax.falconOMS.model.KeyValues;
 import com.example.inventrax.falconOMS.pojos.CustomerListDTO;
 import com.example.inventrax.falconOMS.pojos.ItemListDTO;
 import com.example.inventrax.falconOMS.pojos.ModelDTO;
@@ -39,6 +40,7 @@ import com.example.inventrax.falconOMS.util.DialogUtils;
 import com.example.inventrax.falconOMS.util.ExceptionLoggerUtils;
 import com.example.inventrax.falconOMS.util.NetworkUtils;
 import com.example.inventrax.falconOMS.util.ProgressDialogUtils;
+import com.example.inventrax.falconOMS.util.SharedPreferencesUtils;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
@@ -55,8 +57,8 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
 
     private static final String classCode = "OMS_Android_SyncMasterDataActivity";
 
-    private TextView tvItemMasterSyncTime,txtItemMasterSync,tvCustomerMasterSyncTime,txtCustomerMasterSync;
-    private CardView cvItemMasterSync,cvCustomerMasterSync;
+    private TextView tvItemMasterSyncTime, txtItemMasterSync, tvCustomerMasterSyncTime, txtCustomerMasterSync;
+    private CardView cvItemMasterSync, cvCustomerMasterSync;
 
     private Gson gson;
     private OMSCoreMessage core;
@@ -70,7 +72,9 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
 
     AppDatabase db;
     AlertDialog dialog;
-    
+
+    private SharedPreferencesUtils sharedPreferencesUtils;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,12 +84,14 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
 
             loadFormControls();
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
 
     private void loadFormControls() {
+
+        sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, getApplicationContext());
 
         tvItemMasterSyncTime = (TextView) findViewById(R.id.tvItemMasterSyncTime);
         txtItemMasterSync = (TextView) findViewById(R.id.txtItemMasterSync);
@@ -117,7 +123,7 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
     @Override
     public void onClick(View view) {
 
-        switch (view.getId()){
+        switch (view.getId()) {
 
             case R.id.txtItemMasterSync:
 
@@ -150,6 +156,7 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                         }
                         return null;
                     }
+
                     @Override
                     protected void onPreExecute() {
                         setProgressDialog();
@@ -206,7 +213,7 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                                 ProgressDialogUtils.closeProgressDialog();
                                 common.showAlertType(omsExceptionMessage, SyncMasterDataActivity.this, SyncMasterDataActivity.this);
                             }
-                            if(dialog.isShowing())
+                            if (dialog.isShowing())
                                 dialog.dismiss();
 
                         } else {
@@ -254,7 +261,7 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                                         }.execute();
 
 
-                                        if(dialog.isShowing())
+                                        if (dialog.isShowing())
                                             dialog.dismiss();
 
                                     } else {
@@ -263,29 +270,29 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                                         Intent intent = new Intent(SyncMasterDataActivity.this, MainActivity.class);
                                         startActivity(intent);
                                         finish();
-                                        if(dialog.isShowing())
+                                        if (dialog.isShowing())
                                             dialog.dismiss();
                                     }
 
 
-                                    if(dialog.isShowing())
+                                    if (dialog.isShowing())
                                         dialog.dismiss();
                                 }
 
-                                if(dialog.isShowing())
+                                if (dialog.isShowing())
                                     dialog.dismiss();
                             } catch (Exception ex) {
-                                if(dialog.isShowing())
+                                if (dialog.isShowing())
                                     dialog.dismiss();
 
 
                             }
                         }
-                        if(dialog.isShowing())
+                        if (dialog.isShowing())
                             dialog.dismiss();
 
                     }
-                    if(dialog.isShowing())
+                    if (dialog.isShowing())
                         dialog.dismiss();
                 }
 
@@ -297,7 +304,7 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                     } else {
                         DialogUtils.showAlertDialog(SyncMasterDataActivity.this, errorMessages.EMC_0014);
                     }
-                    if(dialog.isShowing())
+                    if (dialog.isShowing())
                         dialog.dismiss();
                 }
             });
@@ -309,7 +316,7 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(dialog.isShowing())
+            if (dialog.isShowing())
                 dialog.dismiss();
             DialogUtils.showAlertDialog(SyncMasterDataActivity.this, errorMessages.EMC_0003);
         }
@@ -360,10 +367,12 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                                 ProgressDialogUtils.closeProgressDialog();
                                 common.showAlertType(omsExceptionMessage, SyncMasterDataActivity.this, SyncMasterDataActivity.this);
                             }
-                            if(dialog.isShowing())
+                            if (dialog.isShowing())
                                 dialog.dismiss();
 
                         } else {
+
+
 
                             LinkedTreeMap<?, ?> _lstItem = new LinkedTreeMap<String, String>();
                             _lstItem = (LinkedTreeMap<String, String>) core.getEntityObject();
@@ -390,16 +399,14 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                                                 db.variantDAO().deleteAll();
 
 
-
-
-                                                List<ItemTable> itemTableList =new ArrayList<>();
-                                                List<VariantTable> variantTableList =new ArrayList<>();
+                                                List<ItemTable> itemTableList = new ArrayList<>();
+                                                List<VariantTable> variantTableList = new ArrayList<>();
 
 
                                                 for (ModelDTO md : lstItem) {
 
                                                     itemTableList.add(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
-                                                            md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
+                                                            md.getModelDescription(), md.getImgPath(), "0", "0", ""));
 /*                                                        db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
                                                                 md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));*/
 
@@ -409,14 +416,14 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                                                         variantTableList.add(new VariantTable(md.getModelID(), md.getDivisionID(),
                                                                 variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
                                                                 variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
-                                                                variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
+                                                                "0", "0", "",
                                                                 variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
 
                                                     }
 
                                                 }
 
-                                                synchronized (this){
+                                                synchronized (this) {
                                                     db.itemDAO().insertAll(itemTableList);
                                                 }
                                                 db.variantDAO().insertAll(variantTableList);
@@ -432,25 +439,24 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
 
                                 }
 
-                                if(dialog.isShowing())
+                                if (dialog.isShowing())
                                     dialog.dismiss();
-
 
 
                             } catch (Exception e) {
                                 common.showUserDefinedAlertType(errorMessages.EMC_0024, SyncMasterDataActivity.this, SyncMasterDataActivity.this, "Warning");
                                 // logException();
-                                if(dialog.isShowing())
+                                if (dialog.isShowing())
                                     dialog.dismiss();
                             }
-                            if(dialog.isShowing())
+                            if (dialog.isShowing())
                                 dialog.dismiss();
                         }
-                        if(dialog.isShowing())
+                        if (dialog.isShowing())
                             dialog.dismiss();
 
                     }
-                    if(dialog.isShowing())
+                    if (dialog.isShowing())
                         dialog.dismiss();
 
                 }
@@ -458,12 +464,12 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(SyncMasterDataActivity.this)){
+                    if (NetworkUtils.isInternetAvailable(SyncMasterDataActivity.this)) {
                         DialogUtils.showAlertDialog(SyncMasterDataActivity.this, errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog(SyncMasterDataActivity.this, errorMessages.EMC_0014);
                     }
-                    if(dialog.isShowing())
+                    if (dialog.isShowing())
                         dialog.dismiss();
 
                 }
@@ -475,7 +481,7 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(dialog.isShowing())
+            if (dialog.isShowing())
                 dialog.dismiss();
             DialogUtils.showAlertDialog(SyncMasterDataActivity.this, errorMessages.EMC_0003);
         }
@@ -527,8 +533,6 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
             dialog.getWindow().setAttributes(layoutParams);
         }
     }
-
-
 
 
 }
