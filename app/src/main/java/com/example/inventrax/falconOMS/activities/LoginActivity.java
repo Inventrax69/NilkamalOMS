@@ -76,9 +76,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,6 +122,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     AlertDialog dialog;
     ImageView settings;
     String firebase_token;
+
+    int pageIndex = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -470,6 +469,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                     if (lstItem != null && lstItem.size() > 0) {
 
+/*
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+*/
+
+
 
                                         new AsyncTask<Void, Integer, String>() {
 
@@ -480,14 +486,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                     db.itemDAO().deleteAll();
                                                     db.variantDAO().deleteAll();
 
+
+
+
+                                                    List<ItemTable> itemTableList =new ArrayList<>();
+                                                    List<VariantTable> variantTableList =new ArrayList<>();
+
+
                                                     for (ModelDTO md : lstItem) {
 
-                                                        db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                        itemTableList.add(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
                                                                 md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
+/*                                                        db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                                md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));*/
+
 
                                                         for (VariantDTO variantDTO : md.getVarientList()) {
 
-                                                            db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
+                                                            variantTableList.add(new VariantTable(md.getModelID(), md.getDivisionID(),
                                                                     variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
                                                                     variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
                                                                     variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
@@ -496,6 +512,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                         }
 
                                                     }
+
+                                                   synchronized (this){
+                                                        db.itemDAO().insertAll(itemTableList);
+                                                   }
+                                                    db.variantDAO().insertAll(variantTableList);
+
 
                                                     dialog.dismiss();
 
@@ -675,6 +697,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                 synchronized (this) {
                                                     db.customerDAO().deleteAll();
                                                     db.customerDAO().insertAll(customerTables);
+
+
                                                     getProductCatalog();
                                                 }
                                                 return null;
@@ -970,6 +994,174 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     // validatePassword();
                     break;
             }
+        }
+    }
+
+    public void testProductCatalog() {
+
+        if (NetworkUtils.isInternetAvailable(LoginActivity.this)) {
+
+        } else {
+            DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0007);
+            // soundUtils.alertSuccess(getActivity(),getBaseContext());
+            return;
+        }
+
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, LoginActivity.this);
+        ItemListDTO itemListDTO = new ItemListDTO();
+        itemListDTO.setSearchString(null);
+        itemListDTO.setFilter("0");
+        itemListDTO.setPageIndex(pageIndex);
+        itemListDTO.setPageSize(500);
+        itemListDTO.setHandheldRequest(true);
+        message.setEntityObject(itemListDTO);
+
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
+
+        ProgressDialogUtils.showProgressDialog("Please wait..");
+        call = apiService.ProductCatalog(message);
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if ((core.getType().toString().equals("Exception"))) {
+
+                            OMSExceptionMessage omsExceptionMessage = null;
+
+                            for (OMSExceptionMessage oms : core.getOMSMessages()) {
+
+                                omsExceptionMessage = oms;
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showAlertType(omsExceptionMessage, LoginActivity.this, LoginActivity.this);
+
+                            }
+
+                            dialog.dismiss();
+
+                        } else {
+
+                            try {
+
+                                LinkedTreeMap<?, ?> _lstItem = new LinkedTreeMap<String, String>();
+                                _lstItem = (LinkedTreeMap<String, String>) core.getEntityObject();
+
+                                itemTables = new ArrayList<>();
+                                ItemListDTO itemList;
+
+                                try {
+
+                                    itemList = new ItemListDTO(_lstItem.entrySet());
+                                    lstItem = itemList.getResults();
+
+
+                                    if (lstItem != null && lstItem.size() > 0) {
+
+
+                                        new AsyncTask<Void, Integer, String>() {
+
+                                            @Override
+                                            protected String doInBackground(Void... voids) {
+                                                synchronized (this) {
+
+                                                    db.itemDAO().deleteAll();
+                                                    db.variantDAO().deleteAll();
+
+                                                    for (ModelDTO md : lstItem) {
+
+                                                        db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                                md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
+
+                                                        for (VariantDTO variantDTO : md.getVarientList()) {
+
+                                                            db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
+                                                                    variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                                                                    variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
+                                                                    variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
+                                                                    variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
+
+                                                        }
+
+                                                    }
+
+                                                    dialog.dismiss();
+
+                                                    sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
+                                                    sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
+
+                                                    pageIndex++;
+                                                    testProductCatalog();
+
+
+
+
+                                                }
+                                                return null;
+                                            }
+                                        }.execute();
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+
+                                        sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
+                                        sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
+
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+
+                                    }
+
+                                    ProgressDialogUtils.closeProgressDialog();
+
+                                } catch (Exception e) {
+                                    dialog.dismiss();
+                                    common.showUserDefinedAlertType(errorMessages.EMC_0018, LoginActivity.this, LoginActivity.this, "Warning");
+                                }
+
+                            } catch (Exception ex) {
+                                dialog.dismiss();
+                                ProgressDialogUtils.closeProgressDialog();
+                            }
+                            ProgressDialogUtils.closeProgressDialog();
+                        }
+                        ProgressDialogUtils.closeProgressDialog();
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    if (NetworkUtils.isInternetAvailable(LoginActivity.this)) {
+                        DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0001);
+                    } else {
+                        DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0014);
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                    dialog.dismiss();
+                }
+            });
+        } catch (Exception ex) {
+
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", LoginActivity.this);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0003);
         }
     }
 
