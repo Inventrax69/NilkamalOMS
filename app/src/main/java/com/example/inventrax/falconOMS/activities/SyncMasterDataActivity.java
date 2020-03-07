@@ -389,14 +389,24 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                                                 db.itemDAO().deleteAll();
                                                 db.variantDAO().deleteAll();
 
+
+
+
+                                                List<ItemTable> itemTableList =new ArrayList<>();
+                                                List<VariantTable> variantTableList =new ArrayList<>();
+
+
                                                 for (ModelDTO md : lstItem) {
 
-                                                    db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                    itemTableList.add(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
                                                             md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
+/*                                                        db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                                md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));*/
+
 
                                                     for (VariantDTO variantDTO : md.getVarientList()) {
 
-                                                        db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
+                                                        variantTableList.add(new VariantTable(md.getModelID(), md.getDivisionID(),
                                                                 variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
                                                                 variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
                                                                 variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
@@ -406,7 +416,15 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
 
                                                 }
 
+                                                synchronized (this){
+                                                    db.itemDAO().insertAll(itemTableList);
+                                                }
+                                                db.variantDAO().insertAll(variantTableList);
+
+
                                                 dialog.dismiss();
+
+
                                             }
                                             return null;
                                         }
