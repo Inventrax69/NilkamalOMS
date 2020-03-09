@@ -10,8 +10,6 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import retrofit2.http.DELETE;
-
 @Dao
 public interface VariantDAO {
 
@@ -76,6 +74,9 @@ public interface VariantDAO {
 
     @Query("UPDATE varianttable SET discountCount=0,discountId=0,discountDesc=''")
     void updateDiscount();
+
+    @Query("UPDATE varianttable SET discountCount=:discountCount,discountId=:discountId,discountDesc=:discountDesc WHERE materialID=:materialID")
+    void updateDiscountbyID(String discountCount,String discountId,String discountDesc,String materialID);
 
 
 }

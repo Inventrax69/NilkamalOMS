@@ -534,15 +534,16 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                                     }
                                                 }
 
-                                                loadCatlog();
+
 
                                                 return null;
                                             }
                                         }.execute();
 
-
+                                        loadCatlog();
                                     } else {
-
+                                        db.itemDAO().updateDiscount();
+                                        db.variantDAO().updateDiscount();
                                         loadCatlog();
 
                                     }
@@ -1314,6 +1315,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         postion_value = pos;
         Bundle bundle = new Bundle();
         bundle.putString(KeyValues.MODEL_ID, itemsList.get(pos).modelID);
+        bundle.putString(KeyValues.MATERIAL_DIVISION_ID, itemsList.get(pos).divisionID);
         bundle.putString(KeyValues.CUSTOMER_ID, customerId);
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         productDetailsFragment.setArguments(bundle);

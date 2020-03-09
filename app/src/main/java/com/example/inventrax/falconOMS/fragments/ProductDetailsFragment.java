@@ -596,6 +596,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                         } else {
 
                             List<VariantDTO> variants = new ArrayList<>();
+                            List<VariantTable> variantsTable = new ArrayList<>();
 
 
                            if(core.getEntityObject()!=null){
@@ -604,11 +605,23 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                                    JSONArray getApprovalListDTO = new JSONArray((ArrayList) core.getEntityObject());
                                    if(getApprovalListDTO.length()>0){
                                        VariantDTO variantDTO=new VariantDTO();
+                                       VariantTable variantTable=new VariantTable();
                                      for(int i=0;i<getApprovalListDTO.length();i++){
                                         variantDTO= new Gson().fromJson(getApprovalListDTO.get(i).toString(),VariantDTO.class);
+
+                                        db.variantDAO().updateDiscountbyID(variantDTO.getDiscountCount(),variantDTO.getDiscountId(),variantDTO.getDiscountDesc(),variantDTO.getMaterialID());
+
+                                         selectedVariant.discountDesc = variantDTO.getDiscountDesc();
+                                         selectedVariant.discountId = variantDTO.getDiscountId();
+                                         selectedVariant.discountCount = variantDTO.getDiscountCount();
+
+                                        if(Integer.parseInt(variantDTO.getDiscountId())>0){
+                                            availOffer.setVisibility(View.VISIBLE);
+                                        }else {
+                                            availOffer.setVisibility(View.GONE);
+                                        }
+
                                      }
-
-
                                    }
 
                                } catch (Exception e) {
