@@ -75,10 +75,10 @@ public interface CustomerDAO {
     @Query("SELECT DISTINCT customerId,id,((customerCode) || '-' || (customerName)) AS customerName,timeStamp FROM CustomerTable WHERE customerId IN (SELECT DISTINCT customerId FROM UserDivisionCustTable)")
     List<CustomerTable> getCustomerNames();
 
-    @Query("SELECT DISTINCT ((customerCode) || '-' || (customerName)) AS customerName FROM CustomerTable WHERE customerId IN (SELECT DISTINCT customerId FROM UserDivisionCustTable)")
+    @Query("SELECT  ((customerCode) || '-' || (customerName)) AS customerName FROM CustomerTable WHERE customerId IN (SELECT DISTINCT customerId FROM UserDivisionCustTable)")
     List<String> getCustomerCodes();
 
-    @Query("SELECT DISTINCT customerId AS customerName FROM CustomerTable WHERE customerId IN (SELECT DISTINCT customerId FROM UserDivisionCustTable)")
+    @Query("SELECT  customerId AS customerName FROM CustomerTable WHERE customerId IN (SELECT DISTINCT customerId FROM UserDivisionCustTable)")
     List<String> getCustomerId();
 
     @Query("SELECT DISTINCT customerId FROM UserDivisionCustTable")

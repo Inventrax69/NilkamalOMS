@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.pojos.CartDetailsListDTO;
-import com.example.inventrax.falconOMS.room.CartDetails;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -48,7 +47,7 @@ public class OfferItemsObjectAdapter extends RecyclerView.Adapter<OfferItemsObje
         viewHolder.txtItemName.setText(cartDetails1.getMCode());
         viewHolder.txtItemDesc.setText(cartDetails1.getMDescription());
         viewHolder.etQtyCart.setText(cartDetails1.getQuantity());
-        viewHolder.txtPrice.setText("RS: " + cartDetails1.getTotalPrice());
+        viewHolder.txtPrice.setText("RS: " + cartDetails1.getOfferValue());
         Picasso.with(context)
                 .load(cartDetails1.getFileNames().split("[|]")[0])
                 .placeholder(R.drawable.no_img)

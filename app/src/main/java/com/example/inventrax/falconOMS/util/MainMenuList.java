@@ -20,10 +20,7 @@ public class MainMenuList {
 
     public List<MainMenu> getMainMenu(String userRoleName){
         final List<MainMenu> arraylist = new ArrayList<>();
-        if(userRoleName.equals(KeyValues.USER_ROLE_NAME_BRANCH_MANAGER)){
-            arraylist.add(new MainMenu(10, KeyValues.APPROVALS_TITLE, true,R.string.approvals));
-            arraylist.add(new MainMenu(11, KeyValues.COMPLAINTS_TITLE, true,R.string.complaints));
-        }else if(userRoleName.equals(KeyValues.USER_ROLE_NAME_SUPPLY_CHAIN_MANAGER)){
+        if(userRoleName.equals(KeyValues.USER_ROLE_NAME_CC)){
             arraylist.add(new MainMenu(10, KeyValues.APPROVALS_TITLE, true,R.string.approvals));
             arraylist.add(new MainMenu(11, KeyValues.COMPLAINTS_TITLE, true,R.string.complaints));
         }else if(userRoleName.equals(KeyValues.USER_ROLE_NAME_BCO_RCO)){
