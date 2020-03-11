@@ -433,7 +433,7 @@ public class MainActivity extends AppCompatActivity {
             // syncItemData();
             // syncCustomerData();
             cartSyncAsync();
-            //SyncData();
+            // SyncData();
         }
 
 
@@ -535,7 +535,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 // deleteCartItemReservation();
-                //deleteCartItemReservation();
+                // deleteCartItemReservation();
             }
         }.start();
 
@@ -674,7 +674,7 @@ public class MainActivity extends AppCompatActivity {
         message = common.SetAuthentication(EndpointConstants.HHTCartDTO, MainActivity.this);
         productCatalogs oDto = new productCatalogs();
         oDto.setUserID(userId);
-        oDto.setCreatedOn("2020-02-17 17:50:23.857");
+        oDto.setCreatedOn("2020-03-01 17:50:23.857");
         message.setEntityObject(oDto);
 
         Call<OMSCoreMessage> call = null;
@@ -713,7 +713,7 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 if (core.getEntityObject() != null || !core.getEntityObject().toString().isEmpty()) {
 
-                                    SyncDataDTO syncDataDTO = new Gson().fromJson(core.getEntityObject().toString(), SyncDataDTO.class);
+                                    SyncDataDTO syncDataDTO = new Gson().fromJson(new Gson().toJson(core.getEntityObject()), SyncDataDTO.class);
 
                                     if (syncDataDTO.getCustomerMasters().size() > 0) {
                                         for (int i = 0; i < syncDataDTO.getCustomerMasters().size(); i++) {
@@ -733,9 +733,7 @@ public class MainActivity extends AppCompatActivity {
                                                         dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(), dd.getCity(), "");
 
                                             } else if (syncDataDTO.getCustomerMasters().get(i).getAction().equals("D")) {
-
                                                 db.customerDAO().deleteByCustomerId(dd.getCustomerID());
-
                                             }
                                         }
                                     }
@@ -785,7 +783,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                             } catch (Exception e) {
-                                //
+
                             }
                         }
 

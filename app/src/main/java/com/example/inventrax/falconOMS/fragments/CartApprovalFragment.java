@@ -24,6 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.adapters.ApprovalHeaderAdapter;
 import com.example.inventrax.falconOMS.common.Common;
@@ -354,6 +355,7 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
                                 cartHeaderList = new ArrayList<>();
 
                                 if (customerPartnerDTOS.size() > 0) {
+
                                     for (int i = 0; i < customerPartnerDTOS.size(); i++) {
                                         if (customerPartnerDTOS.get(i).getCartHeader().size() > 0) {
                                             customerPartnerDTOS_list.add(customerPartnerDTOS.get(i));
@@ -361,13 +363,16 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
                                         }
                                     }
 
+
                                     List<String> customerCodes;
                                     final List<String> customerIds;
 
                                     customerCodes = new ArrayList<>();
                                     customerIds = new ArrayList<>();
+
                                     customerCodes.add("Select Customer");
                                     customerIds.add("");
+
                                     for (int i = 0; i < customerPartnerDTOS_list.size(); i++) {
                                         customerCodes.add(customerPartnerDTOS_list.get(i).getCustomerName());
                                         customerIds.add(String.valueOf(customerPartnerDTOS_list.get(i).getCustomerID()));
@@ -383,8 +388,8 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
                                                 customerId = "";
                                                 if (cartHeaderList.size() > 0) {
 
-                                                  List<CartHeaderListDTO> cloneCartHeaderList =new GetCartHeaderList(cartHeaderList).getCartHeaderList_Class();
-                                                  List<CartHeaderListDTO> cartHeaderList1 =new GetCartHeaderList(cartHeaderList).getCartHeaderList_Class();
+                                                    List<CartHeaderListDTO> cloneCartHeaderList = new GetCartHeaderList(cartHeaderList).getCartHeaderList_Class();
+                                                    List<CartHeaderListDTO> cartHeaderList1 = new GetCartHeaderList(cartHeaderList).getCartHeaderList_Class();
 
                                                     // List<CartHeaderListDTO> cloneCartHeaderList = ((List<CartHeaderListDTO>) ((ArrayList<CartHeaderListDTO>) cartHeaderList).clone());
                                                     // List<CartHeaderListDTO> cartHeaderList1 = ((List<CartHeaderListDTO>) ((ArrayList<CartHeaderListDTO>) cartHeaderList).clone());
@@ -402,25 +407,32 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
 
                                                     for (int p = 0; p < cloneCartHeaderList.size(); p++) {
 
-                                                        HashMap<String,List<CartDetailsListDTO>> offerCartDetailsDTOList=new HashMap<>();
+                                                        HashMap<String, List<CartDetailsListDTO>> offerCartDetailsDTOList = new HashMap<>();
+                                                        boolean check = false;
 
                                                         for (int q = 0; q < cloneCartHeaderList.get(p).getListCartDetailsList().size(); q++) {
-                                                            if(cloneCartHeaderList.get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID() != null){
-                                                                if(!cloneCartHeaderList.get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID().equals("-1")){
-                                                                    List<CartDetailsListDTO> cartDetailsListDTOS= offerCartDetailsDTOList.get(cloneCartHeaderList.get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID());
-                                                                    if(cartDetailsListDTOS==null){
-                                                                        cartDetailsListDTOS=new ArrayList<>();
+
+                                                            if (cloneCartHeaderList.get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID() != null) {
+                                                                if (!cloneCartHeaderList.get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID().equals("-1")) {
+                                                                    if (cloneCartHeaderList.get(p).getOfferCartDetailsDTOList() == null) {
+                                                                        List<CartDetailsListDTO> cartDetailsListDTOS = offerCartDetailsDTOList.get(cloneCartHeaderList.get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID());
+                                                                        if (cartDetailsListDTOS == null) {
+                                                                            cartDetailsListDTOS = new ArrayList<>();
+                                                                            cartDetailsListDTOS.add(cloneCartHeaderList.get(p).getListCartDetailsList().get(q));
+                                                                            offerCartDetailsDTOList.put(cloneCartHeaderList.get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID(), cartDetailsListDTOS);
+                                                                            cartHeaderList1.get(p).getListCartDetailsList().remove(q);
+                                                                            check=true;
+                                                                        }
                                                                     }
-                                                                    cartDetailsListDTOS.add(cloneCartHeaderList.get(p).getListCartDetailsList().get(q));
-                                                                    offerCartDetailsDTOList.put(cloneCartHeaderList.get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID(),cartDetailsListDTOS);
-                                                                    cartHeaderList1.get(p).getListCartDetailsList().remove(q);
                                                                 }
                                                             }
                                                         }
-                                                        cartHeaderList1.get(p).setOfferCartDetailsDTOList(offerCartDetailsDTOList);
+
+                                                        if (check)
+                                                            cartHeaderList1.get(p).setOfferCartDetailsDTOList(offerCartDetailsDTOList);
                                                     }
 
-                                                    if(cartHeaderList1!=null){
+                                                    if (cartHeaderList1 != null) {
                                                         mAdapter = new ApprovalHeaderAdapter(cartHeaderList1, getActivity(), getActivity());
                                                         rvCartItemsList.setAdapter(mAdapter);
                                                     }
@@ -433,26 +445,31 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
 
                                                     for (int p = 0; p < customerPartnerDTOS_list.get(i - 1).getCartHeader().size(); p++) {
 
-                                                        HashMap<String,List<CartDetailsListDTO>> offerCartDetailsDTOList=new HashMap<>();
+                                                        HashMap<String, List<CartDetailsListDTO>> offerCartDetailsDTOList = new HashMap<>();
+
+                                                        boolean check = false;
 
                                                         for (int q = 0; q < customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().size(); q++) {
-                                                            if(customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID() != null){
-                                                                if(!customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID().equals("-1")){
-                                                                    List<CartDetailsListDTO> cartDetailsListDTOS= offerCartDetailsDTOList.get(customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID());
-                                                                    if(cartDetailsListDTOS==null){
-                                                                        cartDetailsListDTOS=new ArrayList<>();
+                                                            if (customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID() != null) {
+                                                                if (!customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID().equals("-1")) {
+                                                                    if (customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getOfferCartDetailsDTOList() == null) {
+                                                                        List<CartDetailsListDTO> cartDetailsListDTOS = offerCartDetailsDTOList.get(customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID());
+                                                                        if (cartDetailsListDTOS == null) {
+                                                                            cartDetailsListDTOS = new ArrayList<>();
+                                                                            cartDetailsListDTOS.add(customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().get(q));
+                                                                            offerCartDetailsDTOList.put(customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID(), cartDetailsListDTOS);
+                                                                            cartHeaderList1.get(p).getListCartDetailsList().remove(q);
+                                                                            check = true;
+                                                                        }
                                                                     }
-                                                                    cartDetailsListDTOS.add(customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().get(q));
-                                                                    offerCartDetailsDTOList.put(customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getListCartDetailsList().get(q).getOfferItemCartDetailsID(),cartDetailsListDTOS);
-                                                                    cartHeaderList1.get(p).getListCartDetailsList().remove(q);
                                                                 }
                                                             }
                                                         }
-
-                                                        cartHeaderList1.get(p).setOfferCartDetailsDTOList(offerCartDetailsDTOList);
+                                                        if (check)
+                                                            cartHeaderList1.get(p).setOfferCartDetailsDTOList(offerCartDetailsDTOList);
                                                     }
 
-                                                    if(cartHeaderList1!=null){
+                                                    if (cartHeaderList1 != null) {
                                                         mAdapter = new ApprovalHeaderAdapter(cartHeaderList1, getActivity(), getActivity());
                                                         rvCartItemsList.setAdapter(mAdapter);
                                                     }
@@ -505,7 +522,8 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) { }
+        switch (v.getId()) {
+        }
     }
 
 
@@ -576,8 +594,8 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
 
         List<CartHeaderListDTO> cartHeaderList_Class;
 
-        GetCartHeaderList(List<CartHeaderListDTO> cartHeaderList_Class){
-            this.cartHeaderList_Class=cartHeaderList_Class;
+        GetCartHeaderList(List<CartHeaderListDTO> cartHeaderList_Class) {
+            this.cartHeaderList_Class = cartHeaderList_Class;
         }
 
         public List<CartHeaderListDTO> getCartHeaderList_Class() {

@@ -149,9 +149,11 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
             txtTimer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
+
                     txtTimer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     c_width = width - txtTimer.getWidth();
                     c_height = height - txtTimer.getHeight();
+
                 }
             });
 

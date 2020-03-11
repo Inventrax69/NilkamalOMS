@@ -297,6 +297,7 @@ public class SCMCartFragment extends Fragment implements View.OnClickListener {
 
                                                     for (int p = 0; p < cartHeaderList.size(); p++) {
                                                         HashMap<String, List<CartDetailsListDTO>> offerCartDetailsDTOList = new HashMap<>();
+                                                        boolean check =false;
                                                         for (int q = 0; q < cartHeaderList.get(p).getDeliveryDate().size(); q++) {
                                                             for (int s = 0; s < cartHeaderList.get(p).getDeliveryDate().get(q).getListCartDetailsList().size(); s++) {
                                                                 if (cartHeaderList.get(p).getDeliveryDate().get(q).getListCartDetailsList().get(s).getOfferItemCartDetailsID() != null) {
@@ -304,15 +305,17 @@ public class SCMCartFragment extends Fragment implements View.OnClickListener {
                                                                         List<CartDetailsListDTO> cartDetailsListDTOS = offerCartDetailsDTOList.get(cartHeaderList.get(p).getDeliveryDate().get(q).getListCartDetailsList().get(s).getOfferItemCartDetailsID());
                                                                         if (cartDetailsListDTOS == null) {
                                                                             cartDetailsListDTOS = new ArrayList<>();
+                                                                            cartDetailsListDTOS.add(cartHeaderList.get(p).getDeliveryDate().get(q).getListCartDetailsList().get(s));
+                                                                            offerCartDetailsDTOList.put(cartHeaderList.get(p).getDeliveryDate().get(q).getListCartDetailsList().get(s).getOfferItemCartDetailsID(), cartDetailsListDTOS);
+                                                                            cartHeaderList1.get(p).getDeliveryDate().get(q).getListCartDetailsList().remove(s);
+                                                                            check=true;
                                                                         }
-                                                                        cartDetailsListDTOS.add(cartHeaderList.get(p).getDeliveryDate().get(q).getListCartDetailsList().get(s));
-                                                                        offerCartDetailsDTOList.put(cartHeaderList.get(p).getDeliveryDate().get(q).getListCartDetailsList().get(s).getOfferItemCartDetailsID(), cartDetailsListDTOS);
-                                                                        cartHeaderList1.get(p).getDeliveryDate().get(q).getListCartDetailsList().remove(s);
                                                                     }
                                                                 }
                                                             }
                                                         }
-                                                        cartHeaderList1.get(p).setOfferCartDetailsDTOList(offerCartDetailsDTOList);
+                                                        if(check)
+                                                            cartHeaderList1.get(p).setOfferCartDetailsDTOList(offerCartDetailsDTOList);
                                                     }
 
                                                     mAdapter = new SCMHeaderAdapter(cartHeaderList1, getActivity(), getActivity());
@@ -326,6 +329,7 @@ public class SCMCartFragment extends Fragment implements View.OnClickListener {
 
                                                     for (int p = 0; p < customerPartnerDTOS_list.get(i - 1).getCartHeader().size(); p++) {
                                                         HashMap<String, List<CartDetailsListDTO>> offerCartDetailsDTOList = new HashMap<>();
+                                                        boolean check=false;
                                                         for (int q = 0; q < customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getDeliveryDate().size(); q++) {
                                                             for (int s = 0; s < customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getDeliveryDate().get(q).getListCartDetailsList().size(); s++) {
                                                                 if (customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getDeliveryDate().get(q).getListCartDetailsList().get(s).getOfferItemCartDetailsID() != null) {
@@ -333,14 +337,17 @@ public class SCMCartFragment extends Fragment implements View.OnClickListener {
                                                                         List<CartDetailsListDTO> cartDetailsListDTOS = offerCartDetailsDTOList.get(customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getDeliveryDate().get(q).getListCartDetailsList().get(s).getOfferItemCartDetailsID());
                                                                         if (cartDetailsListDTOS == null) {
                                                                             cartDetailsListDTOS = new ArrayList<>();
+                                                                            cartDetailsListDTOS.add(customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getDeliveryDate().get(q).getListCartDetailsList().get(s));
+                                                                            offerCartDetailsDTOList.put(customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getDeliveryDate().get(q).getListCartDetailsList().get(s).getOfferItemCartDetailsID(), cartDetailsListDTOS);
+                                                                            cartHeaderList1.get(p).getDeliveryDate().get(q).getListCartDetailsList().remove(s);
+                                                                            check=true;
                                                                         }
-                                                                        cartDetailsListDTOS.add(customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getDeliveryDate().get(q).getListCartDetailsList().get(s));
-                                                                        offerCartDetailsDTOList.put(customerPartnerDTOS_list.get(i - 1).getCartHeader().get(p).getDeliveryDate().get(q).getListCartDetailsList().get(s).getOfferItemCartDetailsID(), cartDetailsListDTOS);
-                                                                        cartHeaderList1.get(p).getDeliveryDate().get(q).getListCartDetailsList().remove(s);
+
                                                                     }
                                                                 }
                                                             }
                                                         }
+                                                        if(check)
                                                         cartHeaderList1.get(p).setOfferCartDetailsDTOList(offerCartDetailsDTOList);
                                                     }
 

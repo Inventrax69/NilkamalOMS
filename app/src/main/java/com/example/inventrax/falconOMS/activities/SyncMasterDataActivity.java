@@ -1,5 +1,6 @@
 package com.example.inventrax.falconOMS.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -45,14 +46,18 @@ import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
+@SuppressLint("StaticFieldLeak")
 public class SyncMasterDataActivity extends Activity implements View.OnClickListener {
 
     private static final String classCode = "OMS_Android_SyncMasterDataActivity";
@@ -101,7 +106,6 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
         cvItemMasterSync = (CardView) findViewById(R.id.cvItemMasterSync);
         cvCustomerMasterSync = (CardView) findViewById(R.id.cvCustomerMasterSync);
 
-
         txtItemMasterSync.setOnClickListener(this);
         txtCustomerMasterSync.setOnClickListener(this);
 
@@ -119,6 +123,7 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
 
 
     }
+
 
     @Override
     public void onClick(View view) {
@@ -196,6 +201,7 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
             //Getting response from the method
             call.enqueue(new Callback<OMSCoreMessage>() {
 
+                @SuppressLint("StaticFieldLeak")
                 @Override
                 public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
 
@@ -258,11 +264,13 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                                                 }
                                                 return null;
                                             }
-                                        }.execute();
 
+                                        }.execute();
 
                                         if (dialog.isShowing())
                                             dialog.dismiss();
+
+
 
                                     } else {
 
@@ -281,11 +289,15 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
 
                                 if (dialog.isShowing())
                                     dialog.dismiss();
+
+                                Date date = Calendar.getInstance().getTime();
+                                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                String todaysdate = formatter.format(date);
+                                tvCustomerMasterSyncTime.setText(""+todaysdate);
+
                             } catch (Exception ex) {
                                 if (dialog.isShowing())
                                     dialog.dismiss();
-
-
                             }
                         }
                         if (dialog.isShowing())
@@ -430,6 +442,10 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
 
 
                                                 dialog.dismiss();
+                                                Date date = Calendar.getInstance().getTime();
+                                                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                                String todaysdate = formatter.format(date);
+                                                tvItemMasterSyncTime.setText(""+todaysdate);
 
 
                                             }

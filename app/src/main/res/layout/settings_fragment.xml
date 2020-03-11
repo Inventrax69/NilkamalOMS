@@ -22,18 +22,17 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_marginTop="-60dp"
+        android:layout_marginTop="@dimen/_minus50sdp"
         android:layout_weight="1.2"
         android:src="@drawable/nilkamal_logo"
         app:civ_border_color="@color/blanched_almond"
         app:civ_border_width="2dp" />
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="@dimen/_15sdp"
+        android:layout_marginRight="@dimen/_15sdp"
         android:layout_weight="1"
         android:orientation="horizontal"
         android:visibility="visible">
@@ -44,7 +43,7 @@
             android:layout_weight="0.3"
             android:gravity="center_vertical"
             android:textColor="@color/black"
-            android:textSize="16dp"
+            android:textSize="@dimen/_12sdp"
             android:text="Notifications"
             android:textStyle="normal" />
 

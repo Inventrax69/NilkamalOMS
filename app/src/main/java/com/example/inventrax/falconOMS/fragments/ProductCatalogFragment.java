@@ -193,8 +193,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         isgrid = false;
         try {
             loadFormControl();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
 
         return rootView;
     }
@@ -215,17 +214,13 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                     customerId = getArguments().getString("customerId");
             } else {
                 if (customerId == null || customerId.isEmpty())
-                    if (userRoleName.equals("DTD")) {
-
-                    } else {
+                    if (userRoleName.equals("DTD")) { } else {
                         showShipToPartyDialog();
                     }
             }
         } catch (NullPointerException e) {
             if (customerId == null || customerId.isEmpty())
-                if (userRoleName.equals("DTD")) {
-
-                } else {
+                if (userRoleName.equals("DTD")) { } else {
                     showShipToPartyDialog();
                 }
         }
@@ -249,7 +244,6 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         cbPriority = (CheckBox) rootView.findViewById(R.id.cbPriority);
         txtTimer = (TextView) getActivity().findViewById(R.id.txtTimer);
         txtCustomerName = (TextView) rootView.findViewById(R.id.txtCustomerName);
-
 
         if (userRoleName.equals("DTD")) {
             txtCustomerName.setVisibility(View.GONE);
@@ -499,9 +493,9 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
                                     if (lstItem != null && lstItem.size() > 0) {
 
-                                        new AsyncTask<Void, String, Integer>() {
+/*                                        new AsyncTask<Void, String, Integer>() {
                                             @Override
-                                            protected Integer doInBackground(Void... voids) {
+                                            protected Integer doInBackground(Void... voids) {*/
                                                 db.itemDAO().updateDiscount();
                                                 db.variantDAO().updateDiscount();
 
@@ -536,9 +530,9 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
 
 
-                                                return null;
+/*                                                return null;
                                             }
-                                        }.execute();
+                                        }.execute();*/
 
                                         loadCatlog();
                                     } else {

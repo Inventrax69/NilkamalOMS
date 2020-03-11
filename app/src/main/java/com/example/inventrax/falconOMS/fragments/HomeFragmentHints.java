@@ -113,7 +113,6 @@ public class HomeFragmentHints extends Fragment {
     List<MainMenu> mainMenus;
     RecyclerView recyclerView;
     MainMenuViewAdapter mainMenuViewAdapter;
-
     SharedPreferences sp;
 
     @Nullable
@@ -134,8 +133,6 @@ public class HomeFragmentHints extends Fragment {
         userName = sp.getString(KeyValues.USER_NAME, "");
         userId = sp.getString(KeyValues.USER_ID, "");
         userRoleName = sp.getString(KeyValues.USER_ROLE_NAME, "");
-
-
 
         coordLayout = (CoordinatorLayout) rootView.findViewById(R.id.coordLayout);
 

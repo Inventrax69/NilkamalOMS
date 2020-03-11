@@ -114,8 +114,6 @@ public interface CustomerDAO {
     @Query("DELETE FROM customertable WHERE customerId=:customerId")
     void deleteByCustomerId(String customerId);
 
-
-
 }
 
 
