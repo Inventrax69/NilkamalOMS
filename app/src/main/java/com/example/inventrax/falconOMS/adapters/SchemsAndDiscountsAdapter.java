@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.inventrax.falconOMS.R;
+import com.example.inventrax.falconOMS.pojos.VariantDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,10 +18,10 @@ import java.util.List;
  */
 public class SchemsAndDiscountsAdapter extends RecyclerView.Adapter<SchemsAndDiscountsAdapter.ViewHolder> {
 
-    private List items;
+    private List<VariantDTO> items;
     private Context context;
 
-    public SchemsAndDiscountsAdapter(Context applicationContext, ArrayList items) {
+    public SchemsAndDiscountsAdapter(Context applicationContext, List<VariantDTO> items) {
         this.context = applicationContext;
         this.items = items;
     }
@@ -41,9 +41,9 @@ public class SchemsAndDiscountsAdapter extends RecyclerView.Adapter<SchemsAndDis
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-        List discountStrings = items;
+        VariantDTO dto = items.get(i);
 
-        viewHolder.txtDiscountString.setText(discountStrings.get(i).toString());
+        viewHolder.txtDiscountString.setText(dto.getDiscountDesc());
 
     }
 

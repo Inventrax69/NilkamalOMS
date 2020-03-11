@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.adapters.SchemsAndDiscountsAdapter;
@@ -23,8 +22,12 @@ import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
 import com.example.inventrax.falconOMS.common.constants.ErrorMessages;
 import com.example.inventrax.falconOMS.interfaces.ApiInterface;
 import com.example.inventrax.falconOMS.pojos.CustomerListDTO;
+import com.example.inventrax.falconOMS.pojos.ItemListDTO;
+import com.example.inventrax.falconOMS.pojos.ModelDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
+import com.example.inventrax.falconOMS.pojos.VariantDTO;
+import com.example.inventrax.falconOMS.room.ItemTable;
 import com.example.inventrax.falconOMS.services.RestService;
 import com.example.inventrax.falconOMS.util.DialogUtils;
 import com.example.inventrax.falconOMS.util.ExceptionLoggerUtils;
@@ -75,7 +78,7 @@ public class SchemesAndDiscountsFragment extends Fragment implements View.OnClic
 
     private void loadFormControls() {
 
-        if ( getArguments().getString("customerId") != null || !getArguments().getString("customerId").isEmpty() ) {
+        if (getArguments().getString("customerId") != null || !getArguments().getString("customerId").isEmpty()) {
             customerId = getArguments().getString("customerId");
             divisionId = getArguments().getString("divisionId");
         }
@@ -107,7 +110,7 @@ public class SchemesAndDiscountsFragment extends Fragment implements View.OnClic
 
     }
 
-    public void getOffers() {
+    public void getfOffers() {
 
         if (NetworkUtils.isInternetAvailable(getActivity())) {
         } else {
@@ -160,7 +163,7 @@ public class SchemesAndDiscountsFragment extends Fragment implements View.OnClic
 
                             } else {
 
-                                Log.v("SchemesAnd",new Gson().toJson(core.getEntityObject()));
+                                Log.v("SchemesAnd", new Gson().toJson(core.getEntityObject()));
 
                                 try {
 
@@ -183,9 +186,8 @@ public class SchemesAndDiscountsFragment extends Fragment implements View.OnClic
 
                                     ProgressDialogUtils.closeProgressDialog();
 
-                                }
-                                catch (Exception ex){
-                                    if(ex.getMessage()!=null){
+                                } catch (Exception ex) {
+                                    if (ex.getMessage() != null) {
 
                                     }
                                 }
@@ -200,9 +202,9 @@ public class SchemesAndDiscountsFragment extends Fragment implements View.OnClic
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    if(NetworkUtils.isInternetAvailable(getActivity())){
+                    if (NetworkUtils.isInternetAvailable(getActivity())) {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
-                    }else{
+                    } else {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
@@ -219,6 +221,149 @@ public class SchemesAndDiscountsFragment extends Fragment implements View.OnClic
             ProgressDialogUtils.closeProgressDialog();
             DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
         }
+    }
+
+    void getOffers() {
+
+        if (NetworkUtils.isInternetAvailable(getActivity())) {
+
+        } else {
+            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0007);
+            // soundUtils.alertSuccess(getActivity(),getBaseContext());
+            return;
+        }
+
+        ProgressDialogUtils.showProgressDialog("Please Wait");
+
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, getActivity());
+        ItemListDTO itemListDTO = new ItemListDTO();
+        itemListDTO.setSearchString(null);
+        itemListDTO.setFilter("0");
+        itemListDTO.setPageIndex(1);
+        itemListDTO.setPageSize(10);
+        itemListDTO.setHandheldRequest(true);
+        itemListDTO.setCustomerID(customerId);
+        message.setEntityObject(itemListDTO);
+
+
+
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
+
+        // ProgressDialogUtils.showProgressDialog("Please wait..");
+        call = apiService.ProductCatalog2(message);
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if ((core.getType().toString().equals("Exception"))) {
+
+                            OMSExceptionMessage omsExceptionMessage = null;
+
+                            for (OMSExceptionMessage oms : core.getOMSMessages()) {
+
+                                omsExceptionMessage = oms;
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showAlertType(omsExceptionMessage, getActivity(), getActivity());
+
+                            }
+
+                            ProgressDialogUtils.closeProgressDialog();
+
+
+                        } else {
+
+                            try {
+
+                                LinkedTreeMap<?, ?> _lstItem = new LinkedTreeMap<String, String>();
+                                _lstItem = (LinkedTreeMap<String, String>) core.getEntityObject();
+
+                                List<ItemTable> itemTables = new ArrayList<>();
+                                ItemListDTO itemList;
+
+                                try {
+
+                                    itemList = new ItemListDTO(_lstItem.entrySet());
+                                    final List<ModelDTO> lstItem = itemList.getResults();
+                                    List<VariantDTO> variantsList = new ArrayList<>();
+
+                                    if (lstItem != null && lstItem.size() > 0) {
+
+
+                                        for (ModelDTO md : lstItem) {
+
+
+                                            for (VariantDTO variantDTO : md.getVarientList()) {
+
+                                                if(variantDTO.getDiscountId().equalsIgnoreCase("0")){
+
+                                                }else {
+                                                    variantsList.add(variantDTO);
+                                                }
+
+
+                                            }
+                                        }
+
+                                        adapter = new SchemsAndDiscountsAdapter(getActivity(), variantsList);
+                                        rvSandD.setAdapter(adapter);
+
+                                    }
+
+                                    ProgressDialogUtils.closeProgressDialog();
+
+                                } catch (Exception e) {
+                                    ProgressDialogUtils.closeProgressDialog();
+                                    common.showUserDefinedAlertType(errorMessages.EMC_0018, getActivity(), getActivity(), "Warning");
+                                }
+
+
+                            } catch (Exception ex) {
+
+
+                                ProgressDialogUtils.closeProgressDialog();
+                            }
+                            ProgressDialogUtils.closeProgressDialog();
+                        }
+                        ProgressDialogUtils.closeProgressDialog();
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+
+
+                    if (NetworkUtils.isInternetAvailable(getActivity())) {
+                        DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
+                    } else {
+                        DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+            });
+        } catch (Exception ex) {
+
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", getActivity());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
+        }
+
     }
 
 
