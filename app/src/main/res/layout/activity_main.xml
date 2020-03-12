@@ -57,7 +57,7 @@
             app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
             app:itemIconTint="@color/black"
             app:itemTextColor="@color/black"
-            app:elevation="20dp"
+            app:elevation="@dimen/_16sdp"
             app:labelVisibilityMode="labeled" />
 
 
@@ -75,7 +75,7 @@
         android:background="@drawable/ic_timer"
         android:gravity="center"
         android:text="00:00"
-        android:elevation="4dp"
+        android:elevation="@dimen/_3sdp"
         android:textStyle="bold" />
 
 

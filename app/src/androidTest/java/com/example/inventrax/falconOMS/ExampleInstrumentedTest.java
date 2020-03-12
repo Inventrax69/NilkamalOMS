@@ -4,10 +4,12 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.example.inventrax.falconOMS.util.ValidationUtils;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Instrumentation test, which will execute on an Android device.
@@ -21,6 +23,14 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.karthikm.merlinwmscipher", appContext.getPackageName());
+        assertEquals("com.example.inventrax.falconOMS", appContext.getPackageName());
+    }
+
+    @Test
+    public void mailValidation() throws Exception {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getTargetContext();
+
+        assertEquals(true, ValidationUtils.isValidEmail("bco@nkl.com"));
     }
 }

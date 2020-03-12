@@ -21,16 +21,16 @@
 
             <android.support.v7.widget.CardView
                 android:layout_width="@dimen/_110sdp"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/_42sdp"
                 app:cardUseCompatPadding="true"
                 android:layout_alignParentRight="true"
-                app:cardElevation="5dp"
+                app:cardElevation="@dimen/_3sdp"
                 android:id="@+id/card">
 
                 <Spinner
                     android:id="@+id/languagespinner"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp" />
+                    android:layout_height="match_parent" />
 
             </android.support.v7.widget.CardView>
 
@@ -42,7 +42,7 @@
                 android:layout_gravity="center"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/nilkamal_login"
-                android:layout_margin="10dp"/>
+                android:layout_margin="@dimen/_7sdp"/>
 
         </RelativeLayout>
 
@@ -61,10 +61,10 @@
                 android:textSize="@dimen/_15sdp"
                 android:gravity="center"
                 android:textStyle="bold"
-                android:layout_marginBottom="1dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginBottom="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:textColor="@color/colorAccent"
-                android:layout_marginRight="5dp"/>
+                android:layout_marginRight="@dimen/_3sdp"/>
 
 
         </RelativeLayout>
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/email_img"
-            android:drawablePadding="@dimen/activity_login_padding_left"
+            android:drawablePadding="@dimen/_16sdp"
             android:hint="@string/userHint"
             android:inputType="textEmailAddress"
             android:singleLine="true"
@@ -127,8 +127,8 @@
                 android:layout_weight="1"
                 android:text="@string/forgot_password"
                 android:gravity="center_vertical|right"
-                android:layout_marginBottom="1dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginBottom="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:textSize="@dimen/_11sdp"
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_marginRight="5dp"/>
@@ -141,8 +141,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="@dimen/_16sdp"
+            android:layout_marginRight="@dimen/_16sdp"
             android:layout_weight="0.25"
             android:textSize="@dimen/_12sdp"
             android:background="@drawable/button_shape"
@@ -159,7 +159,8 @@
             android:layout_marginBottom="20dp"
             android:layout_marginEnd="30dp"
             android:background="@drawable/settings"
-            android:backgroundTint="#1F9EF6" />
+            android:backgroundTint="#1F9EF6"
+            android:visibility="visible"/>
 
         <ImageView
             android:layout_alignParentBottom="true"

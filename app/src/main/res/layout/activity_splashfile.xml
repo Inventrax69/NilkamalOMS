@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/logo_id"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="@dimen/_83sdp"
+        android:layout_height="@dimen/_83sdp"
         android:layout_centerInParent="true"
         android:src="@drawable/nilkamal_logo"/>
 
