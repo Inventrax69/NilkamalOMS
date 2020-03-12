@@ -44,6 +44,7 @@ public class CustomerPartnerDTO implements Serializable,Cloneable {
     private List<CardMaterialDTO> materials = null;
 
 
+
     public Boolean getrFM() {
         return rFM;
     }
@@ -133,8 +134,8 @@ public class CustomerPartnerDTO implements Serializable,Cloneable {
     }
 
     @Override
-    public List<CartHeaderListDTO> clone() throws CloneNotSupportedException {
-        return (List<CartHeaderListDTO>) super.clone();
+    public CustomerPartnerDTO clone() throws CloneNotSupportedException {
+        return (CustomerPartnerDTO) super.clone();
     }
 
 }

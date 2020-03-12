@@ -2,13 +2,13 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="@dimen/_50sdp"
     android:layout_marginTop="5dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     android:clickable="true"
     android:focusable="true"
-    android:elevation="60dp"
+    android:elevation="6dp"
     android:foreground="?android:attr/selectableItemBackground">
 
 

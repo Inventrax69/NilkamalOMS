@@ -365,16 +365,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             e.printStackTrace();
                         }
 
-                        new AsyncTask<Void, Integer, String>() {
+                        if(NetworkUtils.isInternetAvailable(LoginActivity.this)) {
 
-                            @Override
-                            protected String doInBackground(Void... voids) {
-                                synchronized (this) {
-                                    validateUserSession();
+                            new AsyncTask<Void, Integer, String>() {
+
+                                @Override
+                                protected String doInBackground(Void... voids) {
+                                    synchronized (this) {
+                                        validateUserSession();
+                                    }
+                                    return null;
                                 }
-                                return null;
-                            }
-                        }.execute();
+                            }.execute();
+                        }else {
+                            DialogUtils.showAlertDialog(LoginActivity.this,errorMessages.EMC_0007);
+                        }
 
 
                     /*getProductCatalog();

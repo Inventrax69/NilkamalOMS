@@ -3,7 +3,6 @@ package com.example.inventrax.falconOMS.fragments;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.arch.persistence.room.ColumnInfo;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
@@ -878,14 +876,14 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                             if (cartHeaderListDTO.getIsInActive() == 1) {
                                                 if (getActivity() != null) {
                                                     synchronized (getActivity()) {
-                                                        Toast.makeText(getActivity(), CustomerName + " Send for Inactive approval", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(getActivity(), CustomerName + " sent for Inactive approval", Toast.LENGTH_LONG).show();
                                                         sendForApproval(cartHeaderListDTO.getCartHeaderID(), "6");
                                                     }
                                                 }
                                             } else if (cartHeaderListDTO.getIsStockNotAvailable().equals("1")) {
                                                 if (getActivity() != null) {
                                                     synchronized (getActivity()) {
-                                                        Toast.makeText(getActivity(), CustomerName + " Send for SCM approval", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(getActivity(), CustomerName + " sent for SCM approval", Toast.LENGTH_LONG).show();
                                                         sendForApproval(cartHeaderListDTO.getCartHeaderID(), "23");
                                                     }
                                                 }
@@ -1020,6 +1018,11 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                             approvalDailog.dismiss();
 
+                            getFragmentManager()
+                                    .beginTransaction()
+                                    .detach(CartFragment.this)
+                                    .attach(CartFragment.this)
+                                    .commit();
 
                         } else {
                             ProgressDialogUtils.closeProgressDialog();
@@ -1031,6 +1034,12 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                 db.cartDetailsDAO().deleteCartDetailsOfCartDetails(cartHeaderID);
 
                                 approvalDailog.dismiss();
+
+                                getFragmentManager()
+                                        .beginTransaction()
+                                        .detach(CartFragment.this)
+                                        .attach(CartFragment.this)
+                                        .commit();
 
                             } catch (Exception ex) {
                                 ProgressDialogUtils.closeProgressDialog();
@@ -1147,7 +1156,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                                 if (core.getEntityObject().toString().equals("1")) {
                                     ProgressDialogUtils.closeProgressDialog();
-                                    SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Send for SCM approval", ContextCompat.getColor(getActivity(), R.color.safron), Snackbar.LENGTH_SHORT);
+                                    SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "sent for SCM approval", ContextCompat.getColor(getActivity(), R.color.safron), Snackbar.LENGTH_SHORT);
                                     dialog.dismiss();
                                     db.cartHeaderDAO().deleteCartHeaderbyList(cartHeaderId);
                                     ((CartActivity) getActivity()).findViewById(R.id.txtApprovals).performClick();
@@ -1192,14 +1201,14 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                         if (cartHeaderListDTO.getIsInActive() == 1) {
                                             if (getActivity() != null) {
                                                 synchronized (getActivity()) {
-                                                    Toast.makeText(getActivity(), CustomerName + " Send for Inactive approval", Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(getActivity(), CustomerName + " sent for Inactive approval", Toast.LENGTH_LONG).show();
                                                     sendForApproval(cartHeaderListDTO.getCartHeaderID(), "6");
                                                 }
                                             }
                                         } else if (cartHeaderListDTO.getIsStockNotAvailable().equals("1")) {
                                             if (getActivity() != null) {
                                                 synchronized (getActivity()) {
-                                                    Toast.makeText(getActivity(), CustomerName + " Send for SCM approval", Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(getActivity(), CustomerName + " sent for SCM approval", Toast.LENGTH_LONG).show();
                                                     sendForApproval(cartHeaderListDTO.getCartHeaderID(), "23");
                                                 }
                                             }

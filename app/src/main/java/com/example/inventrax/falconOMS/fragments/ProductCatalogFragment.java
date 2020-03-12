@@ -1014,10 +1014,10 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, getActivity());
         PriceDTO oDto = new PriceDTO();
         oDto.setMaterialMasterID(materialId);
-        if (partnerId.isEmpty() || partnerId.equals(""))
+        if (customerId.isEmpty() || customerId.equals(""))
             oDto.setPartnerID("0");
         else
-            oDto.setPartnerID(partnerId);
+            oDto.setPartnerID(customerId);
         message.setEntityObject(oDto);
 
         Call<OMSCoreMessage> call = null;
@@ -1430,7 +1430,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 // customerListDropDown.getSelectedItem().toString();
                 customerId = customerIds.get(i);
-                sharedPreferencesUtils.savePreference(KeyValues.SELECTED_CUSTOMER_ID_GLOBAL, customerId);
+
             }
 
             @Override
@@ -1459,7 +1459,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                     public void onClick(View view) {
 
                         if (!customerId.isEmpty() || customerId != null) {
-
+                            sharedPreferencesUtils.savePreference(KeyValues.SELECTED_CUSTOMER_ID_GLOBAL, customerId);
 /*                            Bundle bundle = new Bundle();
                             bundle.putString("customerId", customerId);
                             FragmentUtils.replaceFragmentWithBackStackWithBundle(getActivity(), R.id.container, new ProductCatalogFragment(), bundle);*/

@@ -475,10 +475,10 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, getActivity());
         PriceDTO oDto = new PriceDTO();
         oDto.setMaterialMasterID(materialId);
-        if (partnerId.isEmpty() || partnerId.equals(""))
+        if (customerId.isEmpty() || customerId.equals(""))
             oDto.setPartnerID("0");
         else
-            oDto.setPartnerID(partnerId);
+            oDto.setPartnerID(customerId);
 
         message.setEntityObject(oDto);
 
