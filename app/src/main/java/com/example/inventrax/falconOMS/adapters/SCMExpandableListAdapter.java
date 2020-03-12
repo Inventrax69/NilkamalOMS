@@ -20,7 +20,6 @@ import com.example.inventrax.falconOMS.pojos.CartDetailsListDTO;
 import com.example.inventrax.falconOMS.pojos.CartHeaderListDTO;
 import com.example.inventrax.falconOMS.pojos.DeliveryDateDTO;
 import com.example.inventrax.falconOMS.room.AppDatabase;
-import com.example.inventrax.falconOMS.room.CartDetails;
 import com.example.inventrax.falconOMS.room.RoomAppDatabase;
 import com.example.inventrax.falconOMS.util.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -117,15 +116,21 @@ public class SCMExpandableListAdapter extends BaseExpandableListAdapter {
         TextView isItemInactive = view.findViewById(R.id.isItemInactive);
         TextView txtOfferAvaiable = view.findViewById(R.id.txtOfferAvaiable);
 
-        if (cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID()) != null) {
-            if (cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID()).size() > 0) {
-                //  txtOfferAvaiable.setText(cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID()).size()+" offer items");
-                txtOfferAvaiable.setText("Offer applied");
-                txtOfferAvaiable.setVisibility(View.VISIBLE);
+        if(cartHeaderListDTO.getOfferCartDetailsDTOList()!=null){
+
+            if (cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID()) != null) {
+                if (cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID()).size() > 0) {
+                    //  txtOfferAvaiable.setText(cartHeaderListDTO.getOfferCartDetailsDTOList().get(cartHeaderListDTO.getDeliveryDate().get(i).getListCartDetailsList().get(i1).getCartDetailsID()).size()+" offer items");
+                    txtOfferAvaiable.setText("Offer applied");
+                    txtOfferAvaiable.setVisibility(View.VISIBLE);
+                } else {
+                    txtOfferAvaiable.setVisibility(View.INVISIBLE);
+                }
             } else {
                 txtOfferAvaiable.setVisibility(View.INVISIBLE);
             }
-        } else {
+
+        }else{
             txtOfferAvaiable.setVisibility(View.INVISIBLE);
         }
 

@@ -1231,7 +1231,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
                             } catch (Exception e) {
                                 viewDialog.hideDialog();
-                                Toast.makeText(getActivity(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getActivity(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
 

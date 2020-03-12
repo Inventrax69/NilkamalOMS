@@ -1016,13 +1016,15 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                             ProgressDialogUtils.closeProgressDialog();
 
+                            if(approvalDailog != null && approvalDailog.isShowing())
                             approvalDailog.dismiss();
 
-                            getFragmentManager()
+                           /* getFragmentManager()
                                     .beginTransaction()
                                     .detach(CartFragment.this)
                                     .attach(CartFragment.this)
-                                    .commit();
+                                    .commit();*/
+                            loadFormControls();
 
                         } else {
                             ProgressDialogUtils.closeProgressDialog();
@@ -1033,13 +1035,16 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                 db.cartHeaderDAO().deleteCartHeader(String.valueOf(cartHeaderID));
                                 db.cartDetailsDAO().deleteCartDetailsOfCartDetails(cartHeaderID);
 
-                                approvalDailog.dismiss();
+                                if(approvalDailog != null && approvalDailog.isShowing())
+                                    approvalDailog.dismiss();
 
-                                getFragmentManager()
+                               /* getFragmentManager()
                                         .beginTransaction()
                                         .detach(CartFragment.this)
                                         .attach(CartFragment.this)
-                                        .commit();
+                                        .commit();*/
+
+                               loadFormControls();
 
                             } catch (Exception ex) {
                                 ProgressDialogUtils.closeProgressDialog();

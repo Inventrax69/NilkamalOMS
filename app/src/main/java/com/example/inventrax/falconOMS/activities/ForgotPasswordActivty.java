@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.common.Common;
@@ -232,7 +231,7 @@ public class ForgotPasswordActivty extends AppCompatActivity {
                                 }
                             } catch (Exception ex) {
                                 ProgressDialogUtils.closeProgressDialog();
-                                Toast.makeText(ForgotPasswordActivty.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(ForgotPasswordActivty.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

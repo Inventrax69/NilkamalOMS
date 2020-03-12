@@ -1258,7 +1258,7 @@ public class MainActivity extends AppCompatActivity {
 
                             } catch (Exception ex) {
                                 ProgressDialogUtils.closeProgressDialog();
-                                Toast.makeText(MainActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(MainActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                         ProgressDialogUtils.closeProgressDialog();

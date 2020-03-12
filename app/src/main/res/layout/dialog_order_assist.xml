@@ -1,8 +1,8 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_content"
-    android:layout_width="@dimen/_195sdp"
-    android:layout_height="@dimen/_260sdp"
+    android:layout_width="@dimen/_220sdp"
+    android:layout_height="@dimen/_270sdp"
     android:background="@color/white">
 
     <FrameLayout
@@ -24,7 +24,7 @@
                 android:layout_height="0dp"
                 android:paddingLeft="20dip"
                 android:paddingTop="5dp"
-                android:layout_weight="0.6"
+                android:layout_weight="0.7"
                 android:paddingRight="20dip"
                 android:background="@color/colorAccent"
                 android:focusableInTouchMode="true">
@@ -49,7 +49,7 @@
                 android:id="@+id/customerList"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="4.4"
+                android:layout_weight="4.3"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true" />
 

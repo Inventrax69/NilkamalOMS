@@ -22,7 +22,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.common.Common;
@@ -506,7 +505,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
                             } catch (Exception ex) {
                                 ProgressDialogUtils.closeProgressDialog();
-                                Toast.makeText(CartActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(CartActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                             }
 
                         }

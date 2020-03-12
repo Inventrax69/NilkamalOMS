@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
@@ -32,7 +31,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.adapters.OrderConfirmationHeaderAdapter;
@@ -758,7 +756,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
                                 ProgressDialogUtils.closeProgressDialog();
 
                             } catch (Exception ex) {
-                                Toast.makeText(OrderConfirmationActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(OrderConfirmationActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                                 ProgressDialogUtils.closeProgressDialog();
                             }
                         }
@@ -847,7 +845,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
                             } catch (Exception ex) {
                                 ProgressDialogUtils.closeProgressDialog();
-                                Toast.makeText(OrderConfirmationActivity.this, ex.toString(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(OrderConfirmationActivity.this, ex.toString(), Toast.LENGTH_SHORT).show();
                             }
                         }
                         ProgressDialogUtils.closeProgressDialog();
