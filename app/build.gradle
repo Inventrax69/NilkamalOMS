@@ -32,7 +32,8 @@ android {
         /*
         debug {
             debuggable true
-        }*/
+        }
+        */
 
         release {
             shrinkResources true

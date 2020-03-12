@@ -539,7 +539,6 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                         db.itemDAO().updateDiscount();
                                         db.variantDAO().updateDiscount();
                                         loadCatlog();
-
                                     }
 
                                     ProgressDialogUtils.closeProgressDialog();
@@ -616,7 +615,6 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         } catch (NullPointerException ex) {
             //
         }
-
     }
 
     @Override
@@ -635,7 +633,6 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
             } else {
                 itemc.setVisible(true);
             }
-
 
             final MenuItem item1 = menu.findItem(R.id.action_home);
             item1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -1696,7 +1693,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                     if (result.imgPath.equals("")) {
                         itemListView.ivItem.setImageResource(R.drawable.no_img);
                     } else {
-                        Picasso.with(context)
+                         Picasso.with(context)
                                 .load(result.imgPath)
                                 .placeholder(R.drawable.no_img)
                                 .into(itemListView.ivItem);

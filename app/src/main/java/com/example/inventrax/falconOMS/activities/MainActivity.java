@@ -92,11 +92,13 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -108,7 +110,6 @@ import static android.support.design.bottomnavigation.LabelVisibilityMode.LABEL_
 public class MainActivity extends AppCompatActivity {
 
     private static final String classCode = "OMS_Android_MainActivity";
-
     private TextView mTextMessage, txtTimer;
     Toolbar toolbar;
     ActionBar actionBar;
@@ -129,11 +130,12 @@ public class MainActivity extends AppCompatActivity {
     List<productCatalogs> cartList = null;
     AppDatabase db;
     String userName = "", userId = "", cartHeaderId = "";
-    private String itemTimeStamp = "", customerTimeStamp = "";
+    private String  timeStamp = "";
     private static CountDownTimer countDownTimer;
     int c_width, c_height;
     boolean doubleBackToExitPressedOnce = false;
     public boolean isProfileOpened = false, isSearchOpened = false, isSettingOpened = false;
+    String itemTimeStamp="", customerTimeStamp ="";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -417,8 +419,7 @@ public class MainActivity extends AppCompatActivity {
 
         // itemTimeStamp = "2019-08-27 19:08:18.630";
 
-        customerTimeStamp = "2019-08-27 19:08:18.630";
-
+        timeStamp = "2019-08-27 19:08:18.630";
 
         Date date = Calendar.getInstance().getTime();
         //
@@ -433,7 +434,30 @@ public class MainActivity extends AppCompatActivity {
             // syncItemData();
             // syncCustomerData();
             cartSyncAsync();
-            // SyncData();
+            itemTimeStamp = sp.getString(KeyValues.ITEM_MASTER_SYNC_TIME, "");
+            customerTimeStamp = sp.getString(KeyValues.CUSTOMER_MASTER_SYNC_TIME, "");
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            try {
+                Date date1 = simpleDateFormat.parse(itemTimeStamp);
+                Date date2 = simpleDateFormat.parse(customerTimeStamp);
+
+                long diffInMs = date1.getTime() - date2.getTime();
+
+                long diffInSec = TimeUnit.MILLISECONDS.toSeconds(diffInMs);
+
+                if(diffInSec >= 0){
+                    timeStamp= customerTimeStamp;
+                }else{
+                    timeStamp= itemTimeStamp;
+                }
+
+                SyncData();
+
+            } catch (ParseException e) {
+               // e.printStackTrace();
+            }
+            //
         }
 
 
@@ -674,7 +698,7 @@ public class MainActivity extends AppCompatActivity {
         message = common.SetAuthentication(EndpointConstants.HHTCartDTO, MainActivity.this);
         productCatalogs oDto = new productCatalogs();
         oDto.setUserID(userId);
-        oDto.setCreatedOn("2020-03-01 17:50:23.857");
+        oDto.setCreatedOn(timeStamp);
         message.setEntityObject(oDto);
 
         Call<OMSCoreMessage> call = null;

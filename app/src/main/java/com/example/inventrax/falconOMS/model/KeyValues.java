@@ -38,6 +38,9 @@ public class KeyValues {
     public static final String IS_CUSTOMER_MASTER_UPDATE= "isCustomerMasterUpdate";
     public static final String IS_NOTIFICATION_AVAILABLE= "isNotificationAvailable";
 
+    public static final String ITEM_MASTER_SYNC_TIME= "ItemMasterSyncTime";
+    public static final String CUSTOMER_MASTER_SYNC_TIME= "CustomerMasterSyncTime";
+
     // Timer
     public static final String TIMER = "timer";
 

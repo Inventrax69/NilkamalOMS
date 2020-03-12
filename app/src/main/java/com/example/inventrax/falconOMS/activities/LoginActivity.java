@@ -77,7 +77,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -122,9 +126,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     AlertDialog dialog;
     ImageView settings;
     String firebase_token;
-
     int pageIndex = 1;
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -257,10 +261,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 settings.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         Intent intent = new Intent(LoginActivity.this, SettingsActivity.class);
                         startActivity(intent);
-
                     }
                 });
             } catch (Exception ex) {
@@ -335,6 +337,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
+
+    @SuppressLint("StaticFieldLeak")
     @Override
     public void onClick(View v) {
 
@@ -435,6 +439,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //Getting response from the method
             call.enqueue(new Callback<OMSCoreMessage>() {
 
+                @SuppressLint("StaticFieldLeak")
                 @Override
                 public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
 
@@ -480,8 +485,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         finish();
 */
 
-
-
                                         new AsyncTask<Void, Integer, String>() {
 
                                             @Override
@@ -491,18 +494,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                     db.itemDAO().deleteAll();
                                                     db.variantDAO().deleteAll();
 
-
-
-
-                                                    List<ItemTable> itemTableList =new ArrayList<>();
-                                                    List<VariantTable> variantTableList =new ArrayList<>();
+                                                    List<ItemTable> itemTableList = new ArrayList<>();
+                                                    List<VariantTable> variantTableList = new ArrayList<>();
 
 
                                                     for (ModelDTO md : lstItem) {
 
                                                         itemTableList.add(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
                                                                 md.getModelDescription(), md.getImgPath(), "0", "0", ""));
-/*                                                        db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                        /*  db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
                                                                 md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));*/
 
 
@@ -518,9 +518,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                                     }
 
-                                                   synchronized (this){
+                                                    synchronized (this) {
                                                         db.itemDAO().insertAll(itemTableList);
-                                                   }
+                                                    }
                                                     db.variantDAO().insertAll(variantTableList);
 
 
@@ -528,11 +528,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                                     sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
                                                     sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
+                                                    Date date = Calendar.getInstance().getTime();
+                                                    //
+                                                    // Display a date in day, month, year format
+                                                    //
+                                                    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                                    String todaysdate = formatter.format(date);
 
+                                                    sharedPreferencesUtils.savePreference(KeyValues.ITEM_MASTER_SYNC_TIME, todaysdate);
                                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                     startActivity(intent);
                                                     finish();
-
 
                                                 }
                                                 return null;
@@ -543,6 +549,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                         sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
                                         sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
+                                        Date date = Calendar.getInstance().getTime();
+                                        //
+                                        // Display a date in day, month, year format
+                                        //
+                                        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                        String todaysdate = formatter.format(date);
+                                        sharedPreferencesUtils.savePreference(KeyValues.ITEM_MASTER_SYNC_TIME, todaysdate);
 
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                         startActivity(intent);
@@ -581,10 +594,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
         } catch (Exception ex) {
-
             try {
                 ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", LoginActivity.this);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -596,6 +607,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void getCustomerList() {
 
         if (NetworkUtils.isInternetAvailable(LoginActivity.this)) {
+
         } else {
             DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0007);
             return;
@@ -619,6 +631,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //Getting response from the method
             call.enqueue(new Callback<OMSCoreMessage>() {
 
+                @SuppressLint("StaticFieldLeak")
                 @Override
                 public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
 
@@ -703,8 +716,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                     db.customerDAO().deleteAll();
                                                     db.customerDAO().insertAll(customerTables);
 
+                                                    Date date = Calendar.getInstance().getTime();
+                                                    //
+                                                    // Display a date in day, month, year format
+                                                    //
+                                                    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                                    String todaysdate = formatter.format(date);
 
+                                                    sharedPreferencesUtils.savePreference(KeyValues.CUSTOMER_MASTER_SYNC_TIME, todaysdate);
                                                     getProductCatalog();
+
                                                 }
                                                 return null;
                                             }
@@ -717,26 +738,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                         sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
                                         sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
+                                        Date date = Calendar.getInstance().getTime();
+                                        //
+                                        // Display a date in day, month, year format
+                                        //
+                                        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                        String todaysdate = formatter.format(date);
+
+                                        sharedPreferencesUtils.savePreference(KeyValues.CUSTOMER_MASTER_SYNC_TIME, todaysdate);
+
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                         startActivity(intent);
                                         finish();
 
                                     }
-
                                     ProgressDialogUtils.closeProgressDialog();
-
                                 }
 
                                 ProgressDialogUtils.closeProgressDialog();
 
                             } catch (Exception ex) {
-
                                 ProgressDialogUtils.closeProgressDialog();
-
                                 dialog.dismiss();
                             }
                         }
-
                         ProgressDialogUtils.closeProgressDialog();
                     }
                     ProgressDialogUtils.closeProgressDialog();
@@ -1105,8 +1130,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                                     pageIndex++;
                                                     testProductCatalog();
-
-
 
 
                                                 }

@@ -2,7 +2,9 @@ package com.example.inventrax.falconOMS.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -79,6 +81,7 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
     AlertDialog dialog;
 
     private SharedPreferencesUtils sharedPreferencesUtils;
+    String itemMasterSyncTime,customerMasterSyncTime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -120,6 +123,13 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
         customerTables = new ArrayList<>();
         lstItem = new ArrayList<>();
         customerList = new ArrayList<CustomerListDTO>();
+
+        SharedPreferences sp = SyncMasterDataActivity.this.getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
+        itemMasterSyncTime = sp.getString(KeyValues.ITEM_MASTER_SYNC_TIME, "");
+        customerMasterSyncTime = sp.getString(KeyValues.CUSTOMER_MASTER_SYNC_TIME, "");
+
+        tvItemMasterSyncTime.setText("Last Sync Time : "+itemMasterSyncTime);
+        tvCustomerMasterSyncTime.setText("Last Sync Time : "+customerMasterSyncTime);
 
 
     }
@@ -177,8 +187,7 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
 
     public void getCustomerList() {
 
-        if (NetworkUtils.isInternetAvailable(SyncMasterDataActivity.this)) {
-        } else {
+        if (NetworkUtils.isInternetAvailable(SyncMasterDataActivity.this)) { } else {
             DialogUtils.showAlertDialog(SyncMasterDataActivity.this, errorMessages.EMC_0007);
             return;
         }
@@ -190,7 +199,6 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
         itemListDTO.setPageSize(0);
         itemListDTO.setHandheldRequest(true);
         message.setEntityObject(itemListDTO);
-
 
         Call<OMSCoreMessage> call = null;
         ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
@@ -270,10 +278,7 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                                         if (dialog.isShowing())
                                             dialog.dismiss();
 
-
-
                                     } else {
-
 
                                         Intent intent = new Intent(SyncMasterDataActivity.this, MainActivity.class);
                                         startActivity(intent);
@@ -281,7 +286,6 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                                         if (dialog.isShowing())
                                             dialog.dismiss();
                                     }
-
 
                                     if (dialog.isShowing())
                                         dialog.dismiss();
@@ -291,9 +295,14 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
                                     dialog.dismiss();
 
                                 Date date = Calendar.getInstance().getTime();
+                                //
+                                // Display a date in day, month, year format
+                                //
                                 DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                                 String todaysdate = formatter.format(date);
-                                tvCustomerMasterSyncTime.setText(""+todaysdate);
+
+                                sharedPreferencesUtils.savePreference(KeyValues.CUSTOMER_MASTER_SYNC_TIME, todaysdate);
+                                tvCustomerMasterSyncTime.setText("Last Sync Time : "+todaysdate);
 
                             } catch (Exception ex) {
                                 if (dialog.isShowing())
@@ -337,6 +346,7 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
     public void getProductCatalog() {
 
         if (NetworkUtils.isInternetAvailable(SyncMasterDataActivity.this)) {
+
         } else {
             DialogUtils.showAlertDialog(SyncMasterDataActivity.this, errorMessages.EMC_0007);
             // soundUtils.alertSuccess(SyncMasterDataActivity.this,getBaseContext());
@@ -443,9 +453,15 @@ public class SyncMasterDataActivity extends Activity implements View.OnClickList
 
                                                 dialog.dismiss();
                                                 Date date = Calendar.getInstance().getTime();
+                                                //
+                                                // Display a date in day, month, year format
+                                                //
                                                 DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                                                 String todaysdate = formatter.format(date);
-                                                tvItemMasterSyncTime.setText(""+todaysdate);
+
+                                                sharedPreferencesUtils.savePreference(KeyValues.ITEM_MASTER_SYNC_TIME, todaysdate);
+
+                                                tvItemMasterSyncTime.setText("Last Sync Time : "+todaysdate);
 
 
                                             }
