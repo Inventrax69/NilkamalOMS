@@ -194,7 +194,7 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                                     if (isChanged) {
                                         UpdateApprovalCartList();
                                     } else {
-                                        if (type.equals("23")) {
+                                        if (type.equals("23") || type.equals("6")) {
                                             boolean isCheck = true;
                                             for (int i = 0; i < approvalListDTOS.size(); i++) {
                                                 if (!approvalListDTOS.get(i).isStatus()) {

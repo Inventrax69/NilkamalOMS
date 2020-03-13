@@ -97,6 +97,8 @@ public class RefPopSCMApprovalAdapter extends RecyclerView.Adapter<RefPopSCMAppr
 
         this.btnADD = dialog.findViewById(R.id.btnADD);
         this.btnSEND = dialog.findViewById(R.id.btnSEND);
+
+        this.btnSEND.setText(context.getString(R.string.save));
         this.btnCLEAR = dialog.findViewById(R.id.btnCLEAR);
         this.btnClOSE = dialog.findViewById(R.id.btnClOSE);
 

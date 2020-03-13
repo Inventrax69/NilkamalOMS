@@ -259,7 +259,7 @@
     <string name="reject">Reject</string>
     <string name="remarks">Remarks</string>
     <string name="open_price">Open Price</string>
-    <string name="in_active">In-Active</string>
+    <string name="in_active">SCM In-Active</string>
     <string name="credit_limit">Credit Limit</string>
     <string name="schemes_and_discounts">Schemes and Discounts</string>
     <string name="select_all">Select All</string>
