@@ -559,7 +559,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         PriceDTO oDto = new PriceDTO();
         oDto.setMaterialMasterID(materialId);
         oDto.setModelID(modelId);
-        oDto.setCustomerID(partnerId);
+        oDto.setCustomerID(customerId);
         oDto.setResults("");
 
         message.setEntityObject(oDto);
