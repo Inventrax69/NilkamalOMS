@@ -121,7 +121,7 @@ public class ApprovalListDTO implements Serializable,Cloneable {
 
     @SerializedName("Status")
     @Expose
-    private boolean Status  = false;
+    private boolean Status = false;
 
     public String getMaterialcode() {
         return materialcode;

@@ -102,17 +102,12 @@ public class SCMHeaderAdapter extends RecyclerView.Adapter<SCMHeaderAdapter.Item
 
         if (headerListDTO.getIsCreditLimit() > 0) {
             itemViewHolder.customerName.setTextColor(Color.RED);
-
         } else if (headerListDTO.getIsApproved() > 0) {
-
             itemViewHolder.customerName.setTextColor(context.getResources().getColor(R.color.safron));
-
         }else if(headerListDTO.getIsInActive()>0){
             itemViewHolder.customerName.setTextColor(Color.RED);
-
         } else {
             itemViewHolder.customerName.setTextColor(context.getResources().getColor(R.color.green));
-
         }
 
         itemViewHolder.tv_Status.setText(getStatus(headerListDTO));
@@ -197,8 +192,10 @@ public class SCMHeaderAdapter extends RecyclerView.Adapter<SCMHeaderAdapter.Item
             @Override
             public void onClick(View view) {
                 if(itemList.get(i).getIsInActive()==1){
+                    Toast.makeText(context, itemList.get(i).getCustomerName()+ " sent for in-active approval", Toast.LENGTH_SHORT).show();
                     sendForApproval(itemList.get(i).getCartHeaderID(), "6");
                 } else if(itemList.get(i).getIsCreditLimit()==1){
+                    Toast.makeText(context, itemList.get(i).getCustomerName()+ " sent for credit limit approval", Toast.LENGTH_SHORT).show();
                     sendForApproval(itemList.get(i).getCartHeaderID(), "5");
                 }else{
                     OrderConfirmation(new int[]{itemList.get(i).getCartHeaderID()});

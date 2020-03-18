@@ -317,8 +317,10 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
             }.execute();
 
-        } else
+        } else {
             loadCatlog();
+        }
+
 
     }
 

@@ -599,36 +599,36 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                             List<VariantTable> variantsTable = new ArrayList<>();
 
 
-                           if(core.getEntityObject()!=null){
-                               try {
+                            if (core.getEntityObject() != null) {
+                                try {
 
-                                   JSONArray getApprovalListDTO = new JSONArray((ArrayList) core.getEntityObject());
-                                   if(getApprovalListDTO.length()>0){
-                                       VariantDTO variantDTO=new VariantDTO();
-                                       VariantTable variantTable=new VariantTable();
-                                     for(int i=0;i<getApprovalListDTO.length();i++){
-                                        variantDTO= new Gson().fromJson(getApprovalListDTO.get(i).toString(),VariantDTO.class);
+                                    JSONArray getApprovalListDTO = new JSONArray((ArrayList) core.getEntityObject());
+                                    if (getApprovalListDTO.length() > 0) {
+                                        VariantDTO variantDTO = new VariantDTO();
+                                        VariantTable variantTable = new VariantTable();
+                                        for (int i = 0; i < getApprovalListDTO.length(); i++) {
+                                            variantDTO = new Gson().fromJson(getApprovalListDTO.get(i).toString(), VariantDTO.class);
 
-                                        db.variantDAO().updateDiscountbyID(variantDTO.getDiscountCount(),variantDTO.getDiscountId(),variantDTO.getDiscountDesc(),variantDTO.getMaterialID());
+                                            db.variantDAO().updateDiscountbyID(variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(), variantDTO.getMaterialID());
 
-                                         selectedVariant.discountDesc = variantDTO.getDiscountDesc();
-                                         selectedVariant.discountId = variantDTO.getDiscountId();
-                                         selectedVariant.discountCount = variantDTO.getDiscountCount();
+                                            selectedVariant.discountDesc = variantDTO.getDiscountDesc();
+                                            selectedVariant.discountId = variantDTO.getDiscountId();
+                                            selectedVariant.discountCount = variantDTO.getDiscountCount();
 
-                                        if(Integer.parseInt(variantDTO.getDiscountId())>0){
-                                            availOffer.setVisibility(View.VISIBLE);
-                                        }else {
-                                            availOffer.setVisibility(View.GONE);
+                                            if (Integer.parseInt(variantDTO.getDiscountId()) > 0) {
+                                                availOffer.setVisibility(View.VISIBLE);
+                                            } else {
+                                                availOffer.setVisibility(View.GONE);
+                                            }
+
                                         }
+                                    }
 
-                                     }
-                                   }
+                                } catch (Exception e) {
 
-                               } catch (Exception e) {
+                                }
 
-                               }
-
-                           }
+                            }
 
 
                             ProgressDialogUtils.closeProgressDialog();
@@ -730,6 +730,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                                                     db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
                                                             cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
                                                             cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
+
                                                 db.cartHeaderDAO().updateIsUpdated(cartHeaderListDTO.getCustomerID(), 0);
                                                 for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
                                                     cart = cartHeaderListDTO.getListCartDetailsList().get(k);

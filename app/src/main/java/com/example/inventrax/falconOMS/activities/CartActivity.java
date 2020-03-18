@@ -55,6 +55,11 @@ import retrofit2.Response;
 
 /**
  * Created by Padmaja on 04/07/2019.
+ * This page contains three types of fragments
+ * 1) Active Cart - which contains all the Active cart items in this fragment which needed to send to the order confirmation.
+ * 2) Pending Cart - which contains all the pending approvals cart items list before creation of SO.
+ * 3) SCM cart - which contains all SCM approved cart like SCM-Inactive and SCM-RF Approval.
+ * Removed timer for this activity.
  */
 
 public class CartActivity extends AppCompatActivity implements View.OnClickListener {
@@ -84,6 +89,10 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         loadFormControls();
         FirebaseMessaging.getInstance().subscribeToTopic("all");
     }
+
+    /*
+    * @startTime countDownTimer starts 5 mints timer.
+    * */
 
     public void startTime(final long mills) {
 
@@ -117,6 +126,9 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    /*
+     * @stopTimer countDownTimer stop
+     * */
     public void stopTimer() {
         // countDownTimer.cancel();
     }
@@ -177,7 +189,12 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                         // ((MainActivity) CartActivity.this).startTime();
                     }
                 }
+
             }
+
+            /*
+             * Opens Active Cart Fragment.
+             * */
 
             txtOrders.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -200,6 +217,10 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
 
+            /*
+             * Opens Pending Cart Fragment.
+             * */
+
             txtApprovals.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -221,6 +242,11 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
 
+
+            /*
+             * Opens SCM Cart Fragment.
+             * */
+
             txtSCMCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -241,6 +267,10 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
             });
+
+            /*
+             * defaults on Activity open opens Active cart.
+             * */
 
             txtOrders.performClick();
 

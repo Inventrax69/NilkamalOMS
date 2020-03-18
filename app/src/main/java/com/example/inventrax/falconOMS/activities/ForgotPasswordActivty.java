@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
@@ -30,15 +29,17 @@ import com.example.inventrax.falconOMS.util.NetworkUtils;
 import com.example.inventrax.falconOMS.util.ProgressDialogUtils;
 import com.example.inventrax.falconOMS.util.ValidationUtils;
 import com.google.gson.internal.LinkedTreeMap;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+/*
+* This Activity is for forgot password
+*/
 
 public class ForgotPasswordActivty extends AppCompatActivity {
 
@@ -82,7 +83,6 @@ public class ForgotPasswordActivty extends AppCompatActivity {
 
         setKeyboardListener();
 
-
     }
 
     private int heightDiff;
@@ -110,7 +110,6 @@ public class ForgotPasswordActivty extends AppCompatActivity {
                 boolean isShown = heightDiff >= estimatedKeyboardHeight;
 
                 if (isShown == wasOpened) {
-
                     return;
                 }
 
@@ -128,7 +127,7 @@ public class ForgotPasswordActivty extends AppCompatActivity {
         });
     }
 
-    // Method to generate email to retrive password
+    // Method to generate email to retrieve password
     public void forgotPassword() {
 
         if (NetworkUtils.isInternetAvailable(this)) {
@@ -164,13 +163,10 @@ public class ForgotPasswordActivty extends AppCompatActivity {
 
 
         Call<OMSCoreMessage> call = null;
-        ApiInterface apiService =
-                RestService.getClient().create(ApiInterface.class);
-
+        ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
 
         call = apiService.ForgotPassword(message);
         ProgressDialogUtils.showProgressDialog("Please Wait");
-
 
         try {
             //Getting response from the method

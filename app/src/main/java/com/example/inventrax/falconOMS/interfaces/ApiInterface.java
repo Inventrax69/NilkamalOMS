@@ -194,6 +194,9 @@ public interface ApiInterface {
     @POST("Orders/LogException")
     Call<String> LogException(@Body OMSCoreMessage oRequest);
 
+    @POST("Orders/GetSO")
+    Call<OMSCoreMessage> GetSO(@Body OMSCoreMessage oRequest);
+
     @POST("Orders/GetStock")
     Call<OMSCoreMessage> GetStock(@Body OMSCoreMessage oRequest);
 

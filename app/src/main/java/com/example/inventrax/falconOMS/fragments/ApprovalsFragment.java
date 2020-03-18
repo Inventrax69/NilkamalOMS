@@ -20,8 +20,8 @@ public class ApprovalsFragment extends Fragment implements View.OnClickListener 
     CardView cvOpenPrice, cvInActive, cvCreditLimit, cvSchemesAndDiscounts, cvSCMApproval;
     String[] strings = {KeyValues.OPEN_PRICE_APPROVAL,KeyValues.IN_ACTIVE_APPROVAL,
             KeyValues.CREDIT_LIMIT_APPROVAL,KeyValues.S_AND_D_APPROVAL,KeyValues.SCM_APPROVAL};
-/*  String[] strings = {KeyValues.OPEN_PRICE_APPROVAL,KeyValues.IN_ACTIVE_APPROVAL,
-            KeyValues.CREDIT_LIMIT_APPROVAL,KeyValues.S_AND_D_APPROVAL};*/
+    /*  String[] strings = {KeyValues.OPEN_PRICE_APPROVAL,KeyValues.IN_ACTIVE_APPROVAL,
+                KeyValues.CREDIT_LIMIT_APPROVAL,KeyValues.S_AND_D_APPROVAL};*/
 
     @Nullable
     @Override

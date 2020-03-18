@@ -519,13 +519,11 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
         }
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
         }
     }
-
 
     public void setProgressDialog() {
 
@@ -589,7 +587,6 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
         super.onDestroy();
     }
 
-
     public class GetCartHeaderList {
 
         List<CartHeaderListDTO> cartHeaderList_Class;
@@ -607,4 +604,5 @@ public class CartApprovalFragment extends Fragment implements View.OnClickListen
         }
 
     }
+
 }

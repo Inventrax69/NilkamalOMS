@@ -396,8 +396,6 @@ public class CartApproval_DyFragment extends Fragment implements View.OnClickLis
         alertDialog.dismiss();
     }
 
-
-
     @Override
     public void onClick(View v) {
 
@@ -423,7 +421,6 @@ public class CartApproval_DyFragment extends Fragment implements View.OnClickLis
 
         }
     }
-
 
     public void VehicleList() {
 

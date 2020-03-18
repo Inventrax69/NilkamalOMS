@@ -1593,7 +1593,6 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
         FullfilmentDTO oDto = new FullfilmentDTO();
         oDto.setPrefix(null);
-
         message.setEntityObject(oDto);
 
         Call<OMSCoreMessage> call = null;

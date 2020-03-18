@@ -44,7 +44,6 @@ public class ItemListResponse {
 
             switch (entry.getKey().toString()) {
 
-
                 case "MaterialCode":
                     if (entry.getValue() != null) {
                         this.setMaterialCode(entry.getValue().toString());

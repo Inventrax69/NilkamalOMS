@@ -34,8 +34,7 @@ public class CustomerHomeFragment extends Fragment implements View.OnClickListen
 
     private static final String classCode = "OMS_Android_CustomerHomeFragment";
     private View rootView;
-    private CardView llOrderBooking, llComplaints,
-            llDashboard, llSchemesAndDiscounts;
+    private CardView llOrderBooking, llComplaints, llDashboard, llSchemesAndDiscounts;
     SharedPreferencesUtils sharedPreferencesUtils;
     AppDatabase db;
     private String customerId = "",customerName = "",divisionId = "",divisionType = "", mobileNo = "",customerCode= "";
