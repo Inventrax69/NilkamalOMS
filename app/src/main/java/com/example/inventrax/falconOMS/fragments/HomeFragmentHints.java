@@ -202,7 +202,8 @@ public class HomeFragmentHints extends Fragment {
                 }
                 break;
             case KeyValues.ORDER_LIST_TITLE:
-                // FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container, new ProductsFragment());
+                 FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container, new OrderHistoryFragment());
+
                 break;
             case KeyValues.E_INFORMATION_TITLE:
                 // FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container, new ProductsFragment());

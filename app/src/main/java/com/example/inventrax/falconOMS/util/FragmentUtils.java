@@ -112,6 +112,22 @@ public class FragmentUtils {
         }
     }
 
+
+    public static void addFragmentWithBackStackBundle(FragmentActivity activity, int fragmentContainer, Fragment fragment, Bundle bundle) {
+
+        try {
+            fragmentManager = activity.getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            fragmentTransaction.add(fragmentContainer, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragment.setArguments(bundle);
+            fragmentTransaction.commit();
+        } catch (Exception ex) {
+
+        }
+    }
+
     public static void replaceFragmentWithBundle(FragmentActivity activity, int fragmentContainer, Fragment fragment, Bundle bundle) {
 
         try {

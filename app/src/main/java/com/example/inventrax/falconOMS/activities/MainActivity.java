@@ -452,7 +452,7 @@ public class MainActivity extends AppCompatActivity {
                     timeStamp= itemTimeStamp;
                 }
 
-                SyncData();
+                //SyncData();
 
             } catch (ParseException e) {
                // e.printStackTrace();
