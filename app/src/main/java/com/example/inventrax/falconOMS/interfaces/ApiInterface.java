@@ -206,9 +206,4 @@ public interface ApiInterface {
     @POST("Master/Varient")
     Call<OMSCoreMessage> Varient(@Body OMSCoreMessage oRequest);
 
-    @POST("Orders/SOListMOB")
-    Call<OMSCoreMessage> SOListMOB(@Body OMSCoreMessage oRequest);
-
-
-
 }

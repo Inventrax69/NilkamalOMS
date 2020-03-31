@@ -64,6 +64,7 @@ import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.activities.LoginActivity;
 import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.adapters.OffersAdapter;
+import com.example.inventrax.falconOMS.adapters.PaginationAdapter;
 import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.Log.Logger;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
@@ -77,6 +78,7 @@ import com.example.inventrax.falconOMS.pojos.ModelDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
 import com.example.inventrax.falconOMS.pojos.PriceDTO;
+import com.example.inventrax.falconOMS.pojos.ProductDiscountDTO;
 import com.example.inventrax.falconOMS.pojos.VariantDTO;
 import com.example.inventrax.falconOMS.pojos.productCatalogs;
 import com.example.inventrax.falconOMS.room.AppDatabase;
@@ -882,7 +884,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                                         db.cartDetailsDAO().insert(new CartDetails("0", selectedVariant.materialID, selectedVariant.mCode,
                                                                 selectedVariant.mDescription, "", etQtyBottom.getText().toString(), selectedVariantImage,
                                                                 "0", false, "0", Integer.valueOf(partnerId), 1, prioity, "0", "0", null,
-                                                                "0", "", "0", "0", "0", "0"));
+                                                                "0", "", "0", "0", "0", "0",""));
                                                     } else {
                                                         String qty = db.cartDetailsDAO().getQantity(selectedVariant.materialID, partnerId, "0");
                                                         int total_qty = Integer.parseInt(qty) + Integer.parseInt(etQtyBottom.getText().toString());
@@ -896,7 +898,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                                         db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeader.cartHeaderID), selectedVariant.materialID, selectedVariant.mCode,
                                                                 selectedVariant.mDescription, "", etQtyBottom.getText().toString(), selectedVariantImage,
                                                                 "0", false, "0", Integer.valueOf(partnerId), 1, prioity, "0", "0", null,
-                                                                "0", "", "0", "0", "0", "0"));
+                                                                "0", "", "0", "0", "0", "0",""));
                                                     } else {
                                                         String qty = db.cartDetailsDAO().getQantity(selectedVariant.materialID, partnerId, String.valueOf(cartHeader.cartHeaderID));
                                                         int total_qty = Integer.parseInt(qty) + Integer.parseInt(etQtyBottom.getText().toString());
@@ -951,7 +953,8 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
             @Override
             public void onSchemeClick(int pos) {
-                showAvailableOffers(pos);
+                //showAvailableOffers(pos);
+                productDiscount(pos);
             }
         }, isgrid, getActivity());
 
@@ -1174,7 +1177,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                                             cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                             cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                             cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),""));
                                                 }
 
                                             }
@@ -1262,6 +1265,108 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         }
     }
 
+    public void productDiscount(int pos) {
+
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, getActivity());
+
+        ProductDiscountDTO dto = new ProductDiscountDTO();
+
+        if (!userRoleName.equals("DTD")) {
+            if (!customerId.equals("")) {
+
+                dto.setCustomerID(customerId);
+
+            } else {
+                Toast.makeText(getActivity(), "Please select customer", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } else {
+            dto.setCustomerID("0");
+        }
+        dto.setMaterialMasterID("0");
+        dto.setModelID(itemsList.get(pos).modelID);
+
+        message.setEntityObject(dto);
+
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService =
+                RestService.getClient().create(ApiInterface.class);
+
+        ProgressDialogUtils.showProgressDialog("Please wait..");
+
+        call = apiService.ProductDiscount(message);
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if ((core.getType().toString().equals("Exception"))) {
+
+                            OMSExceptionMessage omsExceptionMessage = null;
+
+                            for (OMSExceptionMessage oms : core.getOMSMessages()) {
+                                omsExceptionMessage = oms;
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showAlertType(omsExceptionMessage, getActivity(), getActivity());
+                            }
+
+                            ProgressDialogUtils.closeProgressDialog();
+
+                        } else {
+
+                            try {
+
+                                List<String> mCodeName = new ArrayList<>();
+                                List<String> discountDesc = new ArrayList<>();
+
+                                JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
+                                for(int i = 0;i<getCartHeader.length();i++) {
+
+                                    mCodeName.add(getCartHeader.getJSONObject(i).getString("MCode"));
+                                    discountDesc.add(getCartHeader.getJSONObject(i).getString("Remarks"));
+
+                                }
+
+                                showAvailableOffers(mCodeName,discountDesc);
+                                ProgressDialogUtils.closeProgressDialog();
+
+                            } catch (Exception e) {
+                                ProgressDialogUtils.closeProgressDialog();
+                            }
+                        }
+                    }
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    if (NetworkUtils.isInternetAvailable(getActivity())) {
+                        DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
+                    } else {
+                        DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+            });
+        } catch (Exception ex) {
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", getActivity());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
+        }
+    }
+
 
     private void updateCartItemsCount() {
 
@@ -1279,7 +1384,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void showAvailableOffers(int pos) {
+    private void showAvailableOffers(List<String> mCode, List<String> discountDesc) {
 
         final Dialog mDialog = new Dialog(getActivity());
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1293,10 +1398,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
         lstoffers.setHasFixedSize(true);
 
 
-        List<String> mCodeName = db.variantDAO().getMCode(Integer.parseInt(itemsList.get(pos).modelID));
-        List<String> mDiscountDesc = db.variantDAO().getDiscountDesc(Integer.parseInt(itemsList.get(pos).modelID));
-
-        OffersAdapter adapter = new OffersAdapter(getActivity(), mDiscountDesc, mCodeName, nested);
+        OffersAdapter adapter = new OffersAdapter(getActivity(), discountDesc, mCode, nested);
         lstoffers.setAdapter(adapter);
         lstoffers.setNestedScrollingEnabled(false);
 

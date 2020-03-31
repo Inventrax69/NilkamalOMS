@@ -79,6 +79,11 @@ public class CartDetailsListDTO {
     @SerializedName("HSNCode")
     private String HSNCode;
 
+    @SerializedName("DiscountedPrice")
+    private String DiscountedPrice;
+
+
+
     public CartDetailsListDTO() { }
 
     public String getQuantity() {
@@ -273,4 +278,11 @@ public class CartDetailsListDTO {
         this.HSNCode = HSNCode;
     }
 
+    public String getDiscountedPrice() {
+        return DiscountedPrice;
+    }
+
+    public void setDiscountedPrice(String discountedPrice) {
+        DiscountedPrice = discountedPrice;
+    }
 }

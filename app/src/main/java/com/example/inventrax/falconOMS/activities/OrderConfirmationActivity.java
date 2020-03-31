@@ -1143,7 +1143,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode()));
+                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode(),cart.getDiscountedPrice()));
                                             }
 
                                         }

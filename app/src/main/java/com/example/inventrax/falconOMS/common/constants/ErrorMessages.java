@@ -55,6 +55,8 @@ public class ErrorMessages {
 
     public String EMC_0025 = "Please select all options for POQ or PAQ";
 
+    public String EMC_0026 = "Please apply offers before proceeding further";
+
 
 
 
