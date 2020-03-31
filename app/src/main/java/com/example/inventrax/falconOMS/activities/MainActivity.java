@@ -886,10 +886,6 @@ public class MainActivity extends AppCompatActivity {
 
                             try {
 
-
-
-
-
                                     /*
                                     db.cartHeaderDAO().deleteAllIsUpdated();
                                     db.cartDetailsDAO().deleteAllIsUpdated();
@@ -904,7 +900,6 @@ public class MainActivity extends AppCompatActivity {
                                         db.cartDetailsDAO().deleteAll();
 
                                         for (int i = 0; i < getCartHeader.length(); i++) {
-
 
                                             for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
 

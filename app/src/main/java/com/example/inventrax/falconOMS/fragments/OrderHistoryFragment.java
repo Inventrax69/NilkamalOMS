@@ -1,21 +1,36 @@
 package com.example.inventrax.falconOMS.fragments;
 
+import android.annotation.SuppressLint;
+import android.app.SearchManager;
+import android.app.Service;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.InputType;
+import android.text.method.DigitsKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.inventrax.falconOMS.R;
+import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.adapters.SoListAdapter;
 import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
@@ -29,17 +44,18 @@ import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
 import com.example.inventrax.falconOMS.pojos.Paging;
 import com.example.inventrax.falconOMS.pojos.SOListDTO;
 import com.example.inventrax.falconOMS.room.AppDatabase;
-import com.example.inventrax.falconOMS.room.CustomerTable;
 import com.example.inventrax.falconOMS.room.RoomAppDatabase;
 import com.example.inventrax.falconOMS.services.RestService;
 import com.example.inventrax.falconOMS.util.DialogUtils;
 import com.example.inventrax.falconOMS.util.ExceptionLoggerUtils;
+import com.example.inventrax.falconOMS.util.FragmentUtils;
 import com.example.inventrax.falconOMS.util.NetworkUtils;
 import com.example.inventrax.falconOMS.util.ProgressDialogUtils;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +63,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OrderHistoryFragment extends Fragment implements View.OnClickListener {
+public class OrderHistoryFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
 
     private static final String classCode = "OMS_Android_OrderHistoryFragment";
     private View rootView;
@@ -81,11 +97,28 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
     private int TOTAL_PAGES = 0;
     // indicates the current page which Pagination is fetching.
     private int currentPage = PAGE_START;
-    private int pageSize = 30;
+    private int pageSize = 50;
 
     private List<SOListDTO> lstItem;
-    private List<SOListDTO> updatedList;
 
+
+    SearchView.SearchAutoComplete searchAutoComplete;
+    MenuItem item;
+    SearchView searchView;
+    SearchManager searchManager;
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (getActivity() != null) {
+            ((MainActivity) getActivity()).isSearchOpened = false;
+        }
+
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchAutoComplete.getWindowToken(), 0);
+
+    }
 
     @Nullable
     @Override
@@ -93,11 +126,11 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
 
         rootView = inflater.inflate(R.layout.order_history_fragment, container, false);
 
-        try{
+        try {
             loadFormControls();
-        }catch (Exception e){
+        } catch (Exception e) {
 
-            Log.d("Exception",e.toString());
+            Log.d("Exception", e.toString());
 
         }
 
@@ -114,7 +147,6 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
         core = new OMSCoreMessage();
 
         lstItem = new ArrayList<>();
-        updatedList = new ArrayList<>();
         rvSOList = (RecyclerView) rootView.findViewById(R.id.rvSOList);
         layoutManager = new LinearLayoutManager(getContext());
 
@@ -130,16 +162,22 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
         rvSOList.addOnScrollListener(new PaginationScrollListener(layoutManager) {
             @Override
             protected void loadMoreItems() {
-                isLoading = true;
-                currentPage += 1;
+                if (!searchAutoComplete.isFocused()) {
+                    isLoading = true;
+                    currentPage += 1;
 
-                // mocking network delay for API call
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadNextPage();
-                    }
-                }, 1000);
+                    // mocking network delay for API cal
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            loadNextPage();
+
+                        }
+                    }, 1000);
+                } else {
+                    isLoading = false;
+                }
             }
 
             @Override
@@ -158,16 +196,21 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
             }
         });
 
-        loadFirstPage();
+        loadFirstPage("", false);
 
-        soListAdapter = new SoListAdapter(getContext(),  new SoListAdapter.OnItemClickListener() {
+        soListAdapter = new SoListAdapter(getContext(), new SoListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
 
-                if(lstItem.size()>0) {
+                if (lstItem.size() > 0) {
                     Bundle bundle = new Bundle();
-                    //bundle.putSerializable(KeyValues.SELECTED_CUSTOMER, soListAdapter.getItem(pos));
-                    //FragmentUtils.replaceFragmentWithBackStackWithBundle(getActivity(), R.id.container, new CustomerHomeFragment(), bundle);
+                    searchView.setIconified(true);
+                    searchView.clearFocus();
+                    searchView.onActionViewCollapsed();
+                    bundle.putInt(KeyValues.SELECTED_SOHEADER, soListAdapter.getItem(pos).getSOHeaderID());
+                    bundle.putString(KeyValues.SELECTED_CUSTOMER, soListAdapter.getItem(pos).getCustomer());
+                    bundle.putString(KeyValues.SO_PRICE, soListAdapter.getItem(pos).getSOValue());
+                    FragmentUtils.addFragmentWithBackStackBundle(getActivity(), R.id.container, new OrderHistoryDetailsFragment(), bundle);
                 }
             }
         });
@@ -184,7 +227,114 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
     }
 
 
-    public void loadFirstPage() {
+    @SuppressLint("RestrictedApi")
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        if (menu != null) {
+
+            item = menu.findItem(R.id.cust_action_search);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            item.setVisible(true);
+
+            final MenuItem item1 = menu.findItem(R.id.action_home);
+            item1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            item1.setVisible(false);
+
+
+            //searchView = (SearchView) item.getActionView();
+            searchView = (SearchView) MenuItemCompat.getActionView(item);
+            searchView.setMaxWidth(android.R.attr.width);
+            searchView.setOnQueryTextListener(this);
+            searchView.setIconifiedByDefault(true);
+            //searchView.setIconified(false);
+            //searchView.setFocusable(true);
+
+            // Get SearchView autocomplete object.
+            searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+            searchAutoComplete.setKeyListener(DigitsKeyListener.getInstance("abcdefghijklmnopqrstuvwxyz 0123456789"));
+            searchAutoComplete.setInputType(InputType.TYPE_CLASS_TEXT);
+            searchAutoComplete.setTextColor(Color.WHITE);
+            searchAutoComplete.setThreshold(3);
+
+
+            Field f = null;
+            try {
+                f = TextView.class.getDeclaredField("mCursorDrawableRes");
+                f.setAccessible(true);
+                f.set(searchAutoComplete, R.drawable.cursor);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            //searchAutoComplete.setHintTextColor(Color.WHITE); ABCDEFGHIJKLMNOPQRSTUVWXYZ
+            searchAutoComplete.setDropDownBackgroundResource(R.color.white);
+
+            searchAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    String searchString = (String) parent.getItemAtPosition(position);
+                    searchAutoComplete.setText("" + searchString);
+
+                    // Check if no view has focus:
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(searchAutoComplete.getWindowToken(), 0);
+
+                   /* // Toast.makeText(getContext(), "Your search result is " + " " + searchString, Toast.LENGTH_LONG).show();
+                    mmId = hashMap.get(searchString);
+                    loadView();*/
+
+                }
+            });
+
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
+    // When enter pressed
+    @Override
+    public boolean onQueryTextSubmit(String searchString) {
+
+        loadFirstPage(searchString, true);
+        searchView.setFocusable(true);
+        searchAutoComplete.setFocusable(true);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String searchText) {
+
+        if (searchText != null && !searchText.equals("") && searchText.length() >= 2) {
+
+            if (!Character.isWhitespace(searchText.charAt(0))) {
+
+                String lastChar = searchText.substring(searchText.length() - 1);
+                if (lastChar.equals(" ")) {
+
+                    searchText.trim();
+
+                    loadFirstPage(searchText, true);
+                  /*  Toast.makeText(getContext(), "space bar pressed" + "" + searchText,
+                            Toast.LENGTH_SHORT).show();*/
+                } else {
+                    loadFirstPage(searchText, true);
+                }
+            } else {
+                Toast.makeText(getContext(), "space at starting is not valid", Toast.LENGTH_SHORT).show();
+                searchAutoComplete.setText("");
+            }
+        }
+
+        return true;
+    }
+
+    public void loadFirstPage(String searchString, final boolean fromSearch) {
 
         if (NetworkUtils.isInternetAvailable(getContext())) {
         } else {
@@ -196,8 +346,8 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
         OMSCoreMessage message = new OMSCoreMessage();
         message = common.SetAuthentication(EndpointConstants.SO_FPS_DTO, getContext());
         final ItemListDTO itemListDTO = new ItemListDTO();
-        itemListDTO.setSearchString("");
-        itemListDTO.setPageIndex(currentPage);
+        itemListDTO.setSearchString(searchString);
+        itemListDTO.setPageIndex(1);
         itemListDTO.setPageSize(pageSize);
         message.setEntityObject(itemListDTO);
 
@@ -264,15 +414,19 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
                                     // logException();
                                 }
 
-                                updatedList.clear();
                                 soListAdapter.addAll(lstItem);
-                                updatedList.addAll(lstItem);
 
-                                if (currentPage <= TOTAL_PAGES) soListAdapter.addLoadingFooter();
-                                else isLastPage = true;
+                                if (fromSearch) {
+                                    soListAdapter.clear();
+                                    soListAdapter.addAll(lstItem);
+                                    isLastPage = false;
+                                } else {
 
+                                    if (currentPage <= TOTAL_PAGES)
+                                        soListAdapter.addLoadingFooter();
+                                    else isLastPage = true;
+                                }
                                 ProgressDialogUtils.closeProgressDialog();
-
                             }
                             ProgressDialogUtils.closeProgressDialog();
                         }
@@ -284,7 +438,6 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    Toast.makeText(getContext(), throwable.toString(), Toast.LENGTH_LONG).show();
                     ProgressDialogUtils.closeProgressDialog();
                 }
             });
@@ -305,6 +458,7 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
     public void loadNextPage() {
 
         if (NetworkUtils.isInternetAvailable(getContext())) {
+
         } else {
             DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0007);
             // soundUtils.alertSuccess(LoginActivity.this,getBaseContext());
@@ -319,15 +473,12 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
         itemListDTO.setPageSize(pageSize);
         message.setEntityObject(itemListDTO);
 
-
         Call<OMSCoreMessage> call = null;
         ApiInterface apiService =
                 RestService.getClient().create(ApiInterface.class);
 
-
         call = apiService.SOListMOB(message);
         ProgressDialogUtils.showProgressDialog("Please Wait");
-
 
         try {
             //Getting response from the method
@@ -340,13 +491,11 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
                     soListAdapter.removeLoadingFooter();
                     isLoading = false;
 
-
                     if (response.body() != null) {
 
                         core = response.body();
 
                         if (core != null) {
-
 
                             if ((core.getType().toString().equals("Exception"))) {
                                 List<OMSExceptionMessage> _lExceptions = new ArrayList<OMSExceptionMessage>();
@@ -366,20 +515,15 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
 
                                 ProgressDialogUtils.closeProgressDialog();
 
-                                ProgressDialogUtils.closeProgressDialog();
-
                                 LinkedTreeMap<?, ?> _lstItem = new LinkedTreeMap<String, String>();
                                 _lstItem = (LinkedTreeMap<String, String>) core.getEntityObject();
-
 
                                 Paging paging;
                                 final List<ItemListDTO> lstDto = new ArrayList<ItemListDTO>();
 
                                 try {
 
-                                    updatedList.clear();
                                     paging = new Paging(_lstItem.entrySet());
-                                    updatedList = lstItem;
 
                                     lstItem = paging.getResults();
 
@@ -392,8 +536,6 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
                                 }
 
                                 soListAdapter.addAll(lstItem);
-                                updatedList.addAll(lstItem);
-
 
                                 if (currentPage != TOTAL_PAGES) soListAdapter.addLoadingFooter();
                                 else isLastPage = true;
@@ -411,7 +553,6 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
                 // response object fails
                 @Override
                 public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
-                    Toast.makeText(getContext(), throwable.toString(), Toast.LENGTH_LONG).show();
                     ProgressDialogUtils.closeProgressDialog();
                 }
             });
@@ -429,7 +570,6 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
     }
 
 
-
     @Override
     public void onClick(View v) {
 
@@ -438,13 +578,6 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
         }
 
     }
-
-    private void loadSOList(final List<CustomerTable> lst) {
-
-
-    }
-
-
 
 
     @Override

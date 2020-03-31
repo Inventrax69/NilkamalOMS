@@ -22,10 +22,10 @@ public class SODetailsAdapter extends RecyclerView.Adapter<SODetailsAdapter.View
     private Context context;
     OnItemClickListener listener;
 
-    public SODetailsAdapter(Context applicationContext, List<SODetails> items, OnItemClickListener mlistener) {
+    public SODetailsAdapter(Context applicationContext, List<SODetails> items) {
         this.context = applicationContext;
         this.items = items;
-        listener = mlistener;
+        //listener = mlistener;
     }
 
     @Override
@@ -41,7 +41,8 @@ public class SODetailsAdapter extends RecyclerView.Adapter<SODetailsAdapter.View
 
         viewHolder.txtMaterial.setText(soDetails.getMaterial());
         viewHolder.txtQty.setText(soDetails.getQuantity() + "");
-        viewHolder.txtMaterialDesc.setText(soDetails.getmDesc());
+        viewHolder.txtMaterialDesc.setText(soDetails.getItemDescription());
+        viewHolder.txtPrice.setText(soDetails.getUnitPrice());
 
     }
 
@@ -51,7 +52,7 @@ public class SODetailsAdapter extends RecyclerView.Adapter<SODetailsAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtMaterial, txtQty, txtMaterialDesc;
+        private TextView txtMaterial, txtQty, txtMaterialDesc,txtPrice;
         private ImageView ivDelete;
 
         public ViewHolder(View view) {
@@ -60,6 +61,7 @@ public class SODetailsAdapter extends RecyclerView.Adapter<SODetailsAdapter.View
             txtMaterial = (TextView) view.findViewById(R.id.txtMaterial);
             txtQty = (TextView) view.findViewById(R.id.txtQty);
             txtMaterialDesc = (TextView) view.findViewById(R.id.txtMaterialDesc);
+            txtPrice = (TextView) view.findViewById(R.id.txtPrice);
             ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
 
             //on item click

@@ -46,6 +46,8 @@ public class KeyValues {
 
     // Bundle
     public static final String SELECTED_CUSTOMER = "selectedCustomer";
+    public static final String SELECTED_SOHEADER = "selectedSOHeader";
+    public static final String SO_PRICE = "SOPrice";
 
     // SideMenu
     public static final String CUSTOMER_TITLE = "Customer";

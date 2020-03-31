@@ -309,6 +309,6 @@
     <string name="customer_approval">Customer Approval</string>
     <string name="toolbar_customer">Change Customer</string>
     <string name="sync_cart">Sync Cart</string>
-    <string name="toolbar_order_details">Order Details</string>
+    <string name="toolbar_order_details_title">Order Details</string>
 
 </resources>

@@ -1,8 +1,12 @@
 package com.example.inventrax.falconOMS.pojos;
 
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.internal.LinkedTreeMap;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class SOHeaderDTO {
 
@@ -72,8 +76,54 @@ public class SOHeaderDTO {
     @SerializedName("OrderType")
     private String OrderType;
 
+    @SerializedName("SAPSONumber")
+    private String SAPSONumber;
+
+
+
 
     public SOHeaderDTO() {
+
+    }
+
+    public SOHeaderDTO(Set<? extends Map.Entry<?, ?>> entries) {
+
+        for (Map.Entry<?, ?> entry : entries) {
+
+            switch (entry.getKey().toString()) {
+
+                case "SAPSONumber":
+                    if (entry.getValue() != null) {
+                        this.setSAPSONumber(entry.getValue().toString());
+                    }
+                    break;
+
+                case "SONumber":
+                    if (entry.getValue() != null) {
+                        this.setSONumber(entry.getValue().toString());
+                    }
+                    break;
+
+
+
+                case "SODetails":
+                    if (entry.getValue() != null) {
+                        List<LinkedTreeMap<?, ?>> treemapList = (List<LinkedTreeMap<?, ?>>) entry.getValue();
+                        List<SODetails> lst = new ArrayList<SODetails>();
+                        for (int i = 0; i < treemapList.size(); i++) {
+                            SODetails dto = new SODetails(treemapList.get(i).entrySet());
+                            lst.add(dto);
+                        }
+
+                        this.setSODetails(lst);
+                    }
+                    break;
+
+
+            }
+
+        }
+
 
     }
 
@@ -251,5 +301,13 @@ public class SOHeaderDTO {
 
     public void setOrderType(String orderType) {
         OrderType = orderType;
+    }
+
+    public String getSAPSONumber() {
+        return SAPSONumber;
+    }
+
+    public void setSAPSONumber(String SAPSONumber) {
+        this.SAPSONumber = SAPSONumber;
     }
 }

@@ -6,32 +6,35 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.inventrax.falconOMS.R;
+import com.example.inventrax.falconOMS.adapters.SODetailsAdapter;
 import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
 import com.example.inventrax.falconOMS.common.constants.ErrorMessages;
 import com.example.inventrax.falconOMS.interfaces.ApiInterface;
-import com.example.inventrax.falconOMS.pojos.FullfilmentDTO;
+import com.example.inventrax.falconOMS.model.KeyValues;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
+import com.example.inventrax.falconOMS.pojos.SOHeaderDTO;
+import com.example.inventrax.falconOMS.pojos.SOListDTO;
 import com.example.inventrax.falconOMS.services.RestService;
 import com.example.inventrax.falconOMS.util.DialogUtils;
 import com.example.inventrax.falconOMS.util.ExceptionLoggerUtils;
 import com.example.inventrax.falconOMS.util.NetworkUtils;
 import com.example.inventrax.falconOMS.util.ProgressDialogUtils;
 import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.internal.LinkedTreeMap;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,8 +44,9 @@ public class OrderHistoryDetailsFragment extends Fragment implements View.OnClic
 
     private static final String classCode = "OMS_Android_ComplaintsFragment";
     private View rootView;
-    TextView txtOMSRefNo,txtSAPRefNo,txtCustmerName,txtSourceSite;
-    RecyclerView recyclerView;
+
+    TextView txtOMSRefNo, txtSAPRefNo, txtCustmerName, txtSourceSite;
+    RecyclerView rv_SODetails;
     LinearLayoutManager layoutManager;
     private Common common;
     private ExceptionLoggerUtils exceptionLoggerUtils;
@@ -51,15 +55,23 @@ public class OrderHistoryDetailsFragment extends Fragment implements View.OnClic
     RestService restService;
     private OMSCoreMessage core;
 
+    private int soHeaderId;
+    private String customerName = "";
+
+    MenuItem item;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.order_history_details_fragment, container, false);
 
-        try{
+        try {
             loadFormControls();
-        }catch (Exception e){ }
+        } catch (Exception e) {
+            Log.d("Exd", e.toString());
+        }
 
         return rootView;
 
@@ -67,26 +79,61 @@ public class OrderHistoryDetailsFragment extends Fragment implements View.OnClic
 
     private void loadFormControls() {
 
-        txtOMSRefNo = (TextView)rootView.findViewById(R.id.txtOMSRefNo);
-        txtSAPRefNo = (TextView)rootView.findViewById(R.id.txtSAPRefNo);
-        txtCustmerName = (TextView)rootView.findViewById(R.id.txtCustmerName);
-        txtSourceSite = (TextView)rootView.findViewById(R.id.txtSourceSite);
+        common = new Common();
+        errorMessages = new ErrorMessages();
+        exceptionLoggerUtils = new ExceptionLoggerUtils();
+        restService = new RestService();
+        core = new OMSCoreMessage();
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
+        txtOMSRefNo = (TextView) rootView.findViewById(R.id.txtOMSRefNo);
+        txtSAPRefNo = (TextView) rootView.findViewById(R.id.txtSAPRefNo);
+        txtCustmerName = (TextView) rootView.findViewById(R.id.txtCustmerName);
+        //txtSourceSite = (TextView) rootView.findViewById(R.id.txtSourceSite);
+
+        rv_SODetails = (RecyclerView) rootView.findViewById(R.id.rv_SODetails);
+        rv_SODetails.setHasFixedSize(true);
 
         layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        rv_SODetails.setLayoutManager(layoutManager);
 
+        if (getArguments() != null) {
+            soHeaderId = getArguments().getInt(KeyValues.SELECTED_SOHEADER);
+            customerName = getArguments().getString(KeyValues.SELECTED_CUSTOMER);
+        }
+
+        GetSO();
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        if (menu != null) {
+            menu.clear();
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     public void GetSO() {
 
-        OMSCoreMessage message = new OMSCoreMessage();
-        message = common.SetAuthentication(EndpointConstants.SOPGI_FPS_DTO, getActivity());
+        if (NetworkUtils.isInternetAvailable(getContext())) {
+        } else {
+            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0007);
+            // soundUtils.alertSuccess(LoginActivity.this,getBaseContext());
+            return;
+        }
 
-        FullfilmentDTO oDto = new FullfilmentDTO();
-        oDto.setPrefix(null);
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.SOHeader_DTO, getContext());
+
+        SOListDTO oDto = new SOListDTO();
+        oDto.setSOHeaderID(soHeaderId);
         message.setEntityObject(oDto);
 
         Call<OMSCoreMessage> call = null;
@@ -116,14 +163,28 @@ public class OrderHistoryDetailsFragment extends Fragment implements View.OnClic
                                 common.showAlertType(omsExceptionMessage, getActivity(), getActivity());
                             }
 
-
                         } else {
 
-                            JSONArray getCartHeader = null;
                             try {
 
+                                LinkedTreeMap<?, ?> _lstItem = new LinkedTreeMap<String, String>();
+                                _lstItem = (LinkedTreeMap<String, String>) core.getEntityObject();
+
+                                SOHeaderDTO soHeaderDTO = new SOHeaderDTO();
+
+                                soHeaderDTO = new SOHeaderDTO(_lstItem.entrySet());
+
+                                txtOMSRefNo.setText(soHeaderDTO.getSONumber());
+                                txtSAPRefNo.setText(soHeaderDTO.getSAPSONumber());
+                                txtCustmerName.setText(customerName);
+
+                                if (soHeaderDTO.getSODetails().size() > 0) {
+                                    SODetailsAdapter soDetailsAdapter = new SODetailsAdapter(getActivity(), soHeaderDTO.getSODetails());
+                                    rv_SODetails.setAdapter(soDetailsAdapter);
+                                }
 
                             } catch (Exception e) {
+                                Log.d("dfa", e.toString());
                             }
                             ProgressDialogUtils.closeProgressDialog();
                         }
@@ -166,7 +227,15 @@ public class OrderHistoryDetailsFragment extends Fragment implements View.OnClic
     public void onResume() {
         super.onResume();
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.toolbar_order_details));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.toolbar_order_details_title));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayUseLogoEnabled(false);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.toolbar_orderhistory));
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayUseLogoEnabled(false);
     }
 
