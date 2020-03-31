@@ -78,8 +78,6 @@ public class OrderHistoryDetailsFragment extends Fragment implements View.OnClic
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-
-
     }
 
     public void GetSO() {

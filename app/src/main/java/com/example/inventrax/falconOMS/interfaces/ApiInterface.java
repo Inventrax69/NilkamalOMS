@@ -206,4 +206,14 @@ public interface ApiInterface {
     @POST("Master/Varient")
     Call<OMSCoreMessage> Varient(@Body OMSCoreMessage oRequest);
 
+    @POST("Orders/ActiveCartListWithOffers")
+    Call<OMSCoreMessage> ActiveCartListWithOffers(@Body OMSCoreMessage oRequest);
+
+    @POST("Orders/ProductDiscount")
+    Call<OMSCoreMessage> ProductDiscount(@Body OMSCoreMessage oRequest);
+
+
+
+
+
 }

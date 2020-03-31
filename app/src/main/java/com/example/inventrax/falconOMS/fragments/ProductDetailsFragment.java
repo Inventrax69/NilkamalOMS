@@ -51,6 +51,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.activities.CartActivity;
@@ -69,6 +70,7 @@ import com.example.inventrax.falconOMS.pojos.CartHeaderListDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
 import com.example.inventrax.falconOMS.pojos.PriceDTO;
+import com.example.inventrax.falconOMS.pojos.ProductDiscountDTO;
 import com.example.inventrax.falconOMS.pojos.VariantDTO;
 import com.example.inventrax.falconOMS.pojos.productCatalogs;
 import com.example.inventrax.falconOMS.room.AppDatabase;
@@ -152,6 +154,9 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
     ViewDialog viewDialog;
     String sMaterailId = "", sPartnerId = "";
 
+    List<String> mCodeName;
+    List<String> discountDesc;
+
 
     @Nullable
     @Override
@@ -233,7 +238,6 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         // To disable Bottom navigation bar
         // ((MainActivity) getActivity()).SetNavigationVisibility(false);
 
-
         variantTables = db.variantDAO().getVariants(modelId);
 
         for (VariantTable var : variantTables) {
@@ -298,6 +302,10 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         restService = new RestService();
         core = new OMSCoreMessage();
         cartList = new ArrayList<>();
+
+        mCodeName = new ArrayList<>();
+        discountDesc = new ArrayList<>();
+
 
         // To handle intelli - search result material
         if ((getArguments().getInt(KeyValues.MID)) != 0) {
@@ -366,6 +374,16 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         catalogUrl = variantTable.catalogUrl;
         brochureUrl = variantTable.brochureUrl;
 
+        if (NetworkUtils.isInternetAvailable(getActivity())) {
+
+
+            if (!isFromSearchResult) {
+                productDiscount();
+                getPrice();
+            }
+
+        }
+
         if (specsUrl.equals("")) {
             txtDownloadSepcs.setVisibility(View.GONE);
         } else {
@@ -398,11 +416,6 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
             cbPriority.setChecked(false);
         }
 
-        if (NetworkUtils.isInternetAvailable(getActivity())) {
-            getPrice();
-            getVariants();
-
-        }
 
     }
 
@@ -615,11 +628,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                                             selectedVariant.discountId = variantDTO.getDiscountId();
                                             selectedVariant.discountCount = variantDTO.getDiscountCount();
 
-                                            if (Integer.parseInt(variantDTO.getDiscountId()) > 0) {
-                                                availOffer.setVisibility(View.VISIBLE);
-                                            } else {
-                                                availOffer.setVisibility(View.GONE);
-                                            }
+                                            //productDiscount();
 
                                         }
                                     }
@@ -650,6 +659,108 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
             try {
                 ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", getActivity());
 
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
+        }
+    }
+
+    public void productDiscount() {
+
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, getActivity());
+
+        ProductDiscountDTO dto = new ProductDiscountDTO();
+
+        if (!customerId.equals("")) {
+            dto.setCustomerID(customerId);
+        } else {
+            dto.setCustomerID("0");
+        }
+
+        dto.setMaterialMasterID(materialId);
+        dto.setModelID("0");
+
+        message.setEntityObject(dto);
+
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService =
+                RestService.getClient().create(ApiInterface.class);
+
+        ProgressDialogUtils.showProgressDialog("Please wait..");
+
+        call = apiService.ProductDiscount(message);
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if ((core.getType().toString().equals("Exception"))) {
+
+                            OMSExceptionMessage omsExceptionMessage = null;
+
+                            for (OMSExceptionMessage oms : core.getOMSMessages()) {
+                                omsExceptionMessage = oms;
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showAlertType(omsExceptionMessage, getActivity(), getActivity());
+                            }
+                            availOffer.setVisibility(View.GONE);
+                            ProgressDialogUtils.closeProgressDialog();
+
+
+                        } else {
+
+                            try {
+
+                                mCodeName = new ArrayList<>();
+                                discountDesc = new ArrayList<>();
+
+                                JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
+                                for (int i = 0; i < getCartHeader.length(); i++) {
+                                    mCodeName.add(getCartHeader.getJSONObject(i).getString("MCode"));
+                                    discountDesc.add(getCartHeader.getJSONObject(i).getString("Remarks"));
+
+                                }
+                                ProgressDialogUtils.closeProgressDialog();
+
+                                if (mCodeName.size() > 0) {
+                                    availOffer.setVisibility(View.VISIBLE);
+                                } else {
+                                    availOffer.setVisibility(View.GONE);
+                                }
+
+
+                            } catch (Exception e) {
+                                ProgressDialogUtils.closeProgressDialog();
+
+                            }
+                        }
+                    }
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    if (NetworkUtils.isInternetAvailable(getActivity())) {
+                        DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
+                    } else {
+                        DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+            });
+        } catch (Exception ex) {
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", getActivity());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -740,7 +851,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                                                             cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                             cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                             cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),""));
                                                 }
                                             }
 
@@ -898,7 +1009,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                                             db.cartDetailsDAO().insert(new CartDetails("0", selectedVariant.materialID, selectedVariant.mCode,
                                                     selectedVariant.mDescription, "", etQty.getText().toString(), selectedVariantImage,
                                                     "0", false, "0", Integer.valueOf(partnerId), 1, prioity, "0", "0", null,
-                                                    "0", "", "0", "0", "0", "0"));
+                                                    "0", "", "0", "0", "0", "0",""));
                                         } else {
                                             String qty = db.cartDetailsDAO().getQantity(selectedVariant.materialID, partnerId, "0");
                                             int total_qty = Integer.parseInt(qty) + Integer.parseInt(etQty.getText().toString());
@@ -910,7 +1021,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                                             db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeader.cartHeaderID), selectedVariant.materialID, selectedVariant.mCode,
                                                     selectedVariant.mDescription, "", etQty.getText().toString(), selectedVariantImage,
                                                     "0", false, "0", Integer.valueOf(partnerId), 1, prioity, "0", "0", null,
-                                                    "0", "", "0", "0", "0", "0"));
+                                                    "0", "", "0", "0", "0", "0",""));
                                         } else {
                                             String qty = db.cartDetailsDAO().getQantity(selectedVariant.materialID, partnerId, String.valueOf(cartHeader.cartHeaderID));
                                             int total_qty = Integer.parseInt(qty) + Integer.parseInt(etQty.getText().toString());
@@ -985,8 +1096,10 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                 break;
 
             case R.id.availOffer:
-                if (NetworkUtils.isInternetAvailable(getActivity()))
-                    showAvailableOffers();
+                if (NetworkUtils.isInternetAvailable(getActivity())) {
+                    if (mCodeName.size() > 0 && discountDesc.size() > 0)
+                        showAvailableOffers(mCodeName, discountDesc);
+                }
                 break;
 
 
@@ -1122,7 +1235,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void showAvailableOffers() {
+    private void showAvailableOffers(List<String> mCode, List<String> discountDesc) {
 
         final Dialog mDialog = new Dialog(getContext());
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1135,11 +1248,11 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         lstoffers.setLayoutManager(linearLayoutManager);
         lstoffers.setHasFixedSize(true);
 
-        ArrayList<String> scAndD = new ArrayList<>();
+        //ArrayList<String> scAndD = new ArrayList<>();
 
-        scAndD.add(selectedVariant.discountDesc);
+        //scAndD.add(selectedVariant.discountDesc);
 
-        OffersAdapter adapter = new OffersAdapter(getContext(), scAndD, nested);
+        OffersAdapter adapter = new OffersAdapter(getActivity(), discountDesc, mCode, nested);
         lstoffers.setAdapter(adapter);
         lstoffers.setNestedScrollingEnabled(false);
 
@@ -1260,6 +1373,10 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                         } else {
                             Toast.makeText(getActivity(), "No customer are there", Toast.LENGTH_SHORT).show();
                         }*/
+
+                        getPrice();
+                        productDiscount();
+
                         dialog.dismiss();
                     }
                 });

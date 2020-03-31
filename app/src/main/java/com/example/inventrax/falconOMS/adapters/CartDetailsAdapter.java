@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Service;
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.common.Common;
@@ -35,6 +37,7 @@ import com.example.inventrax.falconOMS.pojos.CartDetailsListDTO;
 import com.example.inventrax.falconOMS.pojos.CartHeaderListDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
+import com.example.inventrax.falconOMS.pojos.ProductDiscountDTO;
 import com.example.inventrax.falconOMS.room.AppDatabase;
 import com.example.inventrax.falconOMS.room.CartDetails;
 import com.example.inventrax.falconOMS.room.RoomAppDatabase;
@@ -68,6 +71,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
     private AppDatabase db;
     private Drawable editDrawable, updateDrawable, updatePriority;
     private TextView txtOrderFulfilment;
+    private TextView txtApplyOffers;
     private Common common;
     private RestService restService;
     private OMSCoreMessage core;
@@ -86,6 +90,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
         updateDrawable = context.getResources().getDrawable(R.drawable.ic_refresh_black_24dp);
         updatePriority = context.getResources().getDrawable(R.drawable.ic_priority);
         txtOrderFulfilment = (TextView) ((Activity) context).findViewById(R.id.txtOrderFulfilment);
+        txtApplyOffers = (TextView) ((Activity) context).findViewById(R.id.txtApplyOffers);
         isUpdatedBoolean = new ArrayList<>();
         for (int i = 0; i < cartItemList.size(); i++) {
             isUpdatedBoolean.add(true);
@@ -114,11 +119,14 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
         final boolean getUpdateCount = db.cartHeaderDetailsDao().getUpdateCount();
         if (!getUpdateCount) {
             viewHolder.txtPrice.setText("");
+            viewHolder.txtOriginalPrice.setText("");
             txtOrderFulfilment.setText(context.getString(R.string.sync_cart));
+            txtApplyOffers.setVisibility(View.INVISIBLE);
             viewHolder.txtOfferAvaiable.setVisibility(View.INVISIBLE);
             viewHolder.txtAvailableItem.setVisibility(View.INVISIBLE);
         } else {
             txtOrderFulfilment.setText(context.getString(R.string.order_fulfilment));
+            txtApplyOffers.setVisibility(View.VISIBLE);
             viewHolder.txtOfferAvaiable.setVisibility(View.VISIBLE);
             viewHolder.txtAvailableItem.setVisibility(View.VISIBLE);
             Animation anim = new AlphaAnimation(0.0f, 1.0f);
@@ -128,13 +136,18 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
             anim.setRepeatCount(Animation.INFINITE);
             viewHolder.txtAvailableItem.startAnimation(anim);
             viewHolder.txtPrice.setText(Html.fromHtml("Rs. :" + item.getOfferValue()));
+            if (item.getTotalPrice().equals(item.getOfferValue()))
+                viewHolder.txtOriginalPrice.setText(Html.fromHtml(""));
+            else
+                viewHolder.txtOriginalPrice.setText(Html.fromHtml(item.getTotalPrice()));
+            viewHolder.txtOriginalPrice.setPaintFlags(viewHolder.txtOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
           /*  if (item.getTotalPrice().equals(item.getOfferValue()))
                 viewHolder.txtPrice.setText(Html.fromHtml("Rs. :" + item.getTotalPrice()));
             else
                 viewHolder.txtPrice.setText(Html.fromHtml("Rs. : <strike>" + item.getTotalPrice() + "</strike> " + item.getOfferValue()));*/
         }
 
-       // viewHolder.isItemInactive.setVisibility(View.GONE);
+        // viewHolder.isItemInactive.setVisibility(View.GONE);
 
         if (item.getIsInActive() != null) {
             if (item.getIsInActive()) {
@@ -152,6 +165,12 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
             viewHolder.txtOfferAvaiable.setVisibility(View.VISIBLE);
         } else {
             viewHolder.txtOfferAvaiable.setVisibility(View.INVISIBLE);
+        }
+
+        if (!item.getDiscountID().equals("") && !item.getDiscountID().equals("0")) {
+            viewHolder.ivAppliedOffer.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.ivAppliedOffer.setVisibility(View.GONE);
         }
 
         if (item.getMaterialPriorityID() == 1) {
@@ -275,6 +294,12 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
             }
         });
 
+        viewHolder.ivAppliedOffer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, cartItemList.get(i).getDiscountText(), Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
@@ -417,9 +442,9 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
 
     public class SubItemViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtItemName, txtItemDesc, txtPrice, isItemInactive, txtAvailableItem, txtOfferAvaiable;
+        private TextView txtItemName, txtItemDesc, txtPrice, txtOriginalPrice, isItemInactive, txtAvailableItem, txtOfferAvaiable;
         private EditText etQtyCart;
-        private ImageView ivItem, ivDeleteItem, imageEdit, txtPriority, ivAvailableItem;
+        private ImageView ivItem, ivDeleteItem, imageEdit, txtPriority, ivAppliedOffer;
 
         public SubItemViewHolder(View view) {
             super(view);
@@ -427,6 +452,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
             txtItemName = (TextView) view.findViewById(R.id.txtItemName);
             txtItemDesc = (TextView) view.findViewById(R.id.txtItemDesc);
             txtPrice = (TextView) view.findViewById(R.id.txtPrice);
+            txtOriginalPrice = (TextView) view.findViewById(R.id.txtOriginalPrice);
             txtAvailableItem = (TextView) view.findViewById(R.id.txtAvailableItem);
             txtOfferAvaiable = (TextView) view.findViewById(R.id.txtOfferAvaiable);
             txtPriority = (ImageView) view.findViewById(R.id.txtPriority);
@@ -434,7 +460,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
             ivItem = (ImageView) view.findViewById(R.id.ivItem);
             imageEdit = (ImageView) view.findViewById(R.id.imageEdit);
             ivDeleteItem = (ImageView) view.findViewById(R.id.ivDeleteItem);
-            ivAvailableItem = (ImageView) view.findViewById(R.id.ivAvailableItem);
+            ivAppliedOffer = (ImageView) view.findViewById(R.id.ivAppliedOffer);
             etQtyCart = (EditText) view.findViewById(R.id.etQtyCart);
 
 

@@ -51,6 +51,7 @@ import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
 import com.example.inventrax.falconOMS.common.constants.ErrorMessages;
 import com.example.inventrax.falconOMS.interfaces.ApiInterface;
 import com.example.inventrax.falconOMS.model.KeyValues;
+import com.example.inventrax.falconOMS.pojos.ApplyOffersDTO;
 import com.example.inventrax.falconOMS.pojos.CartDetailsListDTO;
 import com.example.inventrax.falconOMS.pojos.CartHeaderListDTO;
 import com.example.inventrax.falconOMS.pojos.CartHeaderListResponseDTO;
@@ -60,6 +61,8 @@ import com.example.inventrax.falconOMS.pojos.CustomerPartnerDTO;
 import com.example.inventrax.falconOMS.pojos.FullfilmentDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
+import com.example.inventrax.falconOMS.pojos.ProductDiscountDTO;
+import com.example.inventrax.falconOMS.pojos.VariantDTO;
 import com.example.inventrax.falconOMS.pojos.productCatalogs;
 import com.example.inventrax.falconOMS.room.AppDatabase;
 import com.example.inventrax.falconOMS.room.CartDetails;
@@ -106,7 +109,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
     private SearchableSpinner spinnerSelectCustomer;
     private ImageView ivStartShop;
     LinearLayoutManager linearLayoutManager;
-    TextView txtAvailableCL, txtTotal, txtOrderFulfilment, txtConfirmOrder;
+    TextView txtAvailableCL, txtTotal, txtOrderFulfilment, txtConfirmOrder, txtApplyOffers;
     BottomSheetBehavior behavior;
     private CheckBox cbPartialFulfilment, cbSingleDelivery, cbVehicleTypePreference;
     private Button btnProceed;
@@ -138,6 +141,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
     int cartHeaderId, custumerId;
     Dialog approvalDailog;
     List<Integer> headersList;
+
+    private boolean isOfferApplied=false;
 
     @Nullable
     @Override
@@ -188,6 +193,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
             txtTotal = (TextView) rootView.findViewById(R.id.txtTotal);
             txtOrderFulfilment = (TextView) rootView.findViewById(R.id.txtOrderFulfilment);
             txtConfirmOrder = (TextView) rootView.findViewById(R.id.txtConfirmOrder);
+            txtApplyOffers = (TextView) rootView.findViewById(R.id.txtApplyOffers);
 
             txtTotalAmt = (TextView) rootView.findViewById(R.id.txtTotalAmt);
             txtTaxes = (TextView) rootView.findViewById(R.id.txtTaxes);
@@ -208,6 +214,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
             btnProceed.setOnClickListener(this);
             txtOrderFulfilment.setOnClickListener(this);
             txtConfirmOrder.setOnClickListener(this);
+            txtApplyOffers.setOnClickListener(this);
+
 
             // bottom sheet
             View bottomSheet = rootView.findViewById(R.id.bottom_sheet);
@@ -508,76 +516,102 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                 if (NetworkUtils.isInternetAvailable(getActivity())) {
 
-                    if (cartHeaderList.size() > 1 && customerId.isEmpty() && !userRoleName.equals("DTD")) {
-                        SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0023, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
-                        return;
-                    }
+                    if(isOfferApplied) {
 
-                    if (db.cartHeaderDetailsDao().getUpdateCount()) {
+                        if (cartHeaderList.size() > 1 && customerId.isEmpty() && !userRoleName.equals("DTD")) {
+                            SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0023, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
+                            return;
+                        }
 
-                        vehiclesList = new ArrayList<>();
-                        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                        frame.setVisibility(View.VISIBLE);
+                        if (db.cartHeaderDetailsDao().getUpdateCount()) {
 
-                        if (userRoleName.equals("DTD")) {
+                            vehiclesList = new ArrayList<>();
+                            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                            frame.setVisibility(View.VISIBLE);
 
-                            if (db.cartHeaderDAO().getTaxesList().size() == 1) {
-                                txtTotalAmt.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPrice())));
-                                txtTaxes.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTaxes())));
-                                txtTotalAmtTax.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPriceWithTax())));
+                            if (userRoleName.equals("DTD")) {
+
+                                if (db.cartHeaderDAO().getTaxesList().size() == 1) {
+                                    txtTotalAmt.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPrice())));
+                                    txtTaxes.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTaxes())));
+                                    txtTotalAmtTax.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPriceWithTax())));
+                                }
+
+                            } else {
+
+                                String customerId1 = customerId;
+
+                                if (customerId.isEmpty()) {
+                                    customerId1 = String.valueOf(cartHeaderList.get(0).getCustomerID());
+                                }
+
+                                if (db.cartHeaderDAO().getTaxesListByCustomer(customerId1).size() == 1) {
+                                    txtTotalAmt.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPrice())));
+                                    txtTaxes.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTaxes())));
+                                    txtTotalAmtTax.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPriceWithTax())));
+                                }
+
                             }
 
                         } else {
 
-                            String customerId1 = customerId;
+                            cartList = new ArrayList<>();
 
-                            if (customerId.isEmpty()) {
-                                customerId1 = String.valueOf(cartHeaderList.get(0).getCustomerID());
+                            if (db.cartDetailsDAO().getCartItemsWithOutApprovals() != null) {
+
+                                List<CartDetails> cartDetailsList = new ArrayList<>();
+                                cartDetailsList = db.cartDetailsDAO().getCartItemsWithOutApprovals();
+                                productCatalogs cDto;
+                                for (int i = 0; i < cartDetailsList.size(); i++) {
+                                    cDto = new productCatalogs();
+                                    cDto.setMaterialMasterID(cartDetailsList.get(i).materialID);
+                                    cDto.setMCode(cartDetailsList.get(i).mCode);
+                                    cDto.setQuantity(cartDetailsList.get(i).quantity);
+                                    cDto.setCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
+                                    cDto.setImagePath(cartDetailsList.get(i).imgPath);
+                                    cDto.setPrice(cartDetailsList.get(i).price);
+                                    cDto.setShipToPartyCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
+                                    cDto.setCartDetailsID("0");
+                                    cDto.setMaterialPriorityID(String.valueOf(cartDetailsList.get(i).isPriority));
+                                    cDto.setDeliveryDate(cartDetailsList.get(i).deliveryDate);
+                                    cDto.setCartHeaderID(Integer.parseInt(cartDetailsList.get(i).cartHeaderId));
+                                    cartList.add(cDto);
+                                }
+
+                                addToCart();
+
                             }
-
-                            if (db.cartHeaderDAO().getTaxesListByCustomer(customerId1).size() == 1) {
-                                txtTotalAmt.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPrice())));
-                                txtTaxes.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTaxes())));
-                                txtTotalAmtTax.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPriceWithTax())));
-                            }
-
+                            // Toast.makeText(getActivity(), "Cart has changed please sync add to cart", Toast.LENGTH_SHORT).show();
                         }
-
-                    } else {
-
-                        cartList = new ArrayList<>();
-
-                        if (db.cartDetailsDAO().getCartItemsWithOutApprovals() != null) {
-
-                            List<CartDetails> cartDetailsList = new ArrayList<>();
-                            cartDetailsList = db.cartDetailsDAO().getCartItemsWithOutApprovals();
-                            productCatalogs cDto;
-                            for (int i = 0; i < cartDetailsList.size(); i++) {
-                                cDto = new productCatalogs();
-                                cDto.setMaterialMasterID(cartDetailsList.get(i).materialID);
-                                cDto.setMCode(cartDetailsList.get(i).mCode);
-                                cDto.setQuantity(cartDetailsList.get(i).quantity);
-                                cDto.setCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
-                                cDto.setImagePath(cartDetailsList.get(i).imgPath);
-                                cDto.setPrice(cartDetailsList.get(i).price);
-                                cDto.setShipToPartyCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
-                                cDto.setCartDetailsID("0");
-                                cDto.setMaterialPriorityID(String.valueOf(cartDetailsList.get(i).isPriority));
-                                cDto.setDeliveryDate(cartDetailsList.get(i).deliveryDate);
-                                cDto.setCartHeaderID(Integer.parseInt(cartDetailsList.get(i).cartHeaderId));
-                                cartList.add(cDto);
-                            }
-
-                            addToCart();
-
-                        }
-                        // Toast.makeText(getActivity(), "Cart has changed please sync add to cart", Toast.LENGTH_SHORT).show();
+                    }else {
+                        SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0026, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
                     }
                 } else {
                     SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0007, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
                 }
 
                 break;
+
+            case R.id.txtApplyOffers:
+
+                if (NetworkUtils.isInternetAvailable(getActivity())) {
+
+                    //Toast.makeText(getActivity(), "offer", Toast.LENGTH_SHORT).show();
+                    if (!customerId.equals("")) {
+                        CartHeader cartHeader = db.cartHeaderDAO().getCartHeaderByCustomerID(Integer.parseInt(customerId));
+                        applyOffer(cartHeader.cartHeaderID);
+                    } else {
+                        SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0023, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
+                    }
+
+                } else {
+
+                    SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0007, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
+                }
+
+
+                break;
+
 
             case R.id.btnProceed:
 
@@ -680,6 +714,138 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
         }
     }
+
+    public void applyOffer(final int cartHeaderID) {
+
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, getActivity());
+
+        ApplyOffersDTO applyOffersDTO = new ApplyOffersDTO();
+        applyOffersDTO.setCartHeaderID(String.valueOf(cartHeaderID));
+        if (userRoleName.equals("DTD")) {
+            if (!customerId.equals("")) {
+
+                applyOffersDTO.setCustomerID(customerId);
+
+            } else {
+                Toast.makeText(getActivity(), "Please select customer", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } else {
+            applyOffersDTO.setCustomerID("0");
+        }
+        applyOffersDTO.setHandheldRequest(true);
+        applyOffersDTO.setSearchString(null);
+        applyOffersDTO.setPageIndex(1);
+        applyOffersDTO.setPageSize(5);
+        applyOffersDTO.setUserID(userId);
+
+        message.setEntityObject(applyOffersDTO);
+
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService =
+                RestService.getClient().create(ApiInterface.class);
+
+        ProgressDialogUtils.showProgressDialog("Please wait..");
+
+        call = apiService.ActiveCartListWithOffers(message);
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if ((core.getType().toString().equals("Exception"))) {
+
+                            OMSExceptionMessage omsExceptionMessage = null;
+
+                            for (OMSExceptionMessage oms : core.getOMSMessages()) {
+                                omsExceptionMessage = oms;
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showAlertType(omsExceptionMessage, getActivity(), getActivity());
+                            }
+
+                            isOfferApplied = false;
+                            ProgressDialogUtils.closeProgressDialog();
+
+
+                        } else {
+
+                            db.cartDetailsDAO().deleteAll();
+                            db.cartHeaderDAO().deleteAll();
+
+                            try {
+
+                                JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
+
+                                CartHeaderListDTO cartHeaderListDTO;
+                                CartDetailsListDTO cart;
+
+                                for (int i = 0; i < getCartHeader.length(); i++) {
+
+                                    for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
+
+                                        cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
+                                        if (cartHeaderListDTO.getListCartDetailsList().size() > 0) {
+                                            db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
+                                                    cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
+                                                    cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
+                                        }
+
+                                        for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
+                                            cart = cartHeaderListDTO.getListCartDetailsList().get(k);
+                                            db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
+                                                    cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
+                                                    cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
+                                                    cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
+                                                    cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
+                                                    cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice()));
+                                        }
+                                    }
+                                }
+
+                                isOfferApplied = true;
+
+                                loadFormControls();
+
+                                ProgressDialogUtils.closeProgressDialog();
+
+                            } catch (Exception e) {
+                                ProgressDialogUtils.closeProgressDialog();
+
+                            }
+                        }
+                    }
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    if (NetworkUtils.isInternetAvailable(getActivity())) {
+                        DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
+                    } else {
+                        DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+            });
+        } catch (Exception ex) {
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", getActivity());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
+        }
+    }
+
 
     public void goToProductCatalog() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -857,7 +1023,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                                     for (int i = 0; i < getCartHeader.length(); i++) {
 
-                                        TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() { };
+                                        TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() {
+                                        };
 
                                         String CustomerID = getCartHeader.getJSONObject(i).getString("CustomerID");
                                         String CustomerName = getCartHeader.getJSONObject(i).getString("CustomerName");
@@ -907,7 +1074,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                             cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                             cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                             cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice()));
                                                 }
                                             }
                                         }
@@ -1016,8 +1183,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                             ProgressDialogUtils.closeProgressDialog();
 
-                            if(approvalDailog != null && approvalDailog.isShowing())
-                            approvalDailog.dismiss();
+                            if (approvalDailog != null && approvalDailog.isShowing())
+                                approvalDailog.dismiss();
 
                            /* getFragmentManager()
                                     .beginTransaction()
@@ -1035,7 +1202,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                 db.cartHeaderDAO().deleteCartHeader(String.valueOf(cartHeaderID));
                                 db.cartDetailsDAO().deleteCartDetailsOfCartDetails(cartHeaderID);
 
-                                if(approvalDailog != null && approvalDailog.isShowing())
+                                if (approvalDailog != null && approvalDailog.isShowing())
                                     approvalDailog.dismiss();
 
                                /* getFragmentManager()
@@ -1044,7 +1211,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                         .attach(CartFragment.this)
                                         .commit();*/
 
-                               loadFormControls();
+                                loadFormControls();
 
                             } catch (Exception ex) {
                                 ProgressDialogUtils.closeProgressDialog();
@@ -1188,7 +1355,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                                 for (int i = 0; i < getCartHeader.length(); i++) {
 
-                                    TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() { };
+                                    TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() {
+                                    };
 
                                     String CustomerID = getCartHeader.getJSONObject(i).getString("CustomerID");
                                     String CustomerName = getCartHeader.getJSONObject(i).getString("CustomerName");
@@ -1240,7 +1408,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice()));
                                             }
                                         }
                                     }
@@ -1369,7 +1537,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                                 for (int i = 0; i < getCartHeader.length(); i++) {
 
-                                    TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() { };
+                                    TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() {
+                                    };
 
                                     for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
 
@@ -1394,7 +1563,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice()));
                                             }
                                         }
                                     }
@@ -1531,7 +1700,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice()));
                                             }
                                         }
                                     }
@@ -1851,7 +2020,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                     cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                     cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                     cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                    cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode()));
+                                                    cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice()));
                                         }
                                     }
                                 }

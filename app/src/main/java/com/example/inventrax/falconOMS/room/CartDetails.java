@@ -61,10 +61,10 @@ public class CartDetails implements Serializable {
     public boolean isInActive;
 
     @ColumnInfo(name = "isPriority")
-    public int isPriority=0;
+    public int isPriority = 0;
 
     @ColumnInfo(name = "isUpdated")
-    public int isUpdated=0;
+    public int isUpdated = 0;
 
     @ColumnInfo(name = "discountID")
     public String discountID;
@@ -84,13 +84,16 @@ public class CartDetails implements Serializable {
     @ColumnInfo(name = "HSNCode")
     public String HSNCode;
 
+    @ColumnInfo(name = "discountedPrice")
+    public String discountedPrice;
 
 
-    public CartDetails(String cartHeaderId,String materialID, String mCode, String mDescription,
+
+    public CartDetails(String cartHeaderId, String materialID, String mCode, String mDescription,
                        String deliveryDate, String quantity, String imgPath,
-                       String price, boolean isInActive, String cartDetailsId,int customerId,int isUpdated,int isPriority,
-                       String totalPrice,String offerValue,String offerItemCartDetailsID,
-                       String discountID,String discountText,String gst,String tax,String subtotal,String HSNCode) {
+                       String price, boolean isInActive, String cartDetailsId, int customerId, int isUpdated, int isPriority,
+                       String totalPrice, String offerValue, String offerItemCartDetailsID,
+                       String discountID, String discountText, String gst, String tax, String subtotal, String HSNCode, String discountedPrice) {
         this.materialID = materialID;
         this.mCode = mCode;
         this.mDescription = mDescription;
@@ -102,21 +105,22 @@ public class CartDetails implements Serializable {
         this.cartHeaderId = cartHeaderId;
         this.cartDetailsId = cartDetailsId;
         this.customerId = customerId;
-        this.isUpdated=isUpdated;
-        this.isPriority=isPriority;
-        this.totalPrice=totalPrice;
-        this.offerValue=offerValue;
-        this.offerItemCartDetailsID=offerItemCartDetailsID;
-        this.discountID=discountID;
-        this.discountText=discountText;
-        this.gst=gst;
-        this.tax=tax;
-        this.subtotal=subtotal;
-        this.HSNCode=HSNCode;
+        this.isUpdated = isUpdated;
+        this.isPriority = isPriority;
+        this.totalPrice = totalPrice;
+        this.offerValue = offerValue;
+        this.offerItemCartDetailsID = offerItemCartDetailsID;
+        this.discountID = discountID;
+        this.discountText = discountText;
+        this.gst = gst;
+        this.tax = tax;
+        this.subtotal = subtotal;
+        this.HSNCode = HSNCode;
+        this.discountedPrice = discountedPrice;
     }
 
     @Ignore
-    public CartDetails(String materialID, String mCode, String quantity, String imgPath, String price, String cartHeaderId,String cartDetailsId) {
+    public CartDetails(String materialID, String mCode, String quantity, String imgPath, String price, String cartHeaderId, String cartDetailsId) {
         this.materialID = materialID;
         this.mCode = mCode;
         this.quantity = quantity;
@@ -127,6 +131,7 @@ public class CartDetails implements Serializable {
     }
 
     @Ignore
-    public CartDetails() { }
+    public CartDetails() {
+    }
 
 }
