@@ -601,7 +601,13 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                         CartHeader cartHeader = db.cartHeaderDAO().getCartHeaderByCustomerID(Integer.parseInt(customerId));
                         applyOffer(cartHeader.cartHeaderID);
                     } else {
-                        SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0023, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
+
+                        if (userRoleName.equals("DTD")) {
+                            applyOffer(0);
+                        }else {
+                            SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0023, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
+                        }
+
                     }
 
                 } else {
@@ -722,7 +728,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
         ApplyOffersDTO applyOffersDTO = new ApplyOffersDTO();
         applyOffersDTO.setCartHeaderID(String.valueOf(cartHeaderID));
-        if (userRoleName.equals("DTD")) {
+        if (!userRoleName.equals("DTD")) {
             if (!customerId.equals("")) {
 
                 applyOffersDTO.setCustomerID(customerId);
