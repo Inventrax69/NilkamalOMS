@@ -202,7 +202,7 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
             @Override
             public void onItemClick(int pos) {
 
-                if (lstItem.size() > 0) {
+                if (soListAdapter.getItemCount() > 0) {
                     Bundle bundle = new Bundle();
                     searchView.setIconified(true);
                     searchView.clearFocus();
@@ -404,17 +404,21 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
 
                                     paging = new Paging(_lstItem.entrySet());
 
+                                    lstItem = new ArrayList<>();
                                     lstItem = paging.getResults();
 
                                     double totalPages = Double.parseDouble(paging.getPageNumber());
                                     TOTAL_PAGES = Integer.parseInt(String.valueOf(totalPages).split("[.]", 2)[0]);
 
                                 } catch (Exception e) {
-                                    common.showUserDefinedAlertType("No items found", getActivity(), getContext(), "Warning");
+                                    common.showUserDefinedAlertType("Order list is empty", getActivity(), getContext(), "Warning");
                                     // logException();
+                                    return;
                                 }
 
-                                soListAdapter.addAll(lstItem);
+                                if(lstItem.size()>0) {
+                                    soListAdapter.addAll(lstItem);
+                                }
 
                                 if (fromSearch) {
                                     soListAdapter.clear();
@@ -524,7 +528,7 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
                                 try {
 
                                     paging = new Paging(_lstItem.entrySet());
-
+                                    lstItem = new ArrayList<>();
                                     lstItem = paging.getResults();
 
                                     double totalPages = Double.parseDouble(paging.getPageNumber());
@@ -535,10 +539,18 @@ public class OrderHistoryFragment extends Fragment implements View.OnClickListen
                                     // logException();
                                 }
 
+
+
                                 soListAdapter.addAll(lstItem);
 
                                 if (currentPage != TOTAL_PAGES) soListAdapter.addLoadingFooter();
                                 else isLastPage = true;
+
+                                if(lstItem.size()==0){
+                                    soListAdapter.removeLoadingFooter();
+                                    isLastPage = true;
+                                    isLoading = false;
+                                }
 
                                 ProgressDialogUtils.closeProgressDialog();
 

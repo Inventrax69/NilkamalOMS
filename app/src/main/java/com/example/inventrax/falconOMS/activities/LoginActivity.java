@@ -479,18 +479,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                     if (lstItem != null && lstItem.size() > 0) {
 
-/*
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
-*/
-
                                         new AsyncTask<Void, Integer, String>() {
 
                                             @Override
                                             protected String doInBackground(Void... voids) {
                                                 synchronized (this) {
 
+                                                    // deleting model(item table) table and variant tables
                                                     db.itemDAO().deleteAll();
                                                     db.variantDAO().deleteAll();
 
@@ -519,8 +514,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                     }
 
                                                     synchronized (this) {
+                                                        // inserting all the items list (Models list)
                                                         db.itemDAO().insertAll(itemTableList);
                                                     }
+                                                    // inserting all the variants in variant table
                                                     db.variantDAO().insertAll(variantTableList);
 
 
@@ -672,13 +669,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     customerIDs = sp.getString(KeyValues.CUSTOMER_IDS, "");
                                     userId = sp.getString(KeyValues.USER_ID, "");
 
-/*                                    JSONArray jsonArray = null;
-                                    try {
-                                        jsonArray = new JSONArray(customerIDs);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }*/
-
+                                    // deleting existed user table
                                     db.userDivisionCustDAO().deleteAll();
 
                                     for (CustomerListDTO dd : itemList.getResults()) {
@@ -691,18 +682,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                         db.userDivisionCustDAO().insert(new UserDivisionCustTable(dd.getCustomerID(), dd.getDivisionID().split("[.]")[0]));
 
-/*                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            try {
-                                                if (jsonArray.getString(i).equals(dd.getCustomerID())) {
-
-                                                    if (jsonArray.getString(i) != null) {
-                                                    }
-                                                }
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                                dialog.dismiss();
-                                            }
-                                        }*/
                                     }
 
                                     customerList = lstDto;
@@ -714,6 +693,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             protected String doInBackground(Void... voids) {
                                                 synchronized (this) {
                                                     db.customerDAO().deleteAll();
+                                                    // inserting customers into local database
                                                     db.customerDAO().insertAll(customerTables);
 
                                                     Date date = Calendar.getInstance().getTime();
@@ -724,6 +704,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                     String todaysdate = formatter.format(date);
 
                                                     sharedPreferencesUtils.savePreference(KeyValues.CUSTOMER_MASTER_SYNC_TIME, todaysdate);
+                                                    // service call to get list of Models and Variants under the model
                                                     getProductCatalog();
 
                                                 }
@@ -883,6 +864,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                     login = new LoginDTO((((LinkedTreeMap<String, String>) core.getEntityObject()).entrySet()));
 
+                                    // Storing user information into shared preference
                                     if (login.getUserId() != null && login.getUserName() != null && login.getCustomers() != null) {
                                         sharedPreferencesUtils.savePreference(KeyValues.USER_ID, login.getUserId().split("[.]")[0]);
                                         sharedPreferencesUtils.savePreference(KeyValues.USER_NAME, login.getUserName());
@@ -898,8 +880,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     sharedPreferencesUtils.savePreference(KeyValues.TIMER, 0L);
                                     sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, false);
                                     sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, false);
-
-                                    /*  if(db.itemDAO().getCount()<=0 && db.customerDAO().getCustomerCount()<=0) {*/
 
                                     db.cartDetailsDAO().deleteAll();
                                     db.cartHeaderDAO().deleteAll();
@@ -923,6 +903,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         @Override
                                         protected String doInBackground(Void... voids) {
                                             synchronized (this) {
+                                                // service call to get the customer under the user
                                                 getCustomerList();
                                             }
                                             return null;

@@ -516,14 +516,15 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                 if (NetworkUtils.isInternetAvailable(getActivity())) {
 
-                    if(isOfferApplied) {
-
                         if (cartHeaderList.size() > 1 && customerId.isEmpty() && !userRoleName.equals("DTD")) {
                             SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0023, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
                             return;
                         }
 
                         if (db.cartHeaderDetailsDao().getUpdateCount()) {
+
+                            if(isOfferApplied){
+
 
                             vehiclesList = new ArrayList<>();
                             behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -552,6 +553,9 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                 }
 
                             }
+                        }else {
+                            SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0026, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
+                        }
 
                         } else {
 
@@ -583,9 +587,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                             }
                             // Toast.makeText(getActivity(), "Cart has changed please sync add to cart", Toast.LENGTH_SHORT).show();
                         }
-                    }else {
-                        SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0026, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
-                    }
+
                 } else {
                     SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0007, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
                 }

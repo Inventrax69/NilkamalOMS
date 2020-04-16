@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     List<CartDetails> cartDetails;
     List<productCatalogs> cartList = null;
     AppDatabase db;
-    String userName = "", userId = "", cartHeaderId = "";
+    String userName = "", userId = "", cartHeaderId = "",userRoleName ="";
     private String  timeStamp = "";
     private static CountDownTimer countDownTimer;
     int c_width, c_height;
@@ -304,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = this.getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
         userName = sp.getString(KeyValues.USER_NAME, "");
         userId = sp.getString(KeyValues.USER_ID, "");
+        userRoleName = sp.getString(KeyValues.USER_ROLE_NAME, "");
         cartHeaderId = sp.getString(KeyValues.CART_HEADERID, "");
 
         errorMessages = new ErrorMessages();
@@ -431,8 +432,6 @@ public class MainActivity extends AppCompatActivity {
         Log.v("ABCDE", "" + todaysdate);
 
         if (NetworkUtils.isInternetAvailable(MainActivity.this)) {
-            // syncItemData();
-            // syncCustomerData();
             cartSyncAsync();
             itemTimeStamp = sp.getString(KeyValues.ITEM_MASTER_SYNC_TIME, "");
             customerTimeStamp = sp.getString(KeyValues.CUSTOMER_MASTER_SYNC_TIME, "");
@@ -465,6 +464,7 @@ public class MainActivity extends AppCompatActivity {
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
 
+                // handling notification navigation
                 if (getIntent().getExtras().get("NOTIFICATION1").equals("msg")) {
 
                     SharedPreferences prefs = MainActivity.this.getSharedPreferences("myPrefs", MODE_PRIVATE);
@@ -504,6 +504,11 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } else if (Type.equals("Discount Approval")) {
                         FragmentUtils.replaceFragmentWithBackStack(MainActivity.this, R.id.container, new SADListFragment());
+                    }else if (Type.equals("Cart Approval")) {
+                       /*if(userRoleName.equals(KeyValues.USER_ROLE_NAME_SUPPLY_CHAIN_MANAGER))
+                        FragmentUtils.replaceFragmentWithBackStack(MainActivity.this, R.id.container, new ApprovalsListFragment());
+                       else*/
+                           FragmentUtils.replaceFragmentWithBackStackWithBundle(MainActivity.this, R.id.container, new NotificationFragment(), bundle);
                     } else {
                         FragmentUtils.replaceFragmentWithBackStackWithBundle(MainActivity.this, R.id.container, new NotificationFragment(), bundle);
                     }
@@ -886,11 +891,7 @@ public class MainActivity extends AppCompatActivity {
 
                             try {
 
-                                    /*
-                                    db.cartHeaderDAO().deleteAllIsUpdated();
-                                    db.cartDetailsDAO().deleteAllIsUpdated();
-                                    db.cartHeaderDAO().deleteHeadersNotThereInCartDetails();
-                                    */
+                                    // if value = 2 it means items added to cart in offline
 
                                 if (value.equals("1")) {
                                     if (core.getEntityObject() != null) {
@@ -1008,6 +1009,7 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }
 
+                                    // syncing items to the web cart if items added to the cart in the offline mode
                                     addToCart();
                                 }
 
@@ -1099,6 +1101,8 @@ public class MainActivity extends AppCompatActivity {
                                     if (core.getEntityObject() != null) {
 
                                         JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
+
+                                        // deleting cart headers and details
                                         db.cartDetailsDAO().deleteAll();
                                         db.cartHeaderDAO().deleteAll();
 
@@ -1111,6 +1115,7 @@ public class MainActivity extends AppCompatActivity {
                                                 cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
 
                                                 if (cartHeaderListDTO.getListCartDetailsList().size() > 0) {
+                                                    // inserting cart headers
                                                     db.cartHeaderDAO().insert(new CartHeader(cartHeaderListDTO.getCustomerID(), cartHeaderListDTO.getCustomerName(), cartHeaderListDTO.getCreditLimit(), cartHeaderListDTO.getCartHeaderID(),
                                                             cartHeaderListDTO.getIsInActive(), cartHeaderListDTO.getIsCreditLimit(), cartHeaderListDTO.getIsApproved(), 0, cartHeaderListDTO.getCreatedOn(),
                                                             cartHeaderListDTO.getTotalPrice(), cartHeaderListDTO.getTotalPriceWithTax()));
@@ -1120,6 +1125,7 @@ public class MainActivity extends AppCompatActivity {
 
                                                 for (int k = 0; k < cartHeaderListDTO.getListCartDetailsList().size(); k++) {
                                                     cart = cartHeaderListDTO.getListCartDetailsList().get(k);
+                                                    // inseting cart details
                                                     db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeaderListDTO.getCartHeaderID()), cart.getMaterialMasterID(),
                                                             cart.getMCode(), cart.getMDescription(), cart.getActualDeliveryDate(),
                                                             cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
@@ -1151,6 +1157,7 @@ public class MainActivity extends AppCompatActivity {
                                 BottomNavigationMenuView menuView = (BottomNavigationMenuView) ((BottomNavigationView) MainActivity.this.findViewById(R.id.navigation)).getChildAt(0);
                                 BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(1);
 
+                                //updating cart count
                                 View notificationBadge = LayoutInflater.from(MainActivity.this).inflate(R.layout.notification_badge, menuView, false);
                                 TextView textView = notificationBadge.findViewById(R.id.counter_badge);
                                 textView.setText(String.valueOf(db.cartDetailsDAO().getCartDetailsCountIsApproved()));
@@ -1199,6 +1206,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected String doInBackground(Void... params) {
+
+                /*
+                If items added to the cart in offline the value is 2, else it is 1
+                 */
 
                 String msg = "";
                 if (db.cartHeaderDetailsDao().getUpdateCount()) {

@@ -206,6 +206,18 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
                                                     FragmentUtils.replaceFragmentWithBackStackWithBundle(getActivity(), R.id.container, new ApprovalsListFragment(),bundle1);
                                                 }
 
+                                            }else if(notificationDTOList.get(i).getNotifTriggerName().equals("SCM RF Approval")){
+                                                if(notificationDTOList.get(i).getLink().split("[/]").length==4){
+                                                    Bundle bundle1=new Bundle();
+                                                    bundle1.putString("type",notificationDTOList.get(i).getLink().split("[/]")[2]);
+                                                    bundle1.putString("cartHeaderId",notificationDTOList.get(i).getLink().split("[/]")[3]);
+                                                    FragmentUtils.replaceFragmentWithBackStackWithBundle(getActivity(), R.id.container, new ApprovalsDetailsFragment(),bundle1);
+                                                }else{
+                                                    Bundle bundle1=new Bundle();
+                                                    bundle1.putString("type","23");
+                                                    FragmentUtils.replaceFragmentWithBackStackWithBundle(getActivity(), R.id.container, new ApprovalsListFragment(),bundle1);
+                                                }
+
                                             }
                                             else if(notificationDTOList.get(i).getNotifTriggerName().equals("Discount Approval")){
                                                 FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container, new SADListFragment());

@@ -878,6 +878,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                                 if (cbPriority.isChecked()) {
                                                     prioity = 1;
                                                 }
+
                                                 if (header_count == 0) {
                                                     db.cartHeaderDAO().insert(new CartHeader(Integer.parseInt(partnerId), db.customerDAO().getAllCustomerName(partnerId), 0.0, 0, 0, 0, 0, 0, "", "", ""));
                                                     if (db.cartDetailsDAO().getCartDetailsCountByMaterialId(Integer.parseInt(partnerId), 0, Integer.parseInt(selectedVariant.materialID)) == 0) {
@@ -918,7 +919,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                                             frame.setVisibility(View.GONE);
                                                             addToCart();
                                                         } else {
-                                                            SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Stack size is not correct please enter the mutiples of " + selectedVariant.stackSize + " Eg : " + stackSizeQty(Integer.parseInt((!etQtyBottom.getText().toString().isEmpty()) ? etQtyBottom.getText().toString() : "1"), selectedVariant.stackSize), ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);
+                                                            SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Stack size is not correct please enter the multiples of " + selectedVariant.stackSize + " Eg : " + stackSizeQty(Integer.parseInt((!etQtyBottom.getText().toString().isEmpty()) ? etQtyBottom.getText().toString() : "1"), selectedVariant.stackSize), ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);
                                                         }
                                                     } else {
                                                         SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, getString(R.string.PriceNotAvailable), ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);

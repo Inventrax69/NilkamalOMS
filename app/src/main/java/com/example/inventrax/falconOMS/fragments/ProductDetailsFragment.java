@@ -1038,7 +1038,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                                             if ((Integer.parseInt(etQty.getText().toString()) % (selectedVariant.stackSize)) == 0) {
                                                 addToCart();
                                             } else {
-                                                SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Stack size is not correct please enter the mutiples of " + selectedVariant.stackSize + " Eg : " + stackSizeQty(Integer.parseInt((!etQty.getText().toString().isEmpty()) ? etQty.getText().toString() : "1"), selectedVariant.stackSize), ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);
+                                                SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Stack size is not correct please enter the multiples of " + selectedVariant.stackSize + " Eg : " + stackSizeQty(Integer.parseInt((!etQty.getText().toString().isEmpty()) ? etQty.getText().toString() : "1"), selectedVariant.stackSize), ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);
                                             }
                                         } else {
                                             SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, getString(R.string.PriceNotAvailable), ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);
