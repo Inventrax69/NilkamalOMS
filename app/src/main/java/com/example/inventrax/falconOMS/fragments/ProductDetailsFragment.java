@@ -264,7 +264,6 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                     //set the default according to value
                     spinnerVariant.setSelection(spinnerPosition);
 
-
                 } else {
                     // change result of variant spinner
                     selectedVar = spinnerVariant.getSelectedItem().toString();
@@ -279,10 +278,17 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                             updateUI(variantTables.get(k));
                             setDataListItems(variantTables.get(k));
                             selectedVariant = variantTables.get(k);
-                            Picasso.with(getContext())
-                                    .load(selectedVariantImage)
-                                    .placeholder(R.drawable.no_img)
-                                    .into(ivItem);
+                            if(!selectedVariantImage.isEmpty()) {
+                                Picasso.with(getContext())
+                                        .load(selectedVariantImage)
+                                        .placeholder(R.drawable.no_img)
+                                        .into(ivItem);
+                            }else {
+                                Picasso.with(getContext())
+                                        .load(R.drawable.no_img)
+                                        .placeholder(R.drawable.no_img)
+                                        .into(ivItem);
+                            }
 
                             return;
                         }

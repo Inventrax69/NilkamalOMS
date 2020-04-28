@@ -1452,10 +1452,17 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
     public void updateUI(VariantTable variantTable) {
 
-        Picasso.with(getActivity())
-                .load(selectedVariantImage)
-                .placeholder(R.drawable.no_img)
-                .into(ivItemBottom);
+        if(!selectedVariantImage.isEmpty()) {
+            Picasso.with(getContext())
+                    .load(selectedVariantImage)
+                    .placeholder(R.drawable.no_img)
+                    .into(ivItemBottom);
+        }else {
+            Picasso.with(getContext())
+                    .load(R.drawable.no_img)
+                    .placeholder(R.drawable.no_img)
+                    .into(ivItemBottom);
+        }
 
         txtItemNameBottom.setText(String.valueOf(variantTable.mCode));
 

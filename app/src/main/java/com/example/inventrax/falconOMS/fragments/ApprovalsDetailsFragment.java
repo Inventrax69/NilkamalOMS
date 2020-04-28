@@ -674,7 +674,7 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
 
         message.setEntityObject(approvalListDTO1);
 
-        Log.v("ANIL", new Gson().toJson(message));
+        //Log.v("ANIL", new Gson().toJson(message));
 
         Call<OMSCoreMessage> call = null;
         ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
