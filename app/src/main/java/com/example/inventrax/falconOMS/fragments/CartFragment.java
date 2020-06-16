@@ -456,6 +456,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                         cartDetailsListDTO.setTax(cartDetails.tax);
                         cartDetailsListDTO.setSubTotal(cartDetails.subtotal);
                         cartDetailsListDTO.setHSNCode(cartDetails.HSNCode);
+                        cartDetailsListDTO.setBOMHeaderID(cartDetails.bomHeaderId);
                         cartDetailsListDTOList.add(cartDetailsListDTO);
 
                     }
@@ -813,7 +814,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                     cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                     cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                     cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                    cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice()));
+                                                    cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice(),cart.getBOMHeaderID()));
                                         }
                                     }
                                 }
@@ -1082,7 +1083,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                             cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                             cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                             cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice()));
+                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice(),cart.getBOMHeaderID()));
                                                 }
                                             }
                                         }
@@ -1416,7 +1417,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice(),cart.getBOMHeaderID()));
                                             }
                                         }
                                     }
@@ -1571,7 +1572,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice(),cart.getBOMHeaderID()));
                                             }
                                         }
                                     }
@@ -1708,7 +1709,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice(),cart.getBOMHeaderID()));
                                             }
                                         }
                                     }
@@ -2028,7 +2029,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                     cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                     cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                     cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                    cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice()));
+                                                    cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice(),cart.getBOMHeaderID()));
                                         }
                                     }
                                 }

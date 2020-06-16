@@ -15,35 +15,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="3"
-        android:padding="4dp">
+        android:padding="4dp"
+        android:weightSum="3">
 
         <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="0.7"
             android:orientation="vertical"
-            android:layout_width="0dp"
-            android:weightSum="1"
-            android:layout_height="wrap_content">
+            android:weightSum="1">
 
             <ImageView
                 android:id="@+id/ivItem"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_60sdp"
-                android:layout_weight="0.4"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/_2sdp"
+                android:layout_weight="0.4"
                 android:scaleType="fitXY" />
 
             <ImageView
                 android:id="@+id/txtPriority"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_36sdp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_2sdp"
                 android:layout_weight="0.6"
                 android:gravity="center"
-                android:layout_margin="@dimen/_2sdp"
-                android:layout_gravity="center"
                 android:scaleType="centerInside"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
         </LinearLayout>
 
@@ -60,10 +60,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="center|left"
                 android:singleLine="true"
-                android:textSize="14sp"
                 android:text="Bed Room Furniture"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/black"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -71,18 +71,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textSize="12sp"
                 android:maxLines="2"
                 android:text="Bed Room Furniture\n"
                 android:textColor="@color/black"
+                android:textSize="12sp"
                 android:textStyle="normal" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/txtDeliveryDate"
@@ -124,23 +124,22 @@
                         android:id="@+id/txtOriginalPrice"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
+                        android:layout_marginRight="@dimen/_6sdp"
                         android:layout_weight="1"
                         android:gravity="top|center"
                         android:textSize="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_6sdp"
                         android:textStyle="normal" />
 
 
                 </LinearLayout>
 
 
-
                 <LinearLayout
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:weightSum="1"
                     android:orientation="horizontal"
-                    android:layout_height="match_parent">
+                    android:weightSum="1">
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/textInputQtyBottom"
@@ -153,9 +152,9 @@
                             style="@style/editTextStyleSmall"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="@string/qty"
                             android:digits="0123456789"
                             android:enabled="false"
+                            android:hint="@string/qty"
                             android:inputType="number" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -163,17 +162,16 @@
 
                     <ImageView
                         android:id="@+id/imageEdit"
-                        android:layout_weight="0.3"
                         android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
                         android:scaleType="centerInside"
-                        android:src="@drawable/ic_edit_black_24dp"
-                        android:layout_height="match_parent" />
+                        android:src="@drawable/ic_edit_black_24dp" />
 
                 </LinearLayout>
 
 
             </LinearLayout>
-
 
 
             <LinearLayout
@@ -195,26 +193,46 @@
                     android:id="@+id/txtAvailableItem"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="@dimen/_2sdp"
-                    android:textSize="@dimen/_10sdp"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:background="@drawable/green_border"
                     android:gravity="center"
-                    android:textStyle="bold"
+                    android:padding="@dimen/_2sdp"
                     android:text="@string/available_stock"
-                    android:textColor="@color/green" />
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/_10sdp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtSalesBom"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Sales BOM"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:gravity="center|left"
+                    android:textColor="@color/blue"
+                    android:textStyle="normal"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
         <RelativeLayout
-            android:layout_weight="0.3"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_margin="@dimen/_2sdp"
-            android:layout_height="match_parent">
-
+            android:layout_weight="0.3">
 
 
             <ImageView
@@ -227,21 +245,21 @@
                 android:focusable="true"
                 android:scaleType="fitXY" />
 
-                <ImageView
-                    android:id="@+id/ivAppliedOffer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:background="@drawable/ic_apply_offer"
-                    android:clickable="true"
-                    android:layout_gravity="center_vertical"
-                    android:focusable="true"
-                    android:padding="@dimen/_2sdp"
-                    android:layout_margin="@dimen/_2sdp"
-                    android:scaleType="fitXY"
-                    android:visibility="invisible"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"/>
+            <ImageView
+                android:id="@+id/ivAppliedOffer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/_2sdp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/ic_apply_offer"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/_2sdp"
+                android:scaleType="fitXY"
+                android:visibility="invisible" />
 
 
         </RelativeLayout>

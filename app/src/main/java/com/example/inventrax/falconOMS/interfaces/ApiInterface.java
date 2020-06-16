@@ -216,4 +216,9 @@ public interface ApiInterface {
     @POST("Orders/ProductDiscount")
     Call<OMSCoreMessage> ProductDiscount(@Body OMSCoreMessage oRequest);
 
+    @POST("Orders/GetBOMDetails")
+    Call<OMSCoreMessage> GetBOMDetails(@Body OMSCoreMessage oRequest);
+
+
+
 }

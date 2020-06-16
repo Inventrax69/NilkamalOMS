@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/_280sdp"
+    android:layout_height="@dimen/_320sdp"
+    android:background="@android:color/transparent"
+    android:layout_gravity="center">
+
+
+    <FrameLayout
+        android:background="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/_10sdp"
+            android:background="@drawable/white_rounded_corners"
+            android:orientation="vertical"
+            android:weightSum="10"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="8.5"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/txtAvailableStock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:padding="@dimen/_4sdp"
+                    android:textSize="@dimen/_11sdp"
+                    android:background="@color/colorAccent"
+                    android:textColor="@color/white"
+                    android:text="Sales BOM"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@color/colorAccent"
+                android:overScrollMode="never"
+                android:scrollbarStyle="insideInset"
+                android:scrollbarThumbVertical="@drawable/scrollbar"
+                android:scrollbars="vertical"
+                tools:context=".controller.MainActivity"
+                tools:showIn="@layout/activity_main" />
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnClOSE"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_gravity="right|top"
+            android:contentDescription="@string/close"
+            android:src="@drawable/ic_cancel" />
+
+    </FrameLayout>
+
+
+
+
+</android.support.constraint.ConstraintLayout>

@@ -116,6 +116,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private List<CustomerListDTO> customerList;
     RestService restService;
     private String encryptedPass = "", customerIDs = "", userId = "", serviceUrlString = "";
+    private  TextView txtReleaseDate,txtVersionNumber;
     private Resources resources;
     ServiceURL serviceURL;
     RelativeLayout main_relative, login_tool_relative;
@@ -254,6 +255,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             tvForgotPwd = (TextView) findViewById(R.id.tvForgotPwd);
             tvMobileNumber = (TextView) findViewById(R.id.tvMobileNumber);
             timer = (TextView) findViewById(R.id.timer);
+
+            txtVersionNumber = (TextView) findViewById(R.id.txtVersionNumber);
+            txtReleaseDate = (TextView) findViewById(R.id.txtReleaseDate);
+
+            txtReleaseDate.setText(" 05-05-2020");
+            txtVersionNumber.setText(" " + AndroidUtils.getVersionName().toString());
 
             settings = (ImageView) findViewById(R.id.ivSettings);
 

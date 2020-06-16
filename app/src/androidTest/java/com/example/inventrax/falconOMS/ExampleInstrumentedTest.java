@@ -26,11 +26,11 @@ public class ExampleInstrumentedTest {
         assertEquals("com.example.inventrax.falconOMS", appContext.getPackageName());
     }
 
-    @Test
+  /*  @Test
     public void mailValidation() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals(true, ValidationUtils.isValidEmail("bco@nkl.com"));
-    }
+    }*/
 }

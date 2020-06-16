@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.inventrax.falconOMS.R;
+import com.example.inventrax.falconOMS.pojos.SalesBOMDTO;
 import com.example.inventrax.falconOMS.room.CartDetails;
 import com.squareup.picasso.Picasso;
 
@@ -19,68 +20,54 @@ import java.util.List;
 /**
  * Created by padmaja on 13/07/19.
  */
-public class OfferItemsAdapter extends RecyclerView.Adapter<OfferItemsAdapter.ViewHolder> {
+public class SalesBOMAdapter extends RecyclerView.Adapter<SalesBOMAdapter.ViewHolder> {
 
-    private List<CartDetails> cartDetails;
+    private List<SalesBOMDTO> salesBOMDTOList;
     private Context context;
     private OnItemClickListener mlistener;
     Button btnClOSE;
 
-    public OfferItemsAdapter(Context context, List<CartDetails> cartDetails, OnItemClickListener mlistener) {
+    public SalesBOMAdapter(Context context, List<SalesBOMDTO> salesBOMDTOList, OnItemClickListener mlistener) {
         this.context = context;
-        this.cartDetails = cartDetails;
+        this.salesBOMDTOList = salesBOMDTOList;
         this.mlistener = mlistener;
 
     }
 
     @Override
-    public OfferItemsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.offer_item_view, viewGroup, false);
+    public SalesBOMAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.salebom_item, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
 
-        CartDetails cartDetails1 = cartDetails.get(i);
+        SalesBOMDTO salesBOMDTO = salesBOMDTOList.get(i);
 
-        viewHolder.txtItemName.setText(cartDetails1.mCode);
-        viewHolder.txtItemDesc.setText(cartDetails1.mDescription);
-        viewHolder.etQtyCart.setText(cartDetails1.quantity);
-        viewHolder.txtPrice.setText("RS: " + cartDetails1.offerValue);
-        Picasso.with(context)
-                .load(cartDetails1.imgPath.split("[|]")[0])
-                .placeholder(R.drawable.no_img)
-                .into(viewHolder.ivItem);
-
-/*
-        viewHolder.txtSiteNo.setText(availableStockDTO.getSiteCode());
-        viewHolder.txtSiteName.setText(availableStockDTO.getSiteName());
-        viewHolder.txtAvaQty.setText(""+(int)Double.parseDouble(""+availableStockDTO.getAvailableQty()));*/
-
+        viewHolder.txtItemName.setText(salesBOMDTO.getMcode());
+        viewHolder.txtItemDesc.setText(salesBOMDTO.getMdescription());
+        viewHolder.txtQty.setText(""+salesBOMDTO.getBOMQuantity());
 
     }
 
     @Override
     public int getItemCount() {
-        return cartDetails.size();
+        return salesBOMDTOList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        private TextView txtItemName, txtItemDesc, txtPrice;
-        private EditText etQtyCart;
-        private ImageView ivItem;
+        private TextView txtItemName, txtItemDesc, txtQty;
+
 
         public ViewHolder(View view) {
             super(view);
             // Initializing views
             txtItemName = (TextView) view.findViewById(R.id.txtItemName);
             txtItemDesc = (TextView) view.findViewById(R.id.txtItemDesc);
-            txtPrice = (TextView) view.findViewById(R.id.txtPrice);
-            ivItem = (ImageView) view.findViewById(R.id.ivItem);
-            etQtyCart = (EditText) view.findViewById(R.id.etQtyCart);
+            txtQty = (TextView) view.findViewById(R.id.txtQty);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -93,6 +80,7 @@ public class OfferItemsAdapter extends RecyclerView.Adapter<OfferItemsAdapter.Vi
                     }
                 }
             });
+
         }
     }
 

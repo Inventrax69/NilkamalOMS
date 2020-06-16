@@ -82,6 +82,9 @@ public class CartDetailsListDTO {
     @SerializedName("DiscountedPrice")
     private String DiscountedPrice;
 
+@SerializedName("BOMHeaderID")
+    private int BOMHeaderID;
+
 
 
     public CartDetailsListDTO() { }
@@ -284,5 +287,13 @@ public class CartDetailsListDTO {
 
     public void setDiscountedPrice(String discountedPrice) {
         DiscountedPrice = discountedPrice;
+    }
+
+    public int getBOMHeaderID() {
+        return BOMHeaderID;
+    }
+
+    public void setBOMHeaderID(int BOMHeaderID) {
+        this.BOMHeaderID = BOMHeaderID;
     }
 }

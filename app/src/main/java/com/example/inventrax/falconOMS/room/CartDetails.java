@@ -87,13 +87,15 @@ public class CartDetails implements Serializable {
     @ColumnInfo(name = "discountedPrice")
     public String discountedPrice;
 
+    @ColumnInfo(name = "bomHeaderId")
+    public int bomHeaderId;
 
 
     public CartDetails(String cartHeaderId, String materialID, String mCode, String mDescription,
                        String deliveryDate, String quantity, String imgPath,
                        String price, boolean isInActive, String cartDetailsId, int customerId, int isUpdated, int isPriority,
                        String totalPrice, String offerValue, String offerItemCartDetailsID,
-                       String discountID, String discountText, String gst, String tax, String subtotal, String HSNCode, String discountedPrice) {
+                       String discountID, String discountText, String gst, String tax, String subtotal, String HSNCode, String discountedPrice,int bomHeaderId) {
         this.materialID = materialID;
         this.mCode = mCode;
         this.mDescription = mDescription;
@@ -117,6 +119,7 @@ public class CartDetails implements Serializable {
         this.subtotal = subtotal;
         this.HSNCode = HSNCode;
         this.discountedPrice = discountedPrice;
+        this.bomHeaderId = bomHeaderId;
     }
 
     @Ignore

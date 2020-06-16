@@ -38,6 +38,7 @@ import com.example.inventrax.falconOMS.pojos.CartHeaderListDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
 import com.example.inventrax.falconOMS.pojos.ProductDiscountDTO;
+import com.example.inventrax.falconOMS.pojos.SalesBOMDTO;
 import com.example.inventrax.falconOMS.room.AppDatabase;
 import com.example.inventrax.falconOMS.room.CartDetails;
 import com.example.inventrax.falconOMS.room.RoomAppDatabase;
@@ -172,6 +173,13 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
         } else {
             viewHolder.ivAppliedOffer.setVisibility(View.GONE);
         }
+        if (item.getBOMHeaderID()!=0) {
+            viewHolder.txtSalesBom.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.txtSalesBom.setVisibility(View.GONE);
+        }
+
+
 
         if (item.getMaterialPriorityID() == 1) {
             viewHolder.txtPriority.setImageDrawable(updatePriority);
@@ -298,6 +306,18 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, cartItemList.get(i).getDiscountText(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        viewHolder.txtSalesBom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (NetworkUtils.isInternetAvailable(context)) {
+
+                    GetBOMDetails(cartItemList.get(i).getBOMHeaderID());
+                } else {
+                    SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.coordinatorLayout), errorMessages.EMC_0007, ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
+                }
             }
         });
 
@@ -434,6 +454,136 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
         }
     }
 
+    public void GetBOMDetails(final int cartDetailsID) {
+
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.OrderFulfilment_DTO, context);
+        CartDetailsListDTO cartDetailsListDTO = new CartDetailsListDTO();
+        cartDetailsListDTO.setBOMHeaderID(cartDetailsID);
+        message.setEntityObject(cartDetailsListDTO);
+
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
+
+        ProgressDialogUtils.showProgressDialog("Please wait..");
+
+        call = apiService.GetBOMDetails(message);
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if ((core.getType().toString().equals("Exception"))) {
+
+                            OMSExceptionMessage omsExceptionMessage = null;
+
+                            for (OMSExceptionMessage oms : core.getOMSMessages()) {
+                                omsExceptionMessage = oms;
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showAlertType(omsExceptionMessage, (Activity) context, context);
+                            }
+
+                            ProgressDialogUtils.closeProgressDialog();
+
+                        } else {
+
+                            ProgressDialogUtils.closeProgressDialog();
+
+                            try {
+
+                                JSONArray jsonList = new JSONArray((String) core.getEntityObject());
+                                SalesBOMDTO salesBOMDTO = new SalesBOMDTO();
+
+                                final List<SalesBOMDTO> salesBOMDTOS = new ArrayList<>();
+
+                                if (jsonList != null && jsonList.length() > 0) {
+                                    for (int i = 0; i < jsonList.length(); i++) {
+                                        salesBOMDTO = new Gson().fromJson(jsonList.getJSONObject(i).toString(), SalesBOMDTO.class);
+                                        salesBOMDTOS.add(salesBOMDTO);
+                                    }
+
+                                    if (salesBOMDTOS.size() > 0) {
+
+                                        final Dialog dialog = new Dialog(context);
+                                        dialog.setContentView(R.layout.sales_bom_dialog);
+                                        dialog.setCancelable(false);
+                                        Window window = dialog.getWindow();
+                                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                        final RecyclerView recycler;
+                                        recycler = dialog.findViewById(R.id.recyclerView);
+                                        recycler.setHasFixedSize(true);
+
+                                        ImageView btnClOSE = dialog.findViewById(R.id.btnClOSE);
+
+                                        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+                                        recycler.setLayoutManager(layoutManager);
+
+                                        final SalesBOMAdapter salesBOMAdapter = new SalesBOMAdapter(context, salesBOMDTOS, new SalesBOMAdapter.OnItemClickListener() {
+                                            @Override
+                                            public void OnItemClick(int pos) {
+
+                                            }
+                                        });
+
+                                        recycler.setAdapter(salesBOMAdapter);
+
+                                        btnClOSE.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+
+                                        dialog.show();
+
+                                    } else {
+                                        SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.coordinatorLayout), "No Stock Available", ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
+                                    }
+
+                                } else {
+                                    SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.coordinatorLayout), "No Stock Available", ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
+                                }
+
+                                notifyDataSetChanged();
+
+                            } catch (Exception ex) {
+                                ProgressDialogUtils.closeProgressDialog();
+                                SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.coordinatorLayout), "Error While Stock Available", ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
+                            }
+                        }
+                    }
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    if (NetworkUtils.isInternetAvailable(context)) {
+                        DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0001);
+                    } else {
+                        DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0014);
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+            });
+        } catch (Exception ex) {
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), "SADListAdapter", "001", context);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0003);
+        }
+    }
+
 
     @Override
     public int getItemCount() {
@@ -442,7 +592,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
 
     public class SubItemViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtItemName, txtItemDesc, txtPrice, txtOriginalPrice, isItemInactive, txtAvailableItem, txtOfferAvaiable;
+        private TextView txtItemName, txtItemDesc, txtPrice, txtOriginalPrice, isItemInactive,txtSalesBom, txtAvailableItem, txtOfferAvaiable;
         private EditText etQtyCart;
         private ImageView ivItem, ivDeleteItem, imageEdit, txtPriority, ivAppliedOffer;
 
@@ -456,6 +606,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
             txtAvailableItem = (TextView) view.findViewById(R.id.txtAvailableItem);
             txtOfferAvaiable = (TextView) view.findViewById(R.id.txtOfferAvaiable);
             txtPriority = (ImageView) view.findViewById(R.id.txtPriority);
+            txtSalesBom = (TextView) view.findViewById(R.id.txtSalesBom);
             isItemInactive = (TextView) view.findViewById(R.id.isItemInactive);
             ivItem = (ImageView) view.findViewById(R.id.ivItem);
             imageEdit = (ImageView) view.findViewById(R.id.imageEdit);

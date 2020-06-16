@@ -857,7 +857,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                                                             cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                             cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                             cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),""));
+                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),"",cart.getBOMHeaderID()));
                                                 }
                                             }
 
@@ -1015,7 +1015,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                                             db.cartDetailsDAO().insert(new CartDetails("0", selectedVariant.materialID, selectedVariant.mCode,
                                                     selectedVariant.mDescription, "", etQty.getText().toString(), selectedVariantImage,
                                                     "0", false, "0", Integer.valueOf(partnerId), 1, prioity, "0", "0", null,
-                                                    "0", "", "0", "0", "0", "0",""));
+                                                    "0", "", "0", "0", "0", "0","",0));
                                         } else {
                                             String qty = db.cartDetailsDAO().getQantity(selectedVariant.materialID, partnerId, "0");
                                             int total_qty = Integer.parseInt(qty) + Integer.parseInt(etQty.getText().toString());
@@ -1027,7 +1027,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                                             db.cartDetailsDAO().insert(new CartDetails(String.valueOf(cartHeader.cartHeaderID), selectedVariant.materialID, selectedVariant.mCode,
                                                     selectedVariant.mDescription, "", etQty.getText().toString(), selectedVariantImage,
                                                     "0", false, "0", Integer.valueOf(partnerId), 1, prioity, "0", "0", null,
-                                                    "0", "", "0", "0", "0", "0",""));
+                                                    "0", "", "0", "0", "0", "0","",0));
                                         } else {
                                             String qty = db.cartDetailsDAO().getQantity(selectedVariant.materialID, partnerId, String.valueOf(cartHeader.cartHeaderID));
                                             int total_qty = Integer.parseInt(qty) + Integer.parseInt(etQty.getText().toString());

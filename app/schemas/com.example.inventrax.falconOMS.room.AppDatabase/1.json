@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ce5876471981b88c6b41c8aaec97654c",
+    "identityHash": "36363dae25c93ed7757f18289c190c4f",
     "entities": [
       {
         "tableName": "CustomerTable",
@@ -371,7 +371,7 @@
       },
       {
         "tableName": "CartDetails",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `materialID` TEXT, `mCode` TEXT, `mDescription` TEXT, `deliveryDate` TEXT, `quantity` TEXT, `timeStamp` TEXT, `imgPath` TEXT, `price` TEXT, `totalPrice` TEXT, `offerValue` TEXT, `offerItemCartDetailsID` TEXT, `cartHeaderId` TEXT, `cartDetailsId` TEXT, `customerId` INTEGER NOT NULL, `isInActive` INTEGER NOT NULL, `isPriority` INTEGER NOT NULL, `isUpdated` INTEGER NOT NULL, `discountID` TEXT, `discountText` TEXT, `gst` TEXT, `tax` TEXT, `subtotal` TEXT, `HSNCode` TEXT, `discountedPrice` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `materialID` TEXT, `mCode` TEXT, `mDescription` TEXT, `deliveryDate` TEXT, `quantity` TEXT, `timeStamp` TEXT, `imgPath` TEXT, `price` TEXT, `totalPrice` TEXT, `offerValue` TEXT, `offerItemCartDetailsID` TEXT, `cartHeaderId` TEXT, `cartDetailsId` TEXT, `customerId` INTEGER NOT NULL, `isInActive` INTEGER NOT NULL, `isPriority` INTEGER NOT NULL, `isUpdated` INTEGER NOT NULL, `discountID` TEXT, `discountText` TEXT, `gst` TEXT, `tax` TEXT, `subtotal` TEXT, `HSNCode` TEXT, `discountedPrice` TEXT, `bomHeaderId` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -522,6 +522,12 @@
             "columnName": "discountedPrice",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "bomHeaderId",
+            "columnName": "bomHeaderId",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -672,7 +678,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ce5876471981b88c6b41c8aaec97654c\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"36363dae25c93ed7757f18289c190c4f\")"
     ]
   }
 }

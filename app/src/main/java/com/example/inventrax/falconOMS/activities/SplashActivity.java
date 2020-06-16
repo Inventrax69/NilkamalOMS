@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -53,6 +55,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+import retrofit2.http.Url;
+
 /**
  * Created by padmaja rani.B on 02/08/2019
  */
@@ -77,6 +81,7 @@ public class SplashActivity extends Activity {
     boolean isError = false;
     long downloadID;
     String updateJSON;
+    String configUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +90,8 @@ public class SplashActivity extends Activity {
 
         // navigation transition
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+        SharedPreferences sp = SplashActivity.this.getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
+        configUrl = sp.getString(KeyValues.SETTINGS_URL, "");
         sharedPreferencesUtils = new SharedPreferencesUtils(KeyValues.MY_PREFS, SplashActivity.this);
         sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_MASTER_UPDATE, false);
         // sharedPreferencesUtils.savePreference(KeyValues.USER_ROLE_NAME,"DT");
@@ -109,12 +116,12 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
 
-/*              if (NetworkUtils.isInternetAvailable(SplashActivity.this))
+                if (NetworkUtils.isInternetAvailable(SplashActivity.this))
                     checkUpdate();
                 else
-                    navigateToMainScreen();*/
+                    navigateToMainScreen();
 
-                navigateToMainScreen();
+                //navigateToMainScreen();
 
             }
         }, 500);
@@ -136,7 +143,7 @@ public class SplashActivity extends Activity {
     }
 
     private VersionCheckStrategy buildVersionCheckStrategy() {
-        return (new SimpleHttpVersionCheckStrategy("http://192.168.1.65/oms_storefront/api/" + "updateJson"));
+        return (new SimpleHttpVersionCheckStrategy(configUrl + "updateJson"));
     }
 
     private ConfirmationStrategy buildPreDownloadConfirmationStrategy() {
@@ -196,6 +203,21 @@ public class SplashActivity extends Activity {
                         .getPath();
                 // Download the file
                 InputStream input = new BufferedInputStream(url.openStream());
+
+
+                File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Nilkamal_OMS/");
+
+                if (!file.isDirectory()) {
+                    file.mkdir();
+                }
+
+                File file1 = new File(Environment.getExternalStorageDirectory().getPath() + "/Nilkamal_OMS/Nilkamal_OMS.apk");
+
+                if (file1.exists()) {
+                    file1.createNewFile();
+                }
+
+
                 // Save the downloaded file
                 OutputStream output = new FileOutputStream(Environment.getExternalStorageDirectory().getPath() + "/Nilkamal_OMS/Nilkamal_OMS.apk");
                 byte data[] = new byte[1024];
@@ -231,10 +253,10 @@ public class SplashActivity extends Activity {
             String apkName = "Nilkamal_OMS.apk";
             String fullPath = Environment.getExternalStorageDirectory().getPath() + "/Nilkamal_OMS/" + apkName;
             PackageInfo info = pm.getPackageArchiveInfo(fullPath, 0);
-
+            String versionName = "";
             try {
                 int versionNumber = info.versionCode;
-                String versionName = info.versionName;
+                versionName = info.versionName;
             } catch (Exception e) {
                 //DialogUtils.showAlertDialog(SplashActivity.this,"Failed to update the app");
             }
@@ -289,7 +311,7 @@ public class SplashActivity extends Activity {
 
             HttpURLConnection conn = null;
             try {
-                conn = (HttpURLConnection) new URL("http://192.168.1.65/oms_storefront/api/" + "updateJson").openConnection();
+                conn = (HttpURLConnection) new URL(configUrl + "updateJson").openConnection();
                 int result = -1;
                 conn.connect();
 
@@ -382,7 +404,8 @@ public class SplashActivity extends Activity {
             } catch (Exception e) {
                 // e.printStackTrace();
             } finally {
-                conn.disconnect();
+                if (conn != null)
+                    conn.disconnect();
             }
 
             return objects;
@@ -404,6 +427,7 @@ public class SplashActivity extends Activity {
 
         IntentFilter intentFilter;
         DownloadManager dm = null;
+
 
         private void updateTheApplication(Context ctx, String apkPath) {
 
