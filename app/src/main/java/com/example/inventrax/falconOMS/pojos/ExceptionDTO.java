@@ -16,6 +16,9 @@ public class ExceptionDTO {
     @SerializedName("Action")
     private String Action;
 
+    @SerializedName("UserID")
+    private String UserID;
+
     public ExceptionDTO(){
 
     }
@@ -51,5 +54,13 @@ public class ExceptionDTO {
 
     public void setAction(String action) {
         Action = action;
+    }
+
+    public String getUserID() {
+        return UserID;
+    }
+
+    public void setUserID(String userID) {
+        UserID = userID;
     }
 }

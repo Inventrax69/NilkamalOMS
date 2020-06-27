@@ -27,6 +27,15 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile file('oms_keystore.jks')
+            storePassword '123456'
+            keyAlias 'oms'
+            keyPassword '123456'
+        }
+    }
+
     buildTypes {
 
         /*
@@ -36,6 +45,7 @@ android {
         */
 
         release {
+            signingConfig signingConfigs.release
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

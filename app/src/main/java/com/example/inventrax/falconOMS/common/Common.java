@@ -228,19 +228,20 @@ public class Common {
 
 
     // sending exception to the database
-    public void logException(String activityOrFragment,String methodName,String exception,Activity activity) {
+    public void logException(String activityOrFragment,String methodName,String exception,Activity activity,String userId) {
         try {
 
             String exceptionString = activityOrFragment + methodName + exception;
 
             OMSCoreMessage message = new OMSCoreMessage();
             message = this.SetAuthentication(EndpointConstants.Exception, activity);
-            ExceptionDTO wmsExceptionMessage = new ExceptionDTO();
-            wmsExceptionMessage.setSource("Mobile");
-            wmsExceptionMessage.setPage(activityOrFragment);
-            wmsExceptionMessage.setExceptionMessage(exceptionString);
-            wmsExceptionMessage.setAction(methodName);
-            message.setEntityObject(wmsExceptionMessage);
+            ExceptionDTO exceptionDTO = new ExceptionDTO();
+            exceptionDTO.setSource("Mobile");
+            exceptionDTO.setPage(activityOrFragment);
+            exceptionDTO.setExceptionMessage(exceptionString);
+            exceptionDTO.setAction(methodName);
+            exceptionDTO.setUserID(userId);
+            message.setEntityObject(exceptionDTO);
 
             Call<String> call = null;
             ApiInterface apiService = RestService.getClient().create(ApiInterface.class);

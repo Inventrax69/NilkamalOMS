@@ -764,6 +764,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0014);
                     }
                     ProgressDialogUtils.closeProgressDialog();
+                    dialog.dismiss();
                 }
             });
         } catch (Exception ex) {

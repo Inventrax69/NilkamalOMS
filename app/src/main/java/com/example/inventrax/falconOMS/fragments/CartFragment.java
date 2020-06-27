@@ -577,6 +577,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                     cDto.setPrice(cartDetailsList.get(i).price);
                                     cDto.setShipToPartyCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
                                     cDto.setCartDetailsID("0");
+                                    //cDto.setCartDetailsID(cartDetailsList.get(i).cartDetailsId);
                                     cDto.setMaterialPriorityID(String.valueOf(cartDetailsList.get(i).isPriority));
                                     cDto.setDeliveryDate(cartDetailsList.get(i).deliveryDate);
                                     cDto.setCartHeaderID(Integer.parseInt(cartDetailsList.get(i).cartHeaderId));

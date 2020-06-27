@@ -241,7 +241,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         variantTables = db.variantDAO().getVariants(modelId);
 
         for (VariantTable var : variantTables) {
-            varient.add(var.modelColor);
+            varient.add(var.mCode);
         }
 
         ArrayAdapter adapter = new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, varient);
@@ -273,7 +273,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
                     for (int k = 0; i <= variantTables.size(); k++) {
 
-                        if (variantTables.get(k).modelColor.equals(selectedVar)) {
+                        if (variantTables.get(k).mCode.equals(selectedVar)) {
 
                             updateUI(variantTables.get(k));
                             setDataListItems(variantTables.get(k));
@@ -320,7 +320,7 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
             VariantTable variantTable = db.variantDAO().getMaterial(materialId);
 
-            selectedVar = variantTable.modelColor;
+            selectedVar = variantTable.mCode;
 
             isFromSearchResult = true;
 

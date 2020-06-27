@@ -580,6 +580,8 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                         dialog1.dismiss();
                     }
 
+                    //common.logException(classCode,"ProductCatalg2",throwable.getMessage(),getActivity(),userId);
+
                     if (NetworkUtils.isInternetAvailable(getActivity())) {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
                     } else {
