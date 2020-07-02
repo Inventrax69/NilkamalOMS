@@ -111,7 +111,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
     LinearLayoutManager linearLayoutManager;
     TextView txtAvailableCL, txtTotal, txtOrderFulfilment, txtConfirmOrder, txtApplyOffers;
     BottomSheetBehavior behavior;
-    private CheckBox cbPartialFulfilment, cbSingleDelivery, cbVehicleTypePreference;
+    private CheckBox cbSingleDelivery, cbVehicleTypePreference;
     private Button btnProceed;
     private SearchableSpinner selectVehicleType;
     private CoordinatorLayout coordinatorLayout;
@@ -142,7 +142,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
     Dialog approvalDailog;
     List<Integer> headersList;
 
-    private boolean isOfferApplied=false;
+    private boolean isOfferApplied = false;
 
     @Nullable
     @Override
@@ -204,7 +204,6 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
             // bottom sheet view controllers
             selectVehicleType = (SearchableSpinner) rootView.findViewById(R.id.selectVehicleType);
-            cbPartialFulfilment = (CheckBox) rootView.findViewById(R.id.cbPartialFulfilment);
             cbSingleDelivery = (CheckBox) rootView.findViewById(R.id.cbSingleDelivery);
             cbVehicleTypePreference = (CheckBox) rootView.findViewById(R.id.cbVehicleTypePreference);
             hashMap = new HashMap<>();
@@ -238,7 +237,6 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
             items = new ArrayList<>();
             cbSingleDelivery.setOnCheckedChangeListener(this);
-            cbPartialFulfilment.setOnCheckedChangeListener(this);
             cbVehicleTypePreference.setOnCheckedChangeListener(this);
 
             if (getActivity().getIntent().getExtras() != null) {
@@ -278,7 +276,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
             final List<String> userDivisionId;
 
             getCustomerNames = db.customerDAO().getCustomerNames();
-            userDivisionId = db.customerDAO().getUserDivisionCustTableId();
+            userDivisionId = db.customerDAO().getCustIds();
+            //userDivisionId = db.customerDAO().customerIDsFromCart();
             customerCodes = new ArrayList<String>();
             customerIds = new ArrayList<String>();
             headersList = new ArrayList<>();
@@ -289,6 +288,11 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
             for (int i = 0; i < userDivisionId.size(); i++) {
                 customerCodes.add(db.customerDAO().getCustomerCodesByString(userDivisionId.get(i)));
                 customerIds.add(db.customerDAO().getCustomerIdByString(userDivisionId.get(i)));
+
+                /*customerCodes.add(db.customerDAO().customerNamesFromCart(userDivisionId.get(i)));
+                customerIds.add(userDivisionId.get(i));*/
+
+
             }
 
             ArrayAdapter arrayAdapterPrinters = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, customerCodes);
@@ -517,14 +521,14 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                 if (NetworkUtils.isInternetAvailable(getActivity())) {
 
-                        if (cartHeaderList.size() > 1 && customerId.isEmpty() && !userRoleName.equals("DTD")) {
-                            SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0023, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
-                            return;
-                        }
+                    if (cartHeaderList.size() > 1 && customerId.isEmpty() && !userRoleName.equals("DTD")) {
+                        SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0023, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
+                        return;
+                    }
 
-                        if (db.cartHeaderDetailsDao().getUpdateCount()) {
+                    if (db.cartHeaderDetailsDao().getUpdateCount()) {
 
-                            if(isOfferApplied){
+                        if (isOfferApplied) {
 
 
                             vehiclesList = new ArrayList<>();
@@ -534,9 +538,9 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                             if (userRoleName.equals("DTD")) {
 
                                 if (db.cartHeaderDAO().getTaxesList().size() == 1) {
-                                    txtTotalAmt.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPrice())));
-                                    txtTaxes.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTaxes())));
-                                    txtTotalAmtTax.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPriceWithTax())));
+                                    txtTotalAmt.setText("Rs."+" "+String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPrice())));
+                                    txtTaxes.setText("Rs."+" "+String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTaxes())));
+                                    txtTotalAmtTax.setText("Rs."+" "+String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPriceWithTax())));
                                 }
 
                             } else {
@@ -548,47 +552,47 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                 }
 
                                 if (db.cartHeaderDAO().getTaxesListByCustomer(customerId1).size() == 1) {
-                                    txtTotalAmt.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPrice())));
-                                    txtTaxes.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTaxes())));
-                                    txtTotalAmtTax.setText(String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPriceWithTax())));
+                                    txtTotalAmt.setText("Rs."+" "+String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPrice())));
+                                    txtTaxes.setText("Rs."+" "+String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTaxes())));
+                                    txtTotalAmtTax.setText("Rs."+" "+String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPriceWithTax())));
                                 }
 
                             }
-                        }else {
+                        } else {
                             SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0026, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
                         }
 
-                        } else {
+                    } else {
 
-                            cartList = new ArrayList<>();
+                        cartList = new ArrayList<>();
 
-                            if (db.cartDetailsDAO().getCartItemsWithOutApprovals() != null) {
+                        if (db.cartDetailsDAO().getCartItemsWithOutApprovals() != null) {
 
-                                List<CartDetails> cartDetailsList = new ArrayList<>();
-                                cartDetailsList = db.cartDetailsDAO().getCartItemsWithOutApprovals();
-                                productCatalogs cDto;
-                                for (int i = 0; i < cartDetailsList.size(); i++) {
-                                    cDto = new productCatalogs();
-                                    cDto.setMaterialMasterID(cartDetailsList.get(i).materialID);
-                                    cDto.setMCode(cartDetailsList.get(i).mCode);
-                                    cDto.setQuantity(cartDetailsList.get(i).quantity);
-                                    cDto.setCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
-                                    cDto.setImagePath(cartDetailsList.get(i).imgPath);
-                                    cDto.setPrice(cartDetailsList.get(i).price);
-                                    cDto.setShipToPartyCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
-                                    cDto.setCartDetailsID("0");
-                                    //cDto.setCartDetailsID(cartDetailsList.get(i).cartDetailsId);
-                                    cDto.setMaterialPriorityID(String.valueOf(cartDetailsList.get(i).isPriority));
-                                    cDto.setDeliveryDate(cartDetailsList.get(i).deliveryDate);
-                                    cDto.setCartHeaderID(Integer.parseInt(cartDetailsList.get(i).cartHeaderId));
-                                    cartList.add(cDto);
-                                }
-
-                                addToCart();
-
+                            List<CartDetails> cartDetailsList = new ArrayList<>();
+                            cartDetailsList = db.cartDetailsDAO().getCartItemsWithOutApprovals();
+                            productCatalogs cDto;
+                            for (int i = 0; i < cartDetailsList.size(); i++) {
+                                cDto = new productCatalogs();
+                                cDto.setMaterialMasterID(cartDetailsList.get(i).materialID);
+                                cDto.setMCode(cartDetailsList.get(i).mCode);
+                                cDto.setQuantity(cartDetailsList.get(i).quantity);
+                                cDto.setCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
+                                cDto.setImagePath(cartDetailsList.get(i).imgPath);
+                                cDto.setPrice(cartDetailsList.get(i).price);
+                                cDto.setShipToPartyCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
+                                cDto.setCartDetailsID("0");
+                                //cDto.setCartDetailsID(cartDetailsList.get(i).cartDetailsId);
+                                cDto.setMaterialPriorityID(String.valueOf(cartDetailsList.get(i).isPriority));
+                                cDto.setDeliveryDate(cartDetailsList.get(i).deliveryDate);
+                                cDto.setCartHeaderID(Integer.parseInt(cartDetailsList.get(i).cartHeaderId));
+                                cartList.add(cDto);
                             }
-                            // Toast.makeText(getActivity(), "Cart has changed please sync add to cart", Toast.LENGTH_SHORT).show();
+
+                            addToCart();
+
                         }
+                        // Toast.makeText(getActivity(), "Cart has changed please sync add to cart", Toast.LENGTH_SHORT).show();
+                    }
 
                 } else {
                     SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0007, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
@@ -608,7 +612,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                         if (userRoleName.equals("DTD")) {
                             applyOffer(0);
-                        }else {
+                        } else {
                             SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0023, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
                         }
 
@@ -648,9 +652,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                         oDto.setCartHeaderID(String.valueOf(fullfilHeadersids.get(i).cartHeaderID));
 
                                         int fullfilmentType;
-                                        if (cbPartialFulfilment.isChecked()) {
-                                            fullfilmentType = 2;
-                                        } else if (cbSingleDelivery.isChecked()) {
+                                        if (cbSingleDelivery.isChecked()) {
                                             fullfilmentType = 1;
                                         } else {
                                             fullfilmentType = 2;
@@ -679,9 +681,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                     oDto.setCartHeaderID(String.valueOf(fullfilHeadersid));
 
                                     int fullfilmentType;
-                                    if (cbPartialFulfilment.isChecked()) {
-                                        fullfilmentType = 2;
-                                    } else if (cbSingleDelivery.isChecked()) {
+                                    if (cbSingleDelivery.isChecked()) {
                                         fullfilmentType = 1;
                                     } else {
                                         fullfilmentType = 2;
@@ -815,7 +815,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                     cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                     cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                     cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                    cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice(),cart.getBOMHeaderID()));
+                                                    cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(), cart.getDiscountedPrice(), cart.getBOMHeaderID()));
                                         }
                                     }
                                 }
@@ -1084,7 +1084,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                             cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                             cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                             cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice(),cart.getBOMHeaderID()));
+                                                            cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(), cart.getDiscountedPrice(), cart.getBOMHeaderID()));
                                                 }
                                             }
                                         }
@@ -1418,7 +1418,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice(),cart.getBOMHeaderID()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(), cart.getDiscountedPrice(), cart.getBOMHeaderID()));
                                             }
                                         }
                                     }
@@ -1573,7 +1573,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice(),cart.getBOMHeaderID()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(), cart.getDiscountedPrice(), cart.getBOMHeaderID()));
                                             }
                                         }
                                     }
@@ -1710,7 +1710,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice(),cart.getBOMHeaderID()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(), cart.getDiscountedPrice(), cart.getBOMHeaderID()));
                                             }
                                         }
                                     }
@@ -1888,10 +1888,6 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
             if (b) {
                 cbSingleDelivery.setChecked(false);
             }
-        } else if (compoundButton.getId() == R.id.cbSingleDelivery) {
-            if (b) {
-                cbPartialFulfilment.setChecked(false);
-            }
         }
 
     }
@@ -2030,7 +2026,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                     cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                     cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                     cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                    cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(),cart.getDiscountedPrice(),cart.getBOMHeaderID()));
+                                                    cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(), cart.getDiscountedPrice(), cart.getBOMHeaderID()));
                                         }
                                     }
                                 }

@@ -84,6 +84,9 @@ public interface CustomerDAO {
     @Query("SELECT DISTINCT customerId FROM UserDivisionCustTable")
     List<String> getUserDivisionCustTableId();
 
+    @Query("SELECT DISTINCT customerId FROM UserDivisionCustTable WHERE customerId IN (SELECT customerId FROM CartHeader WHERE isApproved=0)")
+    List<String> getCustIds();
+
     @Query("SELECT DISTINCT ((customerCode) || '-' || (customerName)) AS customerName FROM CustomerTable WHERE customerId=:customerId LIMIT 1")
     String getCustomerCodesByString(String customerId);
 
@@ -99,6 +102,11 @@ public interface CustomerDAO {
     @Query("SELECT customerId FROM CustomerTable WHERE customerTypeID = 2 AND divisionId=:materialDivsionId")
     List<String> getCustomerIdsBasedOnMDivision(String materialDivsionId);
 
+    /*@Query("SELECT customerName FROM CartHeader Where customerID = :customerId")
+    String customerNamesFromCart(String customerId);
+
+    @Query("SELECT DISTINCT customerID FROM CartHeader")
+    List<String> customerIDsFromCart();*/
 
     // master data updates
     // customerId,customerName,customerCode,customerType,customerTypeID,division,divisionId,connectedDepo,mobile,primaryID,salesDistrict,zone,city,timeStamp

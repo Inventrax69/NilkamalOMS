@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -46,13 +47,16 @@ import com.example.inventrax.falconOMS.interfaces.ApiInterface;
 import com.example.inventrax.falconOMS.locale.LocaleHelper;
 import com.example.inventrax.falconOMS.model.KeyValues;
 import com.example.inventrax.falconOMS.model.Selectedlanguage;
+import com.example.inventrax.falconOMS.pojos.CustResult;
 import com.example.inventrax.falconOMS.pojos.CustomerListDTO;
+import com.example.inventrax.falconOMS.pojos.CustomerPartnerDTO;
 import com.example.inventrax.falconOMS.pojos.ItemListDTO;
 import com.example.inventrax.falconOMS.pojos.LoginDTO;
 import com.example.inventrax.falconOMS.pojos.ModelDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreAuthentication;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
+import com.example.inventrax.falconOMS.pojos.PaginationCustDTO;
 import com.example.inventrax.falconOMS.pojos.VariantDTO;
 import com.example.inventrax.falconOMS.room.AppDatabase;
 import com.example.inventrax.falconOMS.room.CustomerTable;
@@ -70,13 +74,17 @@ import com.example.inventrax.falconOMS.util.NotificationUtils;
 import com.example.inventrax.falconOMS.util.ProgressDialogUtils;
 import com.example.inventrax.falconOMS.util.SharedPreferencesUtils;
 import com.example.inventrax.falconOMS.util.SoundUtils;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 
+import org.json.JSONArray;
+
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -114,6 +122,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Encryption encryption;
     private List<ModelDTO> lstItem;
     private List<CustomerListDTO> customerList;
+    private List<UserDivisionCustTable> userDivisionCustTables;
     RestService restService;
     private String encryptedPass = "", customerIDs = "", userId = "", serviceUrlString = "";
     private  TextView txtReleaseDate,txtVersionNumber;
@@ -608,6 +617,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+
     public void getCustomerList() {
 
         if (NetworkUtils.isInternetAvailable(LoginActivity.this)) {
@@ -660,11 +670,312 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                             try {
 
+                                // JsonReader jsonReader=new JsonReader(new InputStreamReader(core.getEntityObject().toString()));
+                                //  parse(String.valueOf(core.getEntityObject()));
+                                //  InputStream stream = new ByteArrayInputStream(String.valueOf(core.getEntityObject()).getBytes(StandardCharsets.UTF_8));
+
+                                // PaginationCustDTO paginationCustDTO = gson.fromJson(String.valueOf(core.getEntityObject()), PaginationCustDTO.class);
+
+                                // JSONObject jsonObj = new JSONObject(core.getEntityObject().toString());
+
                                 LinkedTreeMap<String, String> _lstItem = new LinkedTreeMap<String, String>();
                                 _lstItem = (LinkedTreeMap<String, String>) core.getEntityObject();
 
                                 CustomerListDTO itemList;
                                 final List<CustomerListDTO> lstDto = new ArrayList<CustomerListDTO>();
+                                final List<UserDivisionCustTable> lstserDivisionCustTables = new ArrayList<UserDivisionCustTable>();
+                                final List<CustResult> lstDtoCR = new ArrayList<CustResult>();
+
+                                List<LinkedTreeMap<String,String>> arrayList= (ArrayList)(Object)_lstItem.get("Results");
+
+                                if(arrayList.size()>0){
+                                    customerTables = new ArrayList<>();
+                                    SharedPreferences sp = LoginActivity.this.getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
+                                    customerIDs = sp.getString(KeyValues.CUSTOMER_IDS, "");
+                                    userId = sp.getString(KeyValues.USER_ID, "");
+
+                                    for(int i=0;i<arrayList.size();i++){
+                                        CustomerListDTO dd=new Gson().fromJson(new Gson().toJson(arrayList.get(i)),CustomerListDTO.class);
+                                        lstDto.add(dd);
+                                        customerTables.add(new CustomerTable(dd.getCustomerID(), dd.getCustomerName(), dd.getCustomerCode(),
+                                                dd.getCustomerType(), dd.getCustomerTypeID(), dd.getDivision(), dd.getDivisionID().split("[.]")[0], dd.getConnectedDepot(), dd.getMobile(),
+                                                dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(), dd.getCity()));
+                                        lstserDivisionCustTables.add(new UserDivisionCustTable(dd.getCustomerID(), dd.getDivisionID().split("[.]")[0]));
+                                        Log.v("anil",""+i);
+                                        // db.userDivisionCustDAO().insert(new UserDivisionCustTable(dd.getCustomerID(), dd.getDivisionID().split("[.]")[0]));
+                                    }
+
+                                    customerList = lstDto;
+                                    userDivisionCustTables=lstserDivisionCustTables;
+
+                                    if (customerList != null && customerList.size() > 0) {
+
+                                        new AsyncTask<Void, Integer, String>() {
+
+                                            @Override
+                                            protected String doInBackground(Void... voids) {
+                                                synchronized (this) {
+                                                    db.userDivisionCustDAO().deleteAll();
+                                                    db.customerDAO().deleteAll();
+                                                    // inserting customers into local database
+                                                    db.customerDAO().insertAll(customerTables);
+                                                    db.userDivisionCustDAO().insertAll(userDivisionCustTables);
+
+                                                    Date date = Calendar.getInstance().getTime();
+                                                    //
+                                                    // Display a date in day, month, year format
+                                                    //
+                                                    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                                    String todaysdate = formatter.format(date);
+
+                                                    sharedPreferencesUtils.savePreference(KeyValues.CUSTOMER_MASTER_SYNC_TIME, todaysdate);
+                                                    // service call to get list of Models and Variants under the model
+                                                    getProductCatalog();
+
+                                                }
+                                                return null;
+                                            }
+                                        }.execute();
+
+
+                                    }
+                                    else {
+
+                                        dialog.dismiss();
+
+                                        sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
+                                        sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
+                                        Date date = Calendar.getInstance().getTime();
+                                        //
+                                        // Display a date in day, month, year format
+                                        //
+                                        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                        String todaysdate = formatter.format(date);
+
+                                        sharedPreferencesUtils.savePreference(KeyValues.CUSTOMER_MASTER_SYNC_TIME, todaysdate);
+
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+
+                                    }
+                                    ProgressDialogUtils.closeProgressDialog();
+                                }
+
+
+                                //_lstItem.get("Results");
+
+                                // itemList = new CustomerListDTO(_lstItem.entrySet());
+
+                                /*if (itemList.getResults() != null) {
+                                    customerTables = new ArrayList<>();
+
+                                    SharedPreferences sp = LoginActivity.this.getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
+                                    customerIDs = sp.getString(KeyValues.CUSTOMER_IDS, "");
+                                    userId = sp.getString(KeyValues.USER_ID, "");
+
+                                    // deleting existed user table
+                                    db.userDivisionCustDAO().deleteAll();
+
+                                    for (CustomerListDTO dd : itemList.getResults()) {
+
+                                        lstDto.add(dd);
+
+                                        customerTables.add(new CustomerTable(dd.getCustomerID(), dd.getCustomerName(), dd.getCustomerCode(),
+                                                dd.getCustomerType(), dd.getCustomerTypeID(), dd.getDivision(), dd.getDivisionID().split("[.]")[0], dd.getConnectedDepot(), dd.getMobile(),
+                                                dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(), dd.getCity()));
+
+                                        db.userDivisionCustDAO().insert(new UserDivisionCustTable(dd.getCustomerID(), dd.getDivisionID().split("[.]")[0]));
+
+                                    }
+
+//                                    customerList = lstDto;
+                                    if (customerList != null && customerList.size() > 0) {
+
+                                        new AsyncTask<Void, Integer, String>() {
+
+                                            @Override
+                                            protected String doInBackground(Void... voids) {
+                                                synchronized (this) {
+                                                    db.customerDAO().deleteAll();
+                                                    // inserting customers into local database
+                                                    db.customerDAO().insertAll(customerTables);
+
+                                                    Date date = Calendar.getInstance().getTime();
+                                                    //
+                                                    // Display a date in day, month, year format
+                                                    //
+                                                    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                                    String todaysdate = formatter.format(date);
+
+                                                    sharedPreferencesUtils.savePreference(KeyValues.CUSTOMER_MASTER_SYNC_TIME, todaysdate);
+                                                    // service call to get list of Models and Variants under the model
+                                                    getProductCatalog();
+
+                                                }
+                                                return null;
+                                            }
+                                        }.execute();
+
+
+                                    }
+                                    else {
+
+                                        dialog.dismiss();
+
+                                        sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
+                                        sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
+                                        Date date = Calendar.getInstance().getTime();
+                                        //
+                                        // Display a date in day, month, year format
+                                        //
+                                        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                        String todaysdate = formatter.format(date);
+
+                                        sharedPreferencesUtils.savePreference(KeyValues.CUSTOMER_MASTER_SYNC_TIME, todaysdate);
+
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+
+                                    }
+                                    ProgressDialogUtils.closeProgressDialog();//
+                                }*/
+
+                                ProgressDialogUtils.closeProgressDialog();
+
+                            } catch (Exception ex) {
+                                ProgressDialogUtils.closeProgressDialog();
+                                dialog.dismiss();
+                            }
+                        }
+                        ProgressDialogUtils.closeProgressDialog();
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    if (NetworkUtils.isInternetAvailable(LoginActivity.this)) {
+                        DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0001);
+                    } else {
+                        DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0014);
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                    dialog.dismiss();
+                }
+            });
+        } catch (Exception ex) {
+
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", LoginActivity.this);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0003);
+        }
+    }
+
+    /*public void getCustomerList() {
+
+        if (NetworkUtils.isInternetAvailable(LoginActivity.this)) {
+
+        } else {
+            DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0007);
+            return;
+        }
+
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.Customer_FPS_DTO, LoginActivity.this);
+        ItemListDTO itemListDTO = new ItemListDTO();
+        itemListDTO.setPageIndex(0);
+        itemListDTO.setPageSize(0);
+        itemListDTO.setHandheldRequest(true);
+        message.setEntityObject(itemListDTO);
+
+
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
+
+        call = apiService.GetCustomerListMobile(message);
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @SuppressLint("StaticFieldLeak")
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if ((core.getType().toString().equals("Exception"))) {
+
+                            OMSExceptionMessage omsExceptionMessage = null;
+
+                            for (OMSExceptionMessage oms : core.getOMSMessages()) {
+
+                                omsExceptionMessage = oms;
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showAlertType(omsExceptionMessage, LoginActivity.this, LoginActivity.this);
+                            }
+
+                            dialog.dismiss();
+
+                        } else {
+
+                            try {
+
+                               *//* //PaginationCustDTO paginationCustDTO = new Gson().fromJson(String.valueOf(core.getEntityObject()), PaginationCustDTO.class);
+
+                                *//**//*Type typeMyType = new TypeToken<ArrayList<PaginationCustDTO>>(){}.getType();
+
+                                ArrayList<PaginationCustDTO> myObject = gson.fromJson(core.getEntityObject().toString(), typeMyType);
+*//**//*
+                                Object getrow = core.getEntityObject();
+                                LinkedTreeMap<Object,Object> t = (LinkedTreeMap) getrow;
+
+                                CustResult custResult = null;
+                                List<CustResult> lst = new ArrayList<>();
+
+                                for (int j=0; j<=t.size();j++){
+
+                                    custResult = (CustResult) t.entrySet();
+                                    lst.add(custResult);
+
+                                }
+
+
+                                String name = t.get("Result").toString();
+
+                                Log.d("thisis",name);
+
+                                *//**//*JSONArray getCustomerList = new JSONArray((String) core.getEntityObject());
+                                PaginationCustDTO paginationCustDTO = new PaginationCustDTO();
+                                List<PaginationCustDTO> custDTOS = new ArrayList<>();
+
+
+                                for (int i = 0; i < getCustomerList.length(); i++) {
+                                    paginationCustDTO = new Gson().fromJson(getCustomerList.getJSONObject(i).toString(), PaginationCustDTO.class);
+                                    custDTOS.add(paginationCustDTO);
+                                }*//**//*
+
+*//*
+
+
+
+
+                                LinkedTreeMap<String, String> _lstItem = new LinkedTreeMap<String, String>();
+                                _lstItem = (LinkedTreeMap<String, String>) core.getEntityObject();
+
+                                CustomerListDTO itemList;
+                                final List<CustomerListDTO> lstDto = new ArrayList<CustomerListDTO>();
+                                final List<CustResult> lstDtoCR = new ArrayList<CustResult>();
 
 
                                 itemList = new CustomerListDTO(_lstItem.entrySet());
@@ -712,7 +1023,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                                     sharedPreferencesUtils.savePreference(KeyValues.CUSTOMER_MASTER_SYNC_TIME, todaysdate);
                                                     // service call to get list of Models and Variants under the model
-                                                    getProductCatalog();
+                                                    //getProductCatalog();
 
                                                 }
                                                 return null;
@@ -778,7 +1089,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             ProgressDialogUtils.closeProgressDialog();
             DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0003);
         }
-    }
+    }*/
 
     //Validating the User credentials and Calling the API method
     public void validateUserSession() {
@@ -830,7 +1141,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
         call = apiService.LoginUser(message);
-        ProgressDialogUtils.showProgressDialog("Please Wait");
 
         try {
             //Getting response from the method
@@ -973,7 +1283,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     } else {
                         DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0014);
                     }
-                    ProgressDialogUtils.closeProgressDialog();
+
                 }
             });
         } catch (Exception ex) {
@@ -982,7 +1292,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            ProgressDialogUtils.closeProgressDialog();
             DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0003);
         }
     }

@@ -239,12 +239,12 @@
                 android:textSize="@dimen/_20sdp"
                 android:textStyle="bold" />
 
-            <CheckBox
+            <!--<CheckBox
                 android:id="@+id/cbPartialFulfilment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="@string/multiple_deliveries" />
+                android:text="@string/multiple_deliveries" />-->
 
             <CheckBox
                 android:id="@+id/cbSingleDelivery"

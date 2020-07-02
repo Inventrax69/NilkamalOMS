@@ -3,6 +3,7 @@ package com.example.inventrax.falconOMS.room;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import com.example.inventrax.falconOMS.room.roomModel.CustomerData;
@@ -17,10 +18,8 @@ public interface UserDivisionCustDAO {
     @Query("SELECT * FROM UserDivisionCustTable")
     List<UserDivisionCustTable> getAll();
 
-    /*
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<UserDivisionCustDAO> userDivisionCustTables);
-    */
+    void insertAll(List<UserDivisionCustTable> userDivisionCustTables);
 
     @Insert(onConflict = REPLACE)
     void insert(UserDivisionCustTable userDivisionCustTable);

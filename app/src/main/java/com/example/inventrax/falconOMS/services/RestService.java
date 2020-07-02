@@ -32,8 +32,8 @@ public class RestService {
             SharedPreferences sp = context.getSharedPreferences(KeyValues.MY_PREFS, Context.MODE_PRIVATE);
 
                 OkHttpClient client = new OkHttpClient.Builder()
-                        .connectTimeout(100, TimeUnit.SECONDS)
-                        .readTimeout(100, TimeUnit.SECONDS).build();
+                        .connectTimeout(200, TimeUnit.SECONDS)
+                        .readTimeout(200, TimeUnit.SECONDS).build();
 
                 retrofit = new Retrofit.Builder()
                          //.baseUrl("http://192.168.1.62/OMS_Masters/").client(client)
