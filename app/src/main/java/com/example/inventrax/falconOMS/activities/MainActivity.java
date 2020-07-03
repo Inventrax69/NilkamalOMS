@@ -2,10 +2,12 @@ package com.example.inventrax.falconOMS.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -136,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
     public boolean isProfileOpened = false, isSearchOpened = false, isSettingOpened = false;
     String itemTimeStamp="", customerTimeStamp ="";
+    AlertDialog alert;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -630,7 +633,34 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
 
             case R.id.action_logout: {
-                logoutUtil.doLogout(MainActivity.this, MainActivity.this);
+
+                final AlertDialog.Builder builder;
+
+                builder = new AlertDialog.Builder(MainActivity.this);
+
+                //Setting message manually and performing action on button click
+                builder.setMessage("Are you sure you want to Logout ?")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                logoutUtil.doLogout(MainActivity.this, MainActivity.this);
+                            }
+                        })
+                        .setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                alert.dismiss();
+                            }
+                        });
+
+                //Creating dialog box
+                alert = builder.create();
+
+                //Setting the title manually
+                alert.setTitle("Alert");
+                alert.show();
+
+
             }
             break;
 

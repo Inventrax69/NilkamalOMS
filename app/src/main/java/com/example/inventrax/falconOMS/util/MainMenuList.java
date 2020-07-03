@@ -38,7 +38,7 @@ public class MainMenuList {
             arraylist.add(new MainMenu(5, KeyValues.ORDER_LIST_TITLE, true,R.string.orders_list));
             arraylist.add(new MainMenu(6, KeyValues.E_INFORMATION_TITLE, true,R.string.e_info));
             arraylist.add(new MainMenu(7, KeyValues.DASHBOARD_TITLE, true,R.string.dashboard));
-            arraylist.add(new MainMenu(8, KeyValues.INVENTORY_TITLE, true,R.string.inventory));
+            //arraylist.add(new MainMenu(8, KeyValues.INVENTORY_TITLE, true,R.string.inventory));
             arraylist.add(new MainMenu(9, KeyValues.COMPLAINTS_TITLE, true,R.string.complaints));
 
         }else{
@@ -49,7 +49,7 @@ public class MainMenuList {
             arraylist.add(new MainMenu(5, KeyValues.ORDER_LIST_TITLE, true,R.string.orders_list));
             arraylist.add(new MainMenu(6, KeyValues.E_INFORMATION_TITLE, true,R.string.e_info));
             arraylist.add(new MainMenu(7, KeyValues.DASHBOARD_TITLE, true,R.string.dashboard));
-            arraylist.add(new MainMenu(8, KeyValues.INVENTORY_TITLE, true,R.string.inventory));
+            //arraylist.add(new MainMenu(8, KeyValues.INVENTORY_TITLE, true,R.string.inventory));
             arraylist.add(new MainMenu(9, KeyValues.COMPLAINTS_TITLE, true,R.string.complaints));
             arraylist.add(new MainMenu(10, KeyValues.APPROVALS_TITLE, true,R.string.approvals));
         }

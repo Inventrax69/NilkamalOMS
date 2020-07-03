@@ -111,7 +111,7 @@
     <string name="order_fulfilment">Order Fulfillment</string>
     <string name="confirm_order">Confirm Order</string>
     <string name="multiple_deliveries">Multiple Deliveries</string>
-    <string name="single_delivery">Institutional deliveries </string>
+    <string name="single_delivery">Institutional deliveries</string>
     <string name="select_delivery_date">Select delivery date</string>
     <string name="vehicle_type_preference">Vehicle Type Preference</string>
     <string name="blanket_order_for_phased_deliveries">Blanket Order (for phased deliveries)</string>

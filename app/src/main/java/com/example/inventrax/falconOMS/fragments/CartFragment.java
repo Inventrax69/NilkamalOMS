@@ -204,6 +204,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
             // bottom sheet view controllers
             selectVehicleType = (SearchableSpinner) rootView.findViewById(R.id.selectVehicleType);
+
             cbSingleDelivery = (CheckBox) rootView.findViewById(R.id.cbSingleDelivery);
             cbVehicleTypePreference = (CheckBox) rootView.findViewById(R.id.cbVehicleTypePreference);
             hashMap = new HashMap<>();
@@ -276,8 +277,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
             final List<String> userDivisionId;
 
             getCustomerNames = db.customerDAO().getCustomerNames();
-            userDivisionId = db.customerDAO().getCustIds();
-            //userDivisionId = db.customerDAO().customerIDsFromCart();
+            //userDivisionId = db.customerDAO().getUserDivisionCustTableId();
+            userDivisionId = db.customerDAO().getCartCustIds();
             customerCodes = new ArrayList<String>();
             customerIds = new ArrayList<String>();
             headersList = new ArrayList<>();
@@ -288,11 +289,6 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
             for (int i = 0; i < userDivisionId.size(); i++) {
                 customerCodes.add(db.customerDAO().getCustomerCodesByString(userDivisionId.get(i)));
                 customerIds.add(db.customerDAO().getCustomerIdByString(userDivisionId.get(i)));
-
-                /*customerCodes.add(db.customerDAO().customerNamesFromCart(userDivisionId.get(i)));
-                customerIds.add(userDivisionId.get(i));*/
-
-
             }
 
             ArrayAdapter arrayAdapterPrinters = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, customerCodes);
@@ -538,9 +534,9 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                             if (userRoleName.equals("DTD")) {
 
                                 if (db.cartHeaderDAO().getTaxesList().size() == 1) {
-                                    txtTotalAmt.setText("Rs."+" "+String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPrice())));
-                                    txtTaxes.setText("Rs."+" "+String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTaxes())));
-                                    txtTotalAmtTax.setText("Rs."+" "+String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPriceWithTax())));
+                                    txtTotalAmt.setText("Rs." + " " + String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPrice())));
+                                    txtTaxes.setText("Rs." + " " + String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTaxes())));
+                                    txtTotalAmtTax.setText("Rs." + " " + String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPriceWithTax())));
                                 }
 
                             } else {
@@ -552,9 +548,9 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                 }
 
                                 if (db.cartHeaderDAO().getTaxesListByCustomer(customerId1).size() == 1) {
-                                    txtTotalAmt.setText("Rs."+" "+String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPrice())));
-                                    txtTaxes.setText("Rs."+" "+String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTaxes())));
-                                    txtTotalAmtTax.setText("Rs."+" "+String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPriceWithTax())));
+                                    txtTotalAmt.setText("Rs." + " " + String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPrice())));
+                                    txtTaxes.setText("Rs." + " " + String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTaxes())));
+                                    txtTotalAmtTax.setText("Rs." + " " + String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesListByCustomer(customerId1).get(0).getTotalPriceWithTax())));
                                 }
 
                             }
@@ -581,7 +577,6 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                 cDto.setPrice(cartDetailsList.get(i).price);
                                 cDto.setShipToPartyCustomerID(String.valueOf(cartDetailsList.get(i).customerId));
                                 cDto.setCartDetailsID("0");
-                                //cDto.setCartDetailsID(cartDetailsList.get(i).cartDetailsId);
                                 cDto.setMaterialPriorityID(String.valueOf(cartDetailsList.get(i).isPriority));
                                 cDto.setDeliveryDate(cartDetailsList.get(i).deliveryDate);
                                 cDto.setCartHeaderID(Integer.parseInt(cartDetailsList.get(i).cartHeaderId));

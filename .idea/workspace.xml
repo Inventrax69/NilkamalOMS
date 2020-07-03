@@ -6,14 +6,11 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="stackoverflow" />
     <option name="TOOL_WINDOW_LOG_LEVEL" value="error" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4dba8a46-9d0c-4ae3-9979-5d196adff008" name="Default Changelist" comment="removed unwanted zip files">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/pojos/CustResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/pojos/PaginationCustDTO.java" afterDir="false" />
+    <list default="true" id="4dba8a46-9d0c-4ae3-9979-5d196adff008" name="Default Changelist" comment="fixedBugs">
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileContent/fileContent.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/fileContent/fileContent.lock" afterDir="false" />
@@ -22,12 +19,15 @@
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/classAnalysis.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/MainActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/CartFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/CartFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/CustomerDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/CustomerDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/UserDivisionCustDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/UserDivisionCustDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/services/RestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/services/RestService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/util/MainMenuList.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/util/MainMenuList.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/cart_fragment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/cart_fragment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
@@ -54,47 +54,96 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/CustomerDAO.java">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/CustomerTable.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="147">
-              <caret line="87" column="27" selection-start-line="87" selection-start-column="17" selection-end-line="87" selection-end-column="27" />
+            <state relative-caret-position="731">
+              <caret line="50" column="25" selection-start-line="50" selection-start-column="25" selection-end-line="50" selection-end-column="25" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/CartFragment.java">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/HomeFragmentHints.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="94">
-              <caret line="280" column="52" lean-forward="true" selection-start-line="280" selection-start-column="52" selection-end-line="280" selection-end-column="52" />
+            <state relative-caret-position="855">
+              <caret line="173" selection-start-line="173" selection-end-line="173" />
+              <folding>
+                <element signature="method#getCustomerList#0;class#HomeFragmentHints#0" />
+                <element signature="method#getProductCatalog#0;class#HomeFragmentHints#0" />
+                <element signature="method#syncCart#0;class#HomeFragmentHints#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="53">
+              <caret line="910" selection-start-line="910" selection-end-line="910" />
+              <folding>
+                <element signature="e#53168#53169#0" expanded="true" />
+                <element signature="e#53208#53209#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/OrderHistoryFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
-              <caret line="728" column="95" lean-forward="true" selection-start-line="728" selection-start-column="95" selection-end-line="728" selection-end-column="95" />
+            <state relative-caret-position="104">
+              <caret line="339" column="16" selection-start-line="339" selection-start-column="16" selection-end-line="339" selection-end-column="16" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/cart_fragment.xml">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/OrderHistoryDetailsFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5355">
-              <caret line="315" column="48" selection-start-line="315" selection-start-column="37" selection-end-line="315" selection-end-column="48" />
+            <state relative-caret-position="492">
+              <caret line="138" selection-start-line="138" selection-end-line="138" />
             </state>
           </provider>
-          <provider editor-type-id="android-designer2" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/services/appupdate/UpdateService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1938">
-              <caret line="114" column="62" selection-start-line="114" selection-start-column="62" selection-end-line="114" selection-end-column="62" />
+            <state relative-caret-position="127">
+              <caret line="40" selection-start-line="40" selection-end-line="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/interfaces/ApiInterface.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="121">
+              <caret line="209" column="25" selection-start-line="209" selection-start-column="25" selection-end-line="209" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/MainActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="295">
+              <caret line="741" column="29" selection-start-line="741" selection-start-column="29" selection-end-line="741" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/SyncMasterDataActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="118">
+              <caret line="69" column="22" selection-start-line="69" selection-start-column="22" selection-end-line="69" selection-end-column="22" />
+              <folding>
+                <element signature="method#getCustomerList#0;class#SyncMasterDataActivity#0" />
+                <element signature="method#getProductCatalog#0;class#SyncMasterDataActivity#0" />
+                <element signature="method#setProgressDialog#0;class#SyncMasterDataActivity#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -114,7 +163,6 @@
       <find>query</find>
       <find>modelColor</find>
       <find>syn</find>
-      <find>sync</find>
       <find>txtOrderFulfilment</find>
       <find>price</find>
       <find>imageEdit</find>
@@ -133,6 +181,9 @@
       <find>spinner</find>
       <find>getCustomerCodesByString</find>
       <find>db.userDivisionCustDAO().del</find>
+      <find>showShi</find>
+      <find>UserID</find>
+      <find>sync</find>
     </findStrings>
   </component>
   <component name="GenerateSignedApkSettings">
@@ -164,27 +215,25 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/CartApprovalFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/pojos/CustResult.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/pojos/PaginationCustDTO.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/UserDivisionCustDAO.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/cart_fragment.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/CustomerDAO.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/CartFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/UserDivisionCustDAO.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-7" />
-    <option name="y" value="364" />
-    <option name="width" value="697" />
-    <option name="height" value="371" />
+    <option name="x" value="-1" />
+    <option name="width" value="964" />
+    <option name="height" value="735" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
           <expand>
@@ -212,6 +261,21 @@
             </path>
             <path>
               <item name="OMS_10FEB20" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="falconOMS" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="activities" type="462c0819:PsiDirectoryNode" />
+              <item name="MainActivity.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </path>
+            <path>
+              <item name="OMS_10FEB20" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="falconOMS" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="fragments" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OMS_10FEB20" type="1abcf292:AndroidViewProjectNode" />
               <item name="Gradle Scripts" type="ae0cef3a:AndroidBuildScriptsGroupNode" />
             </path>
           </expand>
@@ -235,6 +299,7 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -356,7 +421,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.49918166" visible="true" weight="0.21406959" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.49918166" visible="true" weight="0.21406959" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
@@ -365,16 +430,16 @@
       <window_info id="Capture Tool" order="7" />
       <window_info id="Build Variants" order="8" sideWeight="0.5008183" side_tool="true" weight="0.19288956" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.3289689" />
-      <window_info anchor="bottom" id="Logcat" order="1" weight="0.3289689" />
+      <window_info anchor="bottom" id="Logcat" order="1" visible="true" weight="0.3289689" />
       <window_info anchor="bottom" id="TODO" order="2" />
       <window_info anchor="bottom" id="Terminal" order="3" sideWeight="0.49924356" weight="0.3289689" />
       <window_info anchor="bottom" id="Event Log" order="4" sideWeight="0.50075644" side_tool="true" weight="0.3289689" />
       <window_info anchor="bottom" id="Build" order="5" weight="0.30932897" />
-      <window_info anchor="bottom" id="Android Profiler" order="6" show_stripe_button="false" weight="0.3289689" />
+      <window_info anchor="bottom" id="Android Profiler" order="6" weight="0.3289689" />
       <window_info anchor="bottom" id="Run" order="7" weight="0.3289689" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.31914893" />
       <window_info anchor="bottom" id="Messages" order="9" />
-      <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" weight="0.23298033" />
+      <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" weight="0.29500756" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
       <window_info anchor="right" id="Gradle" order="2" />
       <window_info anchor="right" id="Theme Preview" order="3" />
@@ -470,27 +535,9 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
-          <line>461</line>
-          <properties />
-          <option name="timeStamp" value="31" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
           <line>1071</line>
           <properties />
           <option name="timeStamp" value="32" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
-          <line>900</line>
-          <properties />
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
-          <line>982</line>
-          <properties />
-          <option name="timeStamp" value="42" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
@@ -500,45 +547,9 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
-          <line>1083</line>
-          <properties />
-          <option name="timeStamp" value="44" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
-          <line>1059</line>
-          <properties />
-          <option name="timeStamp" value="45" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
-          <line>935</line>
-          <properties />
-          <option name="timeStamp" value="48" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
-          <line>957</line>
-          <properties />
-          <option name="timeStamp" value="49" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
           <line>973</line>
           <properties />
           <option name="timeStamp" value="50" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
-          <line>939</line>
-          <properties />
-          <option name="timeStamp" value="51" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
-          <line>1004</line>
-          <properties />
-          <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
@@ -548,21 +559,9 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
-          <line>859</line>
-          <properties />
-          <option name="timeStamp" value="59" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
           <line>533</line>
           <properties />
           <option name="timeStamp" value="60" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
-          <line>653</line>
-          <properties />
-          <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/CartFragment.java</url>
@@ -572,21 +571,9 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/CartFragment.java</url>
-          <line>303</line>
-          <properties />
-          <option name="timeStamp" value="69" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/CartFragment.java</url>
           <line>297</line>
           <properties />
           <option name="timeStamp" value="70" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/CartFragment.java</url>
-          <line>342</line>
-          <properties />
-          <option name="timeStamp" value="71" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/CartFragment.java</url>
@@ -594,11 +581,90 @@
           <properties />
           <option name="timeStamp" value="72" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/ProductCatalogFragment.java</url>
+          <line>211</line>
+          <properties />
+          <option name="timeStamp" value="74" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/ProductCatalogFragment.java</url>
+          <line>443</line>
+          <properties />
+          <option name="timeStamp" value="75" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/ProductCatalogFragment.java</url>
+          <line>464</line>
+          <properties />
+          <option name="timeStamp" value="76" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/ProductCatalogFragment.java</url>
+          <line>335</line>
+          <properties />
+          <option name="timeStamp" value="77" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/ProductCatalogFragment.java</url>
+          <line>331</line>
+          <properties />
+          <option name="timeStamp" value="78" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
+          <line>645</line>
+          <properties />
+          <option name="timeStamp" value="79" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
+          <line>908</line>
+          <properties />
+          <option name="timeStamp" value="81" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
+          <line>931</line>
+          <properties />
+          <option name="timeStamp" value="83" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java</url>
+          <line>1060</line>
+          <properties />
+          <option name="timeStamp" value="84" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>new Gson().toJson(message)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>new Gson().toJson(core.entityObject)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>new Gson().toJson(core)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>db.itemDAO().getAllItems(pagecount, customerId)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>customerId.equals(&quot;&quot;) || customerId.isEmpty()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>db.customerDAO().getUserDivisionCustTableId()</expression-string>
         <language-id>JAVA</language-id>
@@ -616,31 +682,6 @@
       </expression>
       <expression>
         <expression-string>(LinkedTreeMap) getrow).get(&quot;Results&quot;)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>((LinkedTreeMap) getrow).get(&quot;Results&quot;).getClass()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>getrow</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>t.get(&quot;Results&quot;).toString()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>t.get(&quot;Results&quot;)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>new Gson().fromJson(String.valueOf(core.getEntityObject()), PaginationCustDTO.class)</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -765,18 +806,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/HomeFragmentHints.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1530">
-          <caret line="173" selection-start-line="173" selection-end-line="173" />
-          <folding>
-            <element signature="method#getCustomerList#0;class#HomeFragmentHints#0" />
-            <element signature="method#getProductCatalog#0;class#HomeFragmentHints#0" />
-            <element signature="method#syncCart#0;class#HomeFragmentHints#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/util/DialogUtils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
@@ -807,20 +836,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="32" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/interfaces/ApiInterface.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="47" column="25" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/pojos/CustomerListDTO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="19" column="30" lean-forward="true" selection-start-line="19" selection-start-column="30" selection-end-line="19" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -934,27 +949,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/ProductCatalogFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="859" column="77" selection-start-line="859" selection-start-column="77" selection-end-line="859" selection-end-column="77" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/CustomerTable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/UserDivisionCustDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/AppDatabase.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -980,6 +974,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/CartHeader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="17" column="23" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/CustomerDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="108" column="71" selection-start-line="108" selection-start-column="71" selection-end-line="108" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/UserDivisionCustDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="27" column="21" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/cart_fragment.xml">
       <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
@@ -995,31 +1010,115 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/ProductCatalogFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="365" column="17" lean-forward="true" selection-start-line="365" selection-start-column="17" selection-end-line="365" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/pojos/CustomerListDTO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="20" column="32" lean-forward="true" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/CartFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
-          <caret line="280" column="52" lean-forward="true" selection-start-line="280" selection-start-column="52" selection-end-line="280" selection-end-column="52" />
+        <state relative-caret-position="101">
+          <caret line="341" column="54" selection-start-line="341" selection-start-column="54" selection-end-line="341" selection-end-column="54" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/CartHeader.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/CustomerTable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="17" column="23" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="23" />
+        <state relative-caret-position="731">
+          <caret line="50" column="25" selection-start-line="50" selection-start-column="25" selection-end-line="50" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/room/CustomerDAO.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/HomeFragmentHints.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="87" column="27" selection-start-line="87" selection-start-column="17" selection-end-line="87" selection-end-column="27" />
+        <state relative-caret-position="855">
+          <caret line="173" selection-start-line="173" selection-end-line="173" />
+          <folding>
+            <element signature="method#getCustomerList#0;class#HomeFragmentHints#0" />
+            <element signature="method#getProductCatalog#0;class#HomeFragmentHints#0" />
+            <element signature="method#syncCart#0;class#HomeFragmentHints#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="741" column="29" selection-start-line="741" selection-start-column="29" selection-end-line="741" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/SyncMasterDataActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="69" column="22" selection-start-line="69" selection-start-column="22" selection-end-line="69" selection-end-column="22" />
+          <folding>
+            <element signature="method#getCustomerList#0;class#SyncMasterDataActivity#0" />
+            <element signature="method#getProductCatalog#0;class#SyncMasterDataActivity#0" />
+            <element signature="method#setProgressDialog#0;class#SyncMasterDataActivity#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/services/appupdate/SimpleHttpVersionCheckStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="97" selection-start-line="97" selection-end-line="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/services/appupdate/UpdateService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/activities/LoginActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="728" column="95" lean-forward="true" selection-start-line="728" selection-start-column="95" selection-end-line="728" selection-end-column="95" />
+        <state relative-caret-position="53">
+          <caret line="910" selection-start-line="910" selection-end-line="910" />
+          <folding>
+            <element signature="e#53168#53169#0" expanded="true" />
+            <element signature="e#53208#53209#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/interfaces/ApiInterface.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="121">
+          <caret line="209" column="25" selection-start-line="209" selection-start-column="25" selection-end-line="209" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/OrderHistoryDetailsFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="492">
+          <caret line="138" selection-start-line="138" selection-end-line="138" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Documents/AndroidStudio/DeviceExplorer/emulator-5554/data/data/com.example.inventrax.falconOMS/shared_prefs/myPrefs.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="46" lean-forward="true" selection-start-line="8" selection-start-column="46" selection-end-line="8" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/inventrax/falconOMS/fragments/OrderHistoryFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="339" column="16" selection-start-line="339" selection-start-column="16" selection-end-line="339" selection-end-column="16" />
         </state>
       </provider>
     </entry>
