@@ -237,7 +237,7 @@
     <string name="add">Add</string>
     <string name="available_stock">Available Stock</string>
     <string name="product_information">Product information</string>
-    <string name="gst">GST</string>
+    <string name="gst"> GST</string>
     <string name="data_sync">Please wait.. It takes few minutes to sync data</string>
     <string name="no_custmer">No customer is mapped</string>
     <string name="order_created">Order Created</string>
@@ -246,7 +246,7 @@
     <string name="active_cart">Active Cart</string>
     <string name="get_started">Get Started</string>
     <string name="skip">Skip</string>
-    <string name="grand_total">Grand total</string>
+    <string name="grand_total"> Grand total</string>
     <string name="grand_total_with_taxes">Grand total (With Taxes)</string>
     <string name="enter_url">Enter Url</string>
     <string name="base_price">Base Price</string>
@@ -310,5 +310,6 @@
     <string name="toolbar_customer">Change Customer</string>
     <string name="sync_cart">Sync Cart</string>
     <string name="toolbar_order_details_title">Order Details</string>
+
 
 </resources>

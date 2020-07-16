@@ -78,6 +78,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
     private OMSCoreMessage core;
     private ErrorMessages errorMessages;
 
+
     public CartDetailsAdapter(Context applicationContext, CartHeaderListDTO cartHeaderListDTO, List<CartDetailsListDTO> cartItemList, OnItemClickListener mlistener) {
         this.context = applicationContext;
         this.cartItemList = cartItemList;
@@ -170,8 +171,11 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
 
         if (!item.getDiscountID().equals("") && !item.getDiscountID().equals("0")) {
             viewHolder.ivAppliedOffer.setVisibility(View.VISIBLE);
+            viewHolder.txtAppliedOffer.setText("% Offers Applied:"+" "+cartItemList.get(i).getDiscountText());
+            viewHolder.txtAppliedOffer.setVisibility(View.VISIBLE);
         } else {
             viewHolder.ivAppliedOffer.setVisibility(View.GONE);
+            viewHolder.txtAppliedOffer.setVisibility(View.GONE);
         }
         if (item.getBOMHeaderID()!=0) {
             viewHolder.txtSalesBom.setVisibility(View.VISIBLE);
@@ -592,7 +596,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
 
     public class SubItemViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtItemName, txtItemDesc, txtPrice, txtOriginalPrice, isItemInactive,txtSalesBom, txtAvailableItem, txtOfferAvaiable;
+        private TextView txtItemName, txtItemDesc,txtAppliedOffer, txtPrice, txtOriginalPrice, isItemInactive,txtSalesBom, txtAvailableItem, txtOfferAvaiable;
         private EditText etQtyCart;
         private ImageView ivItem, ivDeleteItem, imageEdit, txtPriority, ivAppliedOffer;
 
@@ -600,6 +604,7 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
             super(view);
             // Initializing views
             txtItemName = (TextView) view.findViewById(R.id.txtItemName);
+            txtAppliedOffer = (TextView) view.findViewById(R.id.txtAppliedOffer);
             txtItemDesc = (TextView) view.findViewById(R.id.txtItemDesc);
             txtPrice = (TextView) view.findViewById(R.id.txtPrice);
             txtOriginalPrice = (TextView) view.findViewById(R.id.txtOriginalPrice);

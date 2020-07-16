@@ -20,6 +20,8 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.inventrax.falconOMS.R;
+import com.example.inventrax.falconOMS.activities.CartActivity;
+import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
 import com.example.inventrax.falconOMS.common.constants.ErrorMessages;
@@ -130,9 +132,11 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
         subItemAdapter = new CartDetailsAdapter(context, itemList.get(i), itemList.get(i).getListCartDetailsList(), new CartDetailsAdapter.OnItemClickListener() {
             @Override
             public void onDeletClick(int pos) {
+                cartFragment.visablePriceLayout(true);
                 if (NetworkUtils.isInternetAvailable(context)) {
                     deleteCartItem(pos, i);
                 } else {
+                    //((MainActivity) getActivity()).SetNavigationVisibility(false);
                     deleteItem(pos, i, 1);
                 }
             }

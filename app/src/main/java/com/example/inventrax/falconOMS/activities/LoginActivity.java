@@ -197,7 +197,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     switch (position) {
                         case 0:
                             LocaleHelper.setLocale(LoginActivity.this, "en");
-                            // DialogUtils.showAlertDialog(LoginActivity.this, resources.getString(R.string.msg));
+                            // DialogUtils.showAlertDialog(LoginAc
+                            //
+                            // activity.this, resources.getString(R.string.msg));
                             sharedPreferencesUtils.savePreference(KeyValues.SELECTED_LANG, "en");
                             Selectedlanguage.setLanguage(1);
                             break;
@@ -261,7 +263,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             txtVersionNumber = (TextView) findViewById(R.id.txtVersionNumber);
             txtReleaseDate = (TextView) findViewById(R.id.txtReleaseDate);
 
-            txtReleaseDate.setText(" 05-05-2020");
+            txtReleaseDate.setText(" 14-07-2020");
             txtVersionNumber.setText(" " + AndroidUtils.getVersionName().toString());
 
             settings = (ImageView) findViewById(R.id.ivSettings);

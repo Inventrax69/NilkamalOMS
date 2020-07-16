@@ -140,6 +140,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
     Dialog dialog;
     int cartHeaderId, custumerId;
     Dialog approvalDailog;
+    LinearLayout llPriceLayout;
     List<Integer> headersList;
 
     private boolean isOfferApplied = false;
@@ -165,6 +166,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
             coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinatorLayout);
             frame = (FrameLayout) rootView.findViewById(R.id.frame);
+
+            llPriceLayout = (LinearLayout) rootView.findViewById(R.id.llPriceLayout);
 
             db = new RoomAppDatabase(getActivity()).getAppDatabase();
             db.cartHeaderDAO().deleteHeadersNotThereInCartDetails(); // to clear all duplicate headers
@@ -333,6 +336,15 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
     }
 
+    public void visablePriceLayout(boolean delete) {
+
+        if (delete) {
+            llPriceLayout.setVisibility(View.GONE);
+        } else {
+            llPriceLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
     public void callCart() {
 
         setProgressDialog();
@@ -401,6 +413,10 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
             } else {
                 cartHeadersList = db.cartHeaderDAO().getAllCustomerWithOutApprovals(customerId);
             }
+            visablePriceLayout(false);
+            txtTotalAmt.setText("Rs." + " " + String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPrice())));
+            txtTaxes.setText("Rs." + " " + String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTaxes())));
+            txtTotalAmtTax.setText("Rs." + " " + String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPriceWithTax())));
 
             CartHeaderListDTO cartHeaderListDTO;
 
@@ -532,7 +548,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                             frame.setVisibility(View.VISIBLE);
 
                             if (userRoleName.equals("DTD")) {
-
+                                visablePriceLayout(true);
                                 if (db.cartHeaderDAO().getTaxesList().size() == 1) {
                                     txtTotalAmt.setText("Rs." + " " + String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTotalPrice())));
                                     txtTaxes.setText("Rs." + " " + String.format("%.2f", Double.parseDouble(db.cartHeaderDAO().getTaxesList().get(0).getTaxes())));

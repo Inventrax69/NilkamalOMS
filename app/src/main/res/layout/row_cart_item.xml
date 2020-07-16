@@ -77,6 +77,20 @@
                 android:textSize="12sp"
                 android:textStyle="normal" />
 
+            <TextView
+                android:id="@+id/txtAppliedOffer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:maxLines="2"
+                android:drawableLeft="@drawable/ic_apply_offer"
+                android:drawablePadding="@dimen/_3sdp"
+                android:text="Applied Offer\n"
+                android:textColor="#228B22"
+                android:textSize="12sp"
+                android:visibility="visible"
+                android:textStyle="normal" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -247,13 +261,14 @@
 
             <ImageView
                 android:id="@+id/ivAppliedOffer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="@dimen/_2sdp"
-                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
                 android:background="@drawable/ic_apply_offer"
                 android:clickable="true"
                 android:focusable="true"

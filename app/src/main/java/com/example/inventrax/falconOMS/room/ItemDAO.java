@@ -66,13 +66,13 @@ public interface ItemDAO {
     @Query("SELECT * FROM ItemTable LIMIT  15  OFFSET (:pagecount*15)")
     List<ItemTable> getAllItemsAll(int pagecount);
 
-    @Query("SELECT * FROM ItemTable LIMIT (:pagecount*15)")
+    @Query("SELECT * FROM ItemTable ORDER BY discountId=0 LIMIT (:pagecount*15)")
     List<ItemTable> setAllItemsAll(int pagecount);
 
-    @Query("SELECT * FROM ItemTable ORDER BY modelCode DESC LIMIT (:pagecount*15)")
+    @Query("SELECT * FROM ItemTable ORDER BY discountId=0, modelCode DESC LIMIT (:pagecount*15)")
     List<ItemTable> setAllItemsAllDESC(int pagecount);
 
-    @Query("SELECT * FROM ItemTable ORDER BY modelCode ASC LIMIT (:pagecount*15)")
+    @Query("SELECT * FROM ItemTable ORDER BY discountId=0, modelCode ASC LIMIT (:pagecount*15)")
     List<ItemTable> setAllItemsAllASC(int pagecount);
 
     @Query("SELECT COUNT(*) FROM ItemTable")

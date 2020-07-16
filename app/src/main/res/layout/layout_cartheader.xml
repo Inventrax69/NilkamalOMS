@@ -103,18 +103,40 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tv_creditLimit"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="5sp"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:layout_weight="1"
-                        android:drawableLeft="@drawable/credit_limit"
-                        android:drawableTint="@color/colorAccent"
-                        android:drawablePadding="10dp"/>
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:padding="5sp"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorAccent"
+                            android:layout_weight="0.7"
+                            android:gravity="center_vertical"
+                            android:text="@string/credit_limit"
+                            android:drawableLeft="@drawable/credit_limit"
+                            android:drawableTint="@color/colorAccent"
+                            android:drawablePadding="10dp"/>
+                        <TextView
+                            android:id="@+id/tv_creditLimit"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:padding="5sp"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_weight="1.3"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="10dp"/>
+
+
+                    </LinearLayout>
 
                     <CheckBox
                         android:id="@+id/checkboxPrority"

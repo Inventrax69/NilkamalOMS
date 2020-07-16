@@ -116,6 +116,7 @@ public class OrderExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView txtItemName = view.findViewById(R.id.txtItemName);
         TextView txtQty = view.findViewById(R.id.txtQty);
+        TextView txtPrice = view.findViewById(R.id.txtPrice);
         TextView txtDeliveryDate = view.findViewById(R.id.txtDeliveryDate);
         TextView isItemInactive = view.findViewById(R.id.isItemInactive);
         TextView txtOfferAvaiable = view.findViewById(R.id.txtOfferAvaiable);
@@ -177,6 +178,7 @@ public class OrderExpandableListAdapter extends BaseExpandableListAdapter {
 
         txtItemName.setText(cartDetailsListDTO.getMCode());
         txtQty.setText(cartDetailsListDTO.getQuantity());
+        txtPrice.setText("Rs." + "" +cartDetailsListDTO.getTotalPrice());
         txtDeliveryDate.setText(cartDetailsListDTO.getActualDeliveryDate());
 
         if (NetworkUtils.isInternetAvailable(context)) {
