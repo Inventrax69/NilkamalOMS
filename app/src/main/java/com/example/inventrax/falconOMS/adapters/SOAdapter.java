@@ -59,10 +59,10 @@ public class SOAdapter extends RecyclerView.Adapter<SOAdapter.ViewHolder> {
             txtMaterial = (TextView) view.findViewById(R.id.txtMaterial);
             txtQty = (TextView) view.findViewById(R.id.txtQty);
             txtMaterialDesc = (TextView) view.findViewById(R.id.txtMaterialDesc);
-            ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
+           // ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
 
             //on item click
-            ivDelete.setOnClickListener(new View.OnClickListener() {
+            /*ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
@@ -74,7 +74,7 @@ public class SOAdapter extends RecyclerView.Adapter<SOAdapter.ViewHolder> {
                 }
 
             });
-
+*/
         }
     }
 

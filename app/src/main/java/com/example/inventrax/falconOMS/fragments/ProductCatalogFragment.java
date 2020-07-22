@@ -179,7 +179,6 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
     public void onStart() {
         recyclerView.scrollToPosition(postion_value);
         super.onStart();
-
     }
 
     @Override
@@ -1921,6 +1920,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
          * Main list's content ViewHolder
          */
         public class ItemListView extends RecyclerView.ViewHolder {
+
             private TextView txtItemName, txtItemDesc, txtPrice, txtDiscount, tvScheme;
             private ImageView ivItem;
             private Button ivAddToCart;

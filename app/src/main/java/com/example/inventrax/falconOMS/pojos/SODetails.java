@@ -31,6 +31,19 @@ public class SODetails {
     @SerializedName("ItemDescription")
     private String ItemDescription;
 
+    @SerializedName("TotalValueWithTax")
+    private String TotalValueWithTax;
+
+    @SerializedName("DiscountID")
+    private String DiscountID;
+
+    @SerializedName("DiscountText")
+    private String DiscountText;
+
+    @SerializedName("DiscountedPrice")
+    private String DiscountedPrice;
+
+
 
     public SODetails() {
 
@@ -70,6 +83,30 @@ public class SODetails {
                 case "ItemDescription":
                     if (entry.getValue() != null) {
                         this.setItemDescription(entry.getValue().toString());
+                    }
+                    break;
+
+                case "TotalValueWithTax":
+                    if (entry.getValue() != null) {
+                        this.setTotalValueWithTax(entry.getValue().toString());
+                    }
+                    break;
+
+                case "DiscountID":
+                    if (entry.getValue() != null) {
+                        this.setDiscountID(entry.getValue().toString());
+                    }
+                    break;
+
+                case "DiscountText":
+                    if (entry.getValue() != null) {
+                        this.setDiscountText(entry.getValue().toString());
+                    }
+                    break;
+
+                case "DiscountedPrice":
+                    if (entry.getValue() != null) {
+                        this.setDiscountedPrice(entry.getValue().toString());
                     }
                     break;
 
@@ -142,4 +179,39 @@ public class SODetails {
     public void setItemDescription(String itemDescription) {
         ItemDescription = itemDescription;
     }
+
+    public String getTotalValueWithTax() {
+        return TotalValueWithTax;
+    }
+
+    public void setTotalValueWithTax(String totalValueWithTax) {
+        TotalValueWithTax = totalValueWithTax;
+    }
+
+
+    public String getDiscountID() {
+        return DiscountID;
+    }
+
+    public void setDiscountID(String discountID) {
+        DiscountID = discountID;
+    }
+
+    public String getDiscountText() {
+        return DiscountText;
+    }
+
+    public void setDiscountText(String discountText) {
+        DiscountText = discountText;
+    }
+
+    public String getDiscountedPrice() {
+        return DiscountedPrice;
+    }
+
+    public void setDiscountedPrice(String discountedPrice) {
+        DiscountedPrice = discountedPrice;
+    }
+
+
 }

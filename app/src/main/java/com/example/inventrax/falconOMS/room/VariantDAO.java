@@ -19,8 +19,6 @@ public interface VariantDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<VariantTable> variantTables);
 
-
-
     @Query("DELETE FROM VariantTable")
     void deleteAll();
 

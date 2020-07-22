@@ -41,6 +41,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -209,6 +211,12 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
         ivItem = (ImageView) rootView.findViewById(R.id.ivItem);
         availOffer = (ImageView) rootView.findViewById(R.id.availOffer);
+        Animation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(500); //You can manage the blinking time with this parameter
+        anim.setStartOffset(20);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setRepeatCount(Animation.INFINITE);
+        availOffer.startAnimation(anim);
 
         txtItemName = (TextView) rootView.findViewById(R.id.txtItemName);
         txtDiscount = (TextView) rootView.findViewById(R.id.txtDiscount);

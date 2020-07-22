@@ -1,6 +1,8 @@
 package com.example.inventrax.falconOMS.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,14 +37,30 @@ public class SODetailsAdapter extends RecyclerView.Adapter<SODetailsAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(final ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
 
-        SODetails soDetails = items.get(i);
+        final SODetails soDetails = items.get(i);
 
-        viewHolder.txtMaterial.setText(soDetails.getMaterial());
+        viewHolder.txtMaterial.setText(" "+soDetails.getMaterial());
         viewHolder.txtQty.setText(soDetails.getQuantity() + "");
         viewHolder.txtMaterialDesc.setText(soDetails.getItemDescription());
-        viewHolder.txtPrice.setText(soDetails.getUnitPrice());
+        viewHolder.txtUnitPrice.setText(soDetails.getUnitPrice() == null ? "":soDetails.getUnitPrice());
+        viewHolder.txtTotalPriceWithTax.setText(soDetails.getTotalValueWithTax()==null ? "":soDetails.getTotalValueWithTax());
+        viewHolder.txtDescription.setText(soDetails.getTotalValueWithTax()==null ? "":soDetails.getTotalValueWithTax());
+
+        if(soDetails.getDiscountID()!=null &&  ((int)Double.parseDouble(soDetails.getDiscountID()))>0){
+            viewHolder.txtMaterial.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_apply_offer, 0,0 , 0);
+            viewHolder.txtMaterial.setTextColor(Color.parseColor("#0000FF"));
+            viewHolder.txtDescription.setVisibility(View.VISIBLE);
+            viewHolder.txtDescription.setText(items.get(i).getDiscountText() +" of discount price(Rs.) : "+items.get(i).getDiscountedPrice());
+        }else{
+            viewHolder.txtMaterial.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
+            viewHolder.txtMaterial.setTextColor(Color.parseColor("#000000"));
+            viewHolder.txtDescription.setVisibility(View.GONE);
+            viewHolder.txtDescription.setText("");
+        }
+
+
 
     }
 
@@ -52,8 +70,8 @@ public class SODetailsAdapter extends RecyclerView.Adapter<SODetailsAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtMaterial, txtQty, txtMaterialDesc,txtPrice;
-        private ImageView ivDelete;
+
+        private TextView txtMaterial, txtQty, txtMaterialDesc,txtUnitPrice,txtTotalPriceWithTax,txtDescription;
 
         public ViewHolder(View view) {
             super(view);
@@ -61,22 +79,9 @@ public class SODetailsAdapter extends RecyclerView.Adapter<SODetailsAdapter.View
             txtMaterial = (TextView) view.findViewById(R.id.txtMaterial);
             txtQty = (TextView) view.findViewById(R.id.txtQty);
             txtMaterialDesc = (TextView) view.findViewById(R.id.txtMaterialDesc);
-            txtPrice = (TextView) view.findViewById(R.id.txtPrice);
-            ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
-
-            //on item click
-            ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        int pos = getAdapterPosition();
-                        if (pos != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(pos);
-                        }
-                    }
-                }
-
-            });
+            txtUnitPrice = (TextView) view.findViewById(R.id.txtUnitPrice);
+            txtTotalPriceWithTax = (TextView) view.findViewById(R.id.txtTotalPriceWithTax);
+            txtDescription = (TextView) view.findViewById(R.id.txtDescription);
 
         }
     }

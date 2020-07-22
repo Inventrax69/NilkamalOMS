@@ -81,6 +81,11 @@ public class SOHeaderDTO {
 
 
 
+    @SerializedName("SOValue")
+    private String SOValue;
+
+
+
 
     public SOHeaderDTO() {
 
@@ -101,6 +106,12 @@ public class SOHeaderDTO {
                 case "SONumber":
                     if (entry.getValue() != null) {
                         this.setSONumber(entry.getValue().toString());
+                    }
+                    break;
+
+               case "SOValue":
+                    if (entry.getValue() != null) {
+                        this.setSOValue(entry.getValue().toString());
                     }
                     break;
 
@@ -309,5 +320,13 @@ public class SOHeaderDTO {
 
     public void setSAPSONumber(String SAPSONumber) {
         this.SAPSONumber = SAPSONumber;
+    }
+
+    public String getSOValue() {
+        return SOValue;
+    }
+
+    public void setSOValue(String SOValue) {
+        this.SOValue = SOValue;
     }
 }

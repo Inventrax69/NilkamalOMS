@@ -42,7 +42,7 @@ public interface ItemDAO {
     @Query("SELECT * FROM ItemTable  ORDER BY  modelCode  DESC")
     List<ItemTable> getDescendingList();
 
-    @Query("SELECT * FROM ItemTable WHERE divisionID IN (SELECT divisionID FROM CustomerTable WHERE customerId=:customerId) LIMIT  15  OFFSET (:pagecount*15)")
+    @Query("SELECT * FROM ItemTable WHERE divisionID IN (SELECT divisionID FROM CustomerTable WHERE customerId=:customerId) AND modelID IN (SELECT DISTINCT(modelID) FROM VariantTable ORDER BY discountId DESC) LIMIT  15  OFFSET (:pagecount*15)")
     List<ItemTable> getAllItems(int pagecount, String customerId);
 
     @Query("SELECT * FROM ItemTable WHERE divisionID IN (SELECT divisionID FROM CustomerTable WHERE customerId=:customerId) LIMIT (:pagecount*15)")
@@ -57,13 +57,13 @@ public interface ItemDAO {
     @Query("SELECT COUNT(*) FROM ItemTable WHERE divisionID IN (SELECT divisionID FROM CustomerTable WHERE customerId=:customerId)")
     int getAllItemsCount(String customerId);
 
-    @Query("SELECT * FROM ItemTable WHERE divisionID IN (SELECT divisionID FROM CustomerTable WHERE customerId=:customerId) ORDER BY modelCode DESC LIMIT  15  OFFSET (:pagecount*15)")
+    @Query("SELECT * FROM ItemTable WHERE divisionID IN (SELECT divisionID FROM CustomerTable WHERE customerId=:customerId) AND modelID IN (SELECT DISTINCT(modelID) FROM VariantTable ORDER BY discountId DESC) ORDER BY modelCode DESC LIMIT  15  OFFSET (:pagecount*15)")
     List<ItemTable> getAllItemsDESC(int pagecount, String customerId);
 
-    @Query("SELECT * FROM ItemTable WHERE divisionID IN (SELECT divisionID FROM CustomerTable WHERE customerId=:customerId) ORDER BY modelCode ASC LIMIT  15  OFFSET (:pagecount*15)")
+    @Query("SELECT * FROM ItemTable WHERE divisionID IN (SELECT divisionID FROM CustomerTable WHERE customerId=:customerId) AND modelID IN (SELECT DISTINCT(modelID) FROM VariantTable ORDER BY discountId DESC) ORDER BY modelCode ASC LIMIT  15  OFFSET (:pagecount*15)")
     List<ItemTable> getAllItemsASC(int pagecount, String customerId);
 
-    @Query("SELECT * FROM ItemTable LIMIT  15  OFFSET (:pagecount*15)")
+    @Query("SELECT * FROM ItemTable WHERE modelID IN (SELECT DISTINCT(modelID) FROM VariantTable ORDER BY discountId DESC) LIMIT  15  OFFSET (:pagecount*15)")
     List<ItemTable> getAllItemsAll(int pagecount);
 
     @Query("SELECT * FROM ItemTable ORDER BY discountId=0 LIMIT (:pagecount*15)")
@@ -78,10 +78,10 @@ public interface ItemDAO {
     @Query("SELECT COUNT(*) FROM ItemTable")
     int getAllItemsAllCount();
 
-    @Query("SELECT * FROM ItemTable ORDER BY modelCode DESC LIMIT  15  OFFSET (:pagecount*15)")
+    @Query("SELECT * FROM ItemTable WHERE modelID IN (SELECT DISTINCT(modelID) FROM VariantTable ORDER BY discountId DESC)  ORDER BY modelCode DESC LIMIT  15  OFFSET (:pagecount*15)")
     List<ItemTable> getAllItemsDESCAll(int pagecount);
 
-    @Query("SELECT * FROM ItemTable  ORDER BY modelCode ASC LIMIT  15  OFFSET (:pagecount*15)")
+    @Query("SELECT * FROM ItemTable WHERE modelID IN (SELECT DISTINCT(modelID) FROM VariantTable ORDER BY discountId DESC)  ORDER BY modelCode ASC LIMIT  15  OFFSET (:pagecount*15)")
     List<ItemTable> getAllItemsASCAll(int pagecount);
 
     @Query("SELECT count(*) FROM ItemTable")

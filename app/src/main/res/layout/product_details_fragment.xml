@@ -96,10 +96,11 @@
                             <ImageView
                                 android:id="@+id/availOffer"
                                 android:layout_width="0dp"
+                                android:padding="@dimen/_2sdp"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
                                 android:layout_weight="0.5"
-                                android:src="@drawable/discount" />
+                                android:src="@drawable/ic_apply_offer" />
 
                         </LinearLayout>
 

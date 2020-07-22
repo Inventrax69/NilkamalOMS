@@ -111,7 +111,7 @@ public class SplashActivity extends Activity {
         builder = new UpdateRequest.Builder(context);
         serviceURL = new ServiceURL();
 
-        handler = new Handler();
+/*        handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -124,7 +124,9 @@ public class SplashActivity extends Activity {
                 //navigateToMainScreen();
 
             }
-        }, 500);
+        }, 500);*/
+
+        navigateToMainScreen();
 
     }
 

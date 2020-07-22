@@ -45,7 +45,7 @@ public class OrderHistoryDetailsFragment extends Fragment implements View.OnClic
     private static final String classCode = "OMS_Android_ComplaintsFragment";
     private View rootView;
 
-    TextView txtOMSRefNo, txtSAPRefNo, txtCustmerName, txtSourceSite;
+    TextView txtOMSRefNo, txtSAPRefNo, txtCustmerName, txtSourceSite,txtSOValue;
     RecyclerView rv_SODetails;
     LinearLayoutManager layoutManager;
     private Common common;
@@ -88,6 +88,7 @@ public class OrderHistoryDetailsFragment extends Fragment implements View.OnClic
         txtOMSRefNo = (TextView) rootView.findViewById(R.id.txtOMSRefNo);
         txtSAPRefNo = (TextView) rootView.findViewById(R.id.txtSAPRefNo);
         txtCustmerName = (TextView) rootView.findViewById(R.id.txtCustmerName);
+        txtSOValue = (TextView) rootView.findViewById(R.id.txtSOValue);
         //txtSourceSite = (TextView) rootView.findViewById(R.id.txtSourceSite);
 
         rv_SODetails = (RecyclerView) rootView.findViewById(R.id.rv_SODetails);
@@ -176,6 +177,8 @@ public class OrderHistoryDetailsFragment extends Fragment implements View.OnClic
 
                                 txtOMSRefNo.setText(soHeaderDTO.getSONumber());
                                 txtSAPRefNo.setText(soHeaderDTO.getSAPSONumber());
+                                txtSAPRefNo.setText(soHeaderDTO.getSAPSONumber());
+                                txtSOValue.setText(soHeaderDTO.getSOValue());
                                 txtCustmerName.setText(customerName);
 
                                 if (soHeaderDTO.getSODetails().size() > 0) {

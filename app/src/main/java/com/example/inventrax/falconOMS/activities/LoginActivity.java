@@ -503,7 +503,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                     List<ItemTable> itemTableList = new ArrayList<>();
                                                     List<VariantTable> variantTableList = new ArrayList<>();
 
-
                                                     for (ModelDTO md : lstItem) {
 
                                                         itemTableList.add(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
