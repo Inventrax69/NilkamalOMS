@@ -11,6 +11,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
@@ -46,6 +48,7 @@ import com.example.inventrax.falconOMS.activities.MainActivity;
 import com.example.inventrax.falconOMS.activities.OrderConfirmationActivity;
 import com.example.inventrax.falconOMS.adapters.CartHeaderAdapter;
 import com.example.inventrax.falconOMS.adapters.CartMaterialHeaderAdapter;
+import com.example.inventrax.falconOMS.adapters.PlaceOrderAdapter;
 import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
 import com.example.inventrax.falconOMS.common.constants.ErrorMessages;
@@ -61,6 +64,7 @@ import com.example.inventrax.falconOMS.pojos.CustomerPartnerDTO;
 import com.example.inventrax.falconOMS.pojos.FullfilmentDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
+import com.example.inventrax.falconOMS.pojos.PlaceOrderResponce;
 import com.example.inventrax.falconOMS.pojos.ProductDiscountDTO;
 import com.example.inventrax.falconOMS.pojos.VariantDTO;
 import com.example.inventrax.falconOMS.pojos.productCatalogs;
@@ -84,6 +88,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -142,7 +147,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
     Dialog approvalDailog;
     LinearLayout llPriceLayout;
     List<Integer> headersList;
-
+    String exmple = "[{\"CartHeaderID\":0.0,\"CartRefNo\":\"CRT2000001520\",\"CustomerName\":\"0000453528-N L  JAIN \\u0026 SONS\",\"IsCreditLimit\":0.0,\"OrdersList\":[{\"SOHeaderID\":0.0,\"POHeaderID\":0.0,\"SONumber\":\"SO20003772\"}]},{\"CartHeaderID\":0.0,\"CartRefNo\":\"CRT2000001521\",\"CustomerName\":\"0000501294-N.L. JAIN AND SONS\",\"IsCreditLimit\":1.0}]";
     private boolean isOfferApplied = false;
 
     @Nullable
@@ -329,6 +334,55 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                 txtOrderFulfilment.setBackgroundTintList(ColorStateList.valueOf(getActivity().getResources().getColor(R.color.colorAccent)));
                 callCart();
             }
+
+
+/*            //////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////
+            JSONArray getCartHeader = new JSONArray(exmple);
+            final List<PlaceOrderResponce> placeOrderResponces = new ArrayList<>();
+
+
+
+            if (getCartHeader.length() > 0) {
+                        for (int i = 0; i < getCartHeader.length(); i++) {
+                            PlaceOrderResponce placeOrderResponce = new Gson().fromJson(getCartHeader.get(i).toString(), PlaceOrderResponce.class);
+                            placeOrderResponces.add(placeOrderResponce);
+                        }
+
+                        final Dialog dialog = new Dialog(getActivity());
+                        dialog.setContentView(R.layout.ordered_list_recycler);
+                        dialog.setCancelable(false);
+                        Window window = dialog.getWindow();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        final RecyclerView credit_recycler;
+                        credit_recycler = dialog.findViewById(R.id.recyclerView);
+                        credit_recycler.setHasFixedSize(true);
+
+
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                        credit_recycler.setLayoutManager(layoutManager);
+
+                        final PlaceOrderAdapter placeOrderAdapter = new PlaceOrderAdapter(getActivity(), placeOrderResponces, new PlaceOrderAdapter.OnItemClickListener() {
+                            @Override
+                            public void OnItemClick(int pos) {
+
+                            }
+                        });
+
+                        credit_recycler.setAdapter(placeOrderAdapter);
+
+
+
+                dialog.show();
+
+
+
+
+
+            }
+            //////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////*/
 
         } catch (Exception ex) {
 
@@ -953,6 +1007,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                             isRFMcustomerPartnerDTOS.get(pos).setIsProcessID(IsProcessID);
                                         }
                                     });
+
                                     recyclerView.setAdapter(cartMaterialHeaderAdapter);
 
                                     Button btnPAD = dialog.findViewById(R.id.btnPAD);
@@ -1041,6 +1096,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
 
                                     int value = 0;
 
+                                    List<String> stringList=new ArrayList<>();
 
                                     for (int i = 0; i < getCartHeader.length(); i++) {
 
@@ -1051,6 +1107,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                         String CustomerName = getCartHeader.getJSONObject(i).getString("CustomerName");
                                         String CustomerCode = getCartHeader.getJSONObject(i).getString("CustomerCode");
                                         Double CreditLimit = getCartHeader.getJSONObject(i).getDouble("CreditLimit");
+
 
 
                                         for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
@@ -1065,6 +1122,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                 if (getActivity() != null) {
                                                     synchronized (getActivity()) {
                                                         Toast.makeText(getActivity(), CustomerName + " sent for Inactive approval", Toast.LENGTH_LONG).show();
+                                                        db.cartHeaderDAO().updateisFulfillmentCompleted(cartHeaderListDTO.getCartHeaderID(), String.valueOf(cartHeaderListDTO.getCustomerID()));
+                                                        stringList.add(""+cartHeaderListDTO.getCartHeaderID());
                                                         sendForApproval(cartHeaderListDTO.getCartHeaderID(), "6");
                                                     }
                                                 }
@@ -1072,17 +1131,22 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                                 if (getActivity() != null) {
                                                     synchronized (getActivity()) {
                                                         Toast.makeText(getActivity(), CustomerName + " sent for SCM approval", Toast.LENGTH_LONG).show();
+                                                        db.cartHeaderDAO().updateisFulfillmentCompleted(cartHeaderListDTO.getCartHeaderID(), String.valueOf(cartHeaderListDTO.getCustomerID()));
+                                                        stringList.add(""+cartHeaderListDTO.getCartHeaderID());
                                                         sendForApproval(cartHeaderListDTO.getCartHeaderID(), "23");
                                                     }
                                                 }
                                             } else {
                                                 value += 1;
-                                                if (customerId.equals("") || customerId.isEmpty())
+                                                if (customerId.equals("") || customerId.isEmpty()){
                                                     db.cartHeaderDAO().updateisFulfillmentCompleted(cartHeaderListDTO.getCartHeaderID(), String.valueOf(cartHeaderListDTO.getCustomerID()));
-                                                else if (fullfilmentDTOS.size() > 0)
+                                                    stringList.add(""+cartHeaderListDTO.getCartHeaderID());
+                                                }
+                                                else if (fullfilmentDTOS.size() > 0){
                                                     db.cartHeaderDAO().updateisFulfillmentCompleted(Integer.parseInt(fullfilmentDTOS.get(0).getCartHeaderID()), String.valueOf(customerId));
+                                                    stringList.add(""+fullfilmentDTOS.get(0).getCartHeaderID());
+                                                }
                                             }
-
 
                                             for (int p = 0; p < cartHeaderListDTO.getDeliveryDate().size(); p++) {
 
@@ -1122,8 +1186,11 @@ public class CartFragment extends Fragment implements View.OnClickListener, Comp
                                         ((CartActivity) getActivity()).stopTimer();
                                         */
 
-
+                                        Bundle b=new Bundle();
+                                        String json = new Gson().toJson(stringList);
+                                        b.putString("cartHeadersList",json);
                                         Intent i = new Intent(getActivity(), OrderConfirmationActivity.class);
+                                        i.putExtras(b);
                                         startActivity(i);
                                         getActivity().finish();
 

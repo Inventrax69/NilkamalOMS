@@ -64,6 +64,9 @@ public interface CartHeaderDAO {
     @Query("SELECT * FROM CartHeader WHERE isFulfillmentCompleted = 1 AND isApproved=0 ORDER BY isInActive DESC,isCreditLimit DESC")
     List<CartHeader> getFullfilmentCompletedHeaders();
 
+    @Query("SELECT cartHeaderID FROM CartHeader WHERE isFulfillmentCompleted = 1 ORDER BY isApproved ASC,isCreditLimit ASC,isInActive ASC")
+    int[] getFulfilmentAllHeaders();
+
     @Query("SELECT * FROM CartHeader WHERE isApproved=0")
     List<CartHeader> getCartHeadersForSTP();
 
@@ -79,7 +82,7 @@ public interface CartHeaderDAO {
     @Query("SELECT cartHeaderID FROM CartHeader WHERE customerID IN (:customerID) AND isApproved=0 LIMIT 1")
     Integer getHeadersWithCustmor(String customerID);
 
-    @Query("SELECT * FROM CartHeader WHERE isApproved=0 ")
+    @Query("SELECT * FROM CartHeader WHERE isApproved=0")
     List<CartHeader> getHeadersWithCustmor();
 
     @Query("SELECT cartHeaderID FROM CartHeader WHERE isCreditLimit = 1")

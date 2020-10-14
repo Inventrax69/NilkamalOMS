@@ -1,6 +1,7 @@
 package com.example.inventrax.falconOMS.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +37,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.application.AbstractApplication;
@@ -386,9 +388,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                 @Override
                                 protected String doInBackground(Void... voids) {
-                                    synchronized (this) {
-                                        validateUserSession();
-                                    }
+                                    ((Activity) LoginActivity.this).runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            synchronized (this) {
+                                                validateUserSession();
+                                            }
+                                        }
+                                    });
+
                                     return null;
                                 }
                             }.execute();
@@ -927,10 +934,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //Getting response from the method
             call.enqueue(new Callback<OMSCoreMessage>() {
 
+
                 @SuppressLint("StaticFieldLeak")
                 @Override
                 public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
                     ProgressDialogUtils.closeProgressDialog();
+                   // Log.v("ABCDE",new Gson().toJson(response.body()).toString());
+                   // Toast.makeText(LoginActivity.this, new Gson().toJson(response.body()).toString(), Toast.LENGTH_SHORT).show();
                     if (response.body() != null) {
 
                         core = response.body();
@@ -1001,10 +1011,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                         @Override
                                         protected String doInBackground(Void... voids) {
-                                            synchronized (this) {
-                                                // service call to get the customer under the user
-                                                getCustomerList();
-                                            }
+                                            ((Activity) LoginActivity.this).runOnUiThread(new Runnable() {
+                                                public void run() {
+                                                    synchronized (this) {
+                                                        // service call to get the customer under the user
+                                                        getCustomerList();
+                                                    }
+                                                }
+                                            });
+
                                             return null;
                                         }
                                     }.execute();
@@ -1046,7 +1061,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         startActivity(intent);
                                         finish();
                                     }*/
-                                } else {
+                                }
+                                else {
                                     DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0002);
                                 }
                             } catch (Exception ex) {
@@ -1181,38 +1197,44 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                             @Override
                                             protected String doInBackground(Void... voids) {
-                                                synchronized (this) {
 
-                                                    db.itemDAO().deleteAll();
-                                                    db.variantDAO().deleteAll();
+                                                ((Activity) LoginActivity.this).runOnUiThread(new Runnable() {
+                                                    public void run() {
+                                                        synchronized (this) {
 
-                                                    for (ModelDTO md : lstItem) {
+                                                            db.itemDAO().deleteAll();
+                                                            db.variantDAO().deleteAll();
 
-                                                        db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
-                                                                md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
+                                                            for (ModelDTO md : lstItem) {
 
-                                                        for (VariantDTO variantDTO : md.getVarientList()) {
+                                                                db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                                        md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
 
-                                                            db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
-                                                                    variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
-                                                                    variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
-                                                                    variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
-                                                                    variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
+                                                                for (VariantDTO variantDTO : md.getVarientList()) {
+
+                                                                    db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
+                                                                            variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                                                                            variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
+                                                                            variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
+                                                                            variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
+
+                                                                }
+
+                                                            }
+
+                                                            dialog.dismiss();
+
+                                                            sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
+                                                            sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
+
+                                                            pageIndex++;
+                                                            testProductCatalog();
+
 
                                                         }
-
                                                     }
+                                                });
 
-                                                    dialog.dismiss();
-
-                                                    sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
-                                                    sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
-
-                                                    pageIndex++;
-                                                    testProductCatalog();
-
-
-                                                }
                                                 return null;
                                             }
                                         }.execute();
@@ -1273,16 +1295,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-/*
-    private void versioncontrol() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // Do something for lollipop and above versions
-        } else {
-            Toast.makeText(LoginActivity.this, "You are running on lower versions of Android version, Some features may not work on your device", Toast.LENGTH_LONG).show();
-            //finish();
+    /*
+        private void versioncontrol() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                // Do something for lollipop and above versions
+            } else {
+                Toast.makeText(LoginActivity.this, "You are running on lower versions of Android version, Some features may not work on your device", Toast.LENGTH_LONG).show();
+                //finish();
+            }
         }
-    }
-*/
+    */
 
     @Override
     protected void onResume() {

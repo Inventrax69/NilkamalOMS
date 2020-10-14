@@ -1,16 +1,21 @@
 package com.example.inventrax.falconOMS.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -18,12 +23,16 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.inventrax.falconOMS.R;
+import com.example.inventrax.falconOMS.adapters.PlaceOrderAdapter;
 import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
 import com.example.inventrax.falconOMS.common.constants.ErrorMessages;
@@ -35,6 +44,7 @@ import com.example.inventrax.falconOMS.interfaces.ApiInterface;
 import com.example.inventrax.falconOMS.model.KeyValues;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
+import com.example.inventrax.falconOMS.pojos.PlaceOrderResponce;
 import com.example.inventrax.falconOMS.pojos.productCatalogs;
 import com.example.inventrax.falconOMS.room.AppDatabase;
 import com.example.inventrax.falconOMS.room.RoomAppDatabase;
@@ -46,8 +56,13 @@ import com.example.inventrax.falconOMS.util.NetworkUtils;
 import com.example.inventrax.falconOMS.util.ProgressDialogUtils;
 import com.example.inventrax.falconOMS.util.SharedPreferencesUtils;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -81,6 +96,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     AppDatabase db;
     ProgressDialogUtils progressDialogUtils;
     int c_width, c_height;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -356,6 +372,65 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                     return true;
                 }
             });
+
+
+            //////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////
+
+
+
+
+ /*
+            JSONArray getCartHeader = new JSONArray(exmple);
+            final List<PlaceOrderResponce> placeOrderResponces = new ArrayList<>();
+                    if (getCartHeader.length() > 0) {
+                        for (int i = 0; i < getCartHeader.length(); i++) {
+                            PlaceOrderResponce placeOrderResponce = new Gson().fromJson(getCartHeader.get(i).toString(), PlaceOrderResponce.class);
+                            placeOrderResponces.add(placeOrderResponce);
+                        }
+
+                        final Dialog dialog = new Dialog(CartActivity.this);
+                        dialog.setContentView(R.layout.ordered_list_recycler);
+                        dialog.setCancelable(false);
+                        Window window = dialog.getWindow();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        final RecyclerView credit_recycler;
+                        credit_recycler = dialog.findViewById(R.id.recyclerView);
+                        credit_recycler.setHasFixedSize(true);
+
+                        ImageView btnClOSE = dialog.findViewById(R.id.btnClOSE);
+
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(CartActivity.this);
+                        credit_recycler.setLayoutManager(layoutManager);
+
+                        final PlaceOrderAdapter placeOrderAdapter = new PlaceOrderAdapter(CartActivity.this, placeOrderResponces, new PlaceOrderAdapter.OnItemClickListener() {
+                            @Override
+                            public void OnItemClick(int pos) {
+
+                            }
+                        });
+
+                        credit_recycler.setAdapter(placeOrderAdapter);
+
+                        btnClOSE.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.dismiss();
+                            }
+                        });
+
+
+
+                        dialog.show();
+
+
+
+
+
+            }*/
+            //////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////
 
         } catch (Exception ex) {
             //

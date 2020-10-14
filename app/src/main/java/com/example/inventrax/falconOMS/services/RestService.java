@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -33,12 +34,14 @@ public class RestService {
 
                 OkHttpClient client = new OkHttpClient.Builder()
                         .connectTimeout(200, TimeUnit.SECONDS)
-                        .readTimeout(200, TimeUnit.SECONDS).build();
+                        .readTimeout(200, TimeUnit.SECONDS)
+                        .build();
 
                 retrofit = new Retrofit.Builder()
                          //.baseUrl("http://192.168.1.62/OMS_Masters/").client(client)
                          //.baseUrl("http://192.168.1.20/OMS_StoreFront/api/").client(client)
                            .baseUrl(sp.getString(KeyValues.SETTINGS_URL,"")).client(client)
+                         //.baseUrl("http://192.168.1.145/oms_storefront/api/").client(client)
                          //.baseUrl("http://103.252.184.181:90/OMS_StoreFront/api/").client(client)
                          //.baseUrl("http://192.168.1.62/OMS_StoreFront/api/").client(client)
                          //.baseUrl("http://192.168.1.241/OMS_StoreFront/api/").client(client)
@@ -48,6 +51,7 @@ public class RestService {
                          //.baseUrl("http://192.168.1.62/OMS_Orders/").client(client)
                          //.baseUrl("http://192.168.1.65/OMS_Orders/").client(client)
                         .addConverterFactory(GsonConverterFactory.create())
+                        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                         .build();
 
             return retrofit;

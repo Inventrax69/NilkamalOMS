@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -29,11 +30,15 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.example.inventrax.falconOMS.R;
+import com.example.inventrax.falconOMS.adapters.AvailableStockAdapter;
 import com.example.inventrax.falconOMS.adapters.OrderConfirmationHeaderAdapter;
+import com.example.inventrax.falconOMS.adapters.PlaceOrderAdapter;
 import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
 import com.example.inventrax.falconOMS.common.constants.ErrorMessages;
@@ -45,7 +50,9 @@ import com.example.inventrax.falconOMS.pojos.CartHeaderListDTO;
 import com.example.inventrax.falconOMS.pojos.CartHeaderListResponseDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
 import com.example.inventrax.falconOMS.pojos.OMSExceptionMessage;
+import com.example.inventrax.falconOMS.pojos.PlaceOrderResponce;
 import com.example.inventrax.falconOMS.pojos.productCatalogs;
+import com.example.inventrax.falconOMS.pojos.productCatalogs2;
 import com.example.inventrax.falconOMS.room.AppDatabase;
 import com.example.inventrax.falconOMS.room.CartDetails;
 import com.example.inventrax.falconOMS.room.CartHeader;
@@ -69,9 +76,11 @@ import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.RandomAccess;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -110,6 +119,9 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
     List<Integer> headersList;
     Animation anim;
     int c_width, c_height;
+    String ScartHeadersList, SAppoveredList;
+    int[] intArraycartHeadersList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -324,12 +336,62 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
                 }
             });
 
+            Bundle bundle = getIntent().getExtras();
+           // List<String> stringList = bundle.getParcelable("cartHeadersList");
+            assert bundle != null;
+            String str =  bundle.getString("cartHeadersList");
+            List<String> stringList = Arrays.asList(new Gson().fromJson(str,  String[].class));
+/*            // input primitive integer array
+            int[] intArray = db.cartHeaderDAO().getFulfilmentAllHeaders();
+
+            String strArray[] = new String[intArray.length];
+
+            for (int i = 0; i < intArray.length; i++)
+                strArray[i] = String.valueOf(intArray[i]);*/
+
+            ScartHeadersList = listToString(stringList);
+
+
             loadData();
 
         } catch (Exception ex) {
 
         }
 
+    }
+
+    public static String listToString(List<String> stringList) {
+        if (stringList.size() == 0) return "";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < stringList.size(); ++i) {
+            sb.append(",").append(stringList.get(i)).append("");
+        }
+        return sb.substring(1);
+    }
+
+    public static String arrayToString(String array[]) {
+        if (array.length == 0) return "";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < array.length; ++i) {
+            sb.append(",").append(array[i]).append("");
+        }
+        return sb.substring(1);
+    }
+
+    public static int[] convertListToArray(List<Integer> listResult) {
+        int size = listResult.size();
+        int[] result = new int[size];
+        if (listResult instanceof RandomAccess) {
+            for (int i = 0; i < size; i++) {
+                result[i] = listResult.get(i);
+            }
+        } else {
+            int i = 0;
+            for (int num : listResult) {
+                result[i++] = num;
+            }
+        }
+        return result;
     }
 
     @Override
@@ -404,8 +466,13 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
             case R.id.txtConfirmOrder:
                 if (NetworkUtils.isInternetAvailable(OrderConfirmationActivity.this)) {
-                    headersList = new ArrayList<>();
-                    CheckOrderConfirmation();
+                    // headersList = new ArrayList<>();
+                    // CheckOrderConfirmation();
+                    if (intArraycartHeadersList.length > 0) {
+                        ProcessCart();
+                    } else {
+                        SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "No cart to place order", ContextCompat.getColor(OrderConfirmationActivity.this, R.color.dark_red), Snackbar.LENGTH_SHORT);
+                    }
                 } else {
                     SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, errorMessages.EMC_0014, ContextCompat.getColor(OrderConfirmationActivity.this, R.color.dark_red), Snackbar.LENGTH_SHORT);
                 }
@@ -506,7 +573,6 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
     }
 
     int[] headerId;
-
     public void doOrderConfirmation() {
         if (headersList.size() > 0) {
             headerId = new int[headersList.size()];
@@ -680,6 +746,136 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
         super.onDestroy();
     }
 
+    public void ProcessCart() {
+
+        OMSCoreMessage message = new OMSCoreMessage();
+        message = common.SetAuthentication(EndpointConstants.OrderFulfilment_DTO, OrderConfirmationActivity.this);
+        CartHeaderListResponseDTO oDto = new CartHeaderListResponseDTO();
+        oDto.setCartHeaderID(intArraycartHeadersList);
+        oDto.setResult("");
+
+        //oDto.setCartHeaderID(Integer.parseInt(cartHeaderId));
+
+        message.setEntityObject(oDto);
+
+        Call<OMSCoreMessage> call = null;
+        ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
+
+        call = apiService.ProcessCart(message);
+
+        ProgressDialogUtils.showProgressDialog("Please Wait");
+
+        try {
+            //Getting response from the method
+            call.enqueue(new Callback<OMSCoreMessage>() {
+
+                @Override
+                public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+
+                    if (response.body() != null) {
+
+                        core = response.body();
+
+                        if ((core.getType().toString().equals("Exception"))) {
+
+                            OMSExceptionMessage omsExceptionMessage = null;
+
+                            for (OMSExceptionMessage oms : core.getOMSMessages()) {
+                                omsExceptionMessage = oms;
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showAlertType(omsExceptionMessage, OrderConfirmationActivity.this, OrderConfirmationActivity.this);
+                            }
+
+                            ProgressDialogUtils.closeProgressDialog();
+
+                        } else {
+
+                            try {
+
+                                ProgressDialogUtils.closeProgressDialog();
+
+                                if (core.getEntityObject() != null) {
+                                    JSONArray getCartHeader = new JSONArray(new Gson().toJson(core.getEntityObject() ));
+                                    List<PlaceOrderResponce> placeOrderResponces = new ArrayList<>();
+
+                                    if (getCartHeader.length() > 0) {
+                                        for (int i = 0; i < getCartHeader.length(); i++) {
+                                            PlaceOrderResponce placeOrderResponce = new Gson().fromJson(getCartHeader.get(i).toString(), PlaceOrderResponce.class);
+                                            placeOrderResponces.add(placeOrderResponce);
+                                        }
+
+                                        final Dialog dialog = new Dialog(OrderConfirmationActivity.this);
+                                        dialog.setContentView(R.layout.ordered_list_recycler);
+                                        dialog.setCancelable(false);
+                                        Window window = dialog.getWindow();
+                                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                        final RecyclerView credit_recycler;
+                                        credit_recycler = dialog.findViewById(R.id.recyclerView);
+                                        credit_recycler.setHasFixedSize(true);
+
+                                         Button buttonOk=(Button) dialog.findViewById(R.id.buttonOk);
+
+                                        LinearLayoutManager layoutManager = new LinearLayoutManager(OrderConfirmationActivity.this);
+                                        credit_recycler.setLayoutManager(layoutManager);
+
+                                        final PlaceOrderAdapter placeOrderAdapter = new PlaceOrderAdapter(OrderConfirmationActivity.this, placeOrderResponces, new PlaceOrderAdapter.OnItemClickListener() {
+                                            @Override
+                                            public void OnItemClick(int pos) {
+
+                                            }
+                                        });
+
+                                        buttonOk.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog.dismiss();
+                                                syncCart();
+                                            }
+                                        });
+
+                                        credit_recycler.setAdapter(placeOrderAdapter);
+
+
+                                        dialog.show();
+
+                                    }
+
+                                }
+
+                            } catch (Exception ex) {
+                                ProgressDialogUtils.closeProgressDialog();
+                            }
+                        }
+                        ProgressDialogUtils.closeProgressDialog();
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+
+                // response object fails
+                @Override
+                public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                    if (NetworkUtils.isInternetAvailable(OrderConfirmationActivity.this)) {
+                        DialogUtils.showAlertDialog(OrderConfirmationActivity.this, errorMessages.EMC_0001);
+                    } else {
+                        DialogUtils.showAlertDialog(OrderConfirmationActivity.this, errorMessages.EMC_0014);
+                    }
+                    ProgressDialogUtils.closeProgressDialog();
+                }
+            });
+        } catch (Exception ex) {
+
+            try {
+                ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", OrderConfirmationActivity.this);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(OrderConfirmationActivity.this, errorMessages.EMC_0003);
+        }
+    }
+
     public void OrderConfirmation(final int[] cartHeaderId) {
 
         OMSCoreMessage message = new OMSCoreMessage();
@@ -756,7 +952,6 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
                                 ProgressDialogUtils.closeProgressDialog();
 
                             } catch (Exception ex) {
-                                //Toast.makeText(OrderConfirmationActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                                 ProgressDialogUtils.closeProgressDialog();
                             }
                         }
@@ -788,7 +983,6 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
             DialogUtils.showAlertDialog(OrderConfirmationActivity.this, errorMessages.EMC_0003);
         }
     }
-
 
     public void deleteCartItemReservation() {
 
@@ -879,26 +1073,21 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
         }
     }
 
-
     public void getcart() {
 
         OMSCoreMessage message = new OMSCoreMessage();
         message = common.SetAuthentication(EndpointConstants.ProductCatalog_FPS_DTO, OrderConfirmationActivity.this);
-        productCatalogs productCatalogs = new productCatalogs();
+        productCatalogs2 productCatalogs = new productCatalogs2();
         productCatalogs.setHandheldRequest(true);
         productCatalogs.setUserID(userId);
         productCatalogs.setCustomerID("0");
         productCatalogs.setResults("");
-        if(db.cartHeaderDAO().getFullfilmentCompletedHeaders().size()==1)
+        productCatalogs.setCartHeaderIDS(ScartHeadersList);
+/*        if(db.cartHeaderDAO().getFullfilmentCompletedHeaders().size()==1)
             productCatalogs.setCartHeaderID(db.cartHeaderDAO().getFullfilmentCompletedHeaders().get(0).cartHeaderID);
         else
-            productCatalogs.setCartHeaderID(0);
+            productCatalogs.setCartHeaderID(0);*/
 
-/*        if( db.cartHeaderDAO().getFullfilmentCompletedHeaders().size() == 0){
-
-        }else{
-            productCatalogs.setCartHeaderID(db.cartHeaderDAO().getFullfilmentCompletedHeaders().);
-        }*/
 
         message.setEntityObject(productCatalogs);
 
@@ -937,25 +1126,33 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
                                 JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
                                 cartHeaderList = new ArrayList<>();
+                                SAppoveredList = "";
+                                List<Integer> carthedaerList = new ArrayList<>();
+                                StringBuilder sb = new StringBuilder();
                                 for (int i = 0; i < getCartHeader.length(); i++) {
-                                    String CustomerID =  getCartHeader.getJSONObject(i).getString("CustomerID");
-                                    String CustomerName =  getCartHeader.getJSONObject(i).getString("CustomerName");
-                                    String CustomerCode =  getCartHeader.getJSONObject(i).getString("CustomerCode");
-                                    Double CreditLimit =  getCartHeader.getJSONObject(i).getDouble("CreditLimit");
+                                    String CustomerID = getCartHeader.getJSONObject(i).getString("CustomerID");
+                                    String CustomerName = getCartHeader.getJSONObject(i).getString("CustomerName");
+                                    String CustomerCode = getCartHeader.getJSONObject(i).getString("CustomerCode");
+                                    Double CreditLimit = getCartHeader.getJSONObject(i).getDouble("CreditLimit");
                                     for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
                                         CartHeaderListDTO cartHeaderListDTO = new Gson().fromJson(getCartHeader.getJSONObject(i).getJSONArray("CartHeader").getJSONObject(j).toString(), CartHeaderListDTO.class);
                                         cartHeaderListDTO.setCustomerName(CustomerName);
                                         cartHeaderListDTO.setCreditLimit(CreditLimit);
                                         if (db.cartHeaderDAO().getFullfilmentCompletedHeaders() != null) {
                                             List<CartHeader> cartHeaders = db.cartHeaderDAO().getFullfilmentCompletedHeaders();
+                                            cartHeaderList.add(cartHeaderListDTO);
                                             for (CartHeader cartHeader : cartHeaders) {
                                                 if (cartHeaderListDTO.getCartHeaderID() == cartHeader.cartHeaderID) {
-                                                    cartHeaderList.add(cartHeaderListDTO);
+                                                    if (cartHeaderListDTO.getIsApproved() == 0) {
+                                                        carthedaerList.add(cartHeaderListDTO.getCartHeaderID());
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
+
+                                intArraycartHeadersList = convertListToArray(carthedaerList);
 
                                 if (cartHeaderList.size() > 0) {
                                     total = 0.0;
@@ -1070,7 +1267,6 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
         }
     }
 
-
     public void syncCart() {
 
         OMSCoreMessage message = new OMSCoreMessage();
@@ -1115,7 +1311,7 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
                             try {
 
-                                if(core.getEntityObject() !=null) {
+                                if (core.getEntityObject() != null) {
 
                                     JSONArray getCartHeader = new JSONArray((String) core.getEntityObject());
 
@@ -1124,7 +1320,8 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
 
                                     for (int i = 0; i < getCartHeader.length(); i++) {
 
-                                        TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() {};
+                                        TypeToken<CartHeaderListDTO> header = new TypeToken<CartHeaderListDTO>() {
+                                        };
 
                                         for (int j = 0; j < getCartHeader.getJSONObject(i).getJSONArray("CartHeader").length(); j++) {
 
@@ -1143,14 +1340,14 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
                                                         cart.getQuantity(), cart.getFileNames(), cart.getPrice(), cart.getIsInActive(),
                                                         cart.getCartDetailsID(), cartHeaderListDTO.getCustomerID(), 0, cart.getMaterialPriorityID(),
                                                         cart.getTotalPrice(), cart.getOfferValue(), cart.getOfferItemCartDetailsID(),
-                                                        cart.getDiscountID(),cart.getDiscountText(),cart.getGST(),cart.getTax(),cart.getSubTotal(),cart.getHSNCode(),cart.getDiscountedPrice(),cart.getBOMHeaderID()));
+                                                        cart.getDiscountID(), cart.getDiscountText(), cart.getGST(), cart.getTax(), cart.getSubTotal(), cart.getHSNCode(), cart.getDiscountedPrice(), cart.getBOMHeaderID()));
                                             }
 
                                         }
 
                                     }
 
-                                }else{
+                                } else {
                                     db.cartDetailsDAO().deleteAll();
                                     db.cartHeaderDAO().deleteAll();
                                 }
@@ -1195,7 +1392,6 @@ public class OrderConfirmationActivity extends AppCompatActivity implements View
             DialogUtils.showAlertDialog(OrderConfirmationActivity.this, errorMessages.EMC_0003);
         }
     }
-
 
     private void showSuccessDialog(String soNum) {
 

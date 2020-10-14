@@ -88,7 +88,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.8"
                     android:orientation="horizontal"
                     android:visibility="visible"
                     android:gravity="right">
@@ -99,8 +99,9 @@
                         android:layout_height="match_parent"
                         android:gravity="right|center"
                         android:text="Apply Offers"
-                        android:padding="@dimen/_2sdp"
-                        android:layout_margin="@dimen/_2sdp"
+                        android:padding="@dimen/_3sdp"
+                        android:textSize="@dimen/_12sdp"
+                        android:layout_margin="@dimen/_3sdp"
                         android:textColor="@color/green"
                         android:textStyle="normal"
                         android:drawableEnd="@drawable/ic_apply_offer"

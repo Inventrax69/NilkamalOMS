@@ -1,5 +1,6 @@
 package com.example.inventrax.falconOMS.adapters;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -99,7 +100,7 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
     OrderConfirmationAdapter subItemAdapter;
 
     @Override
-    public void onBindViewHolder(@NonNull final ItemViewHolder itemViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final ItemViewHolder itemViewHolder, @SuppressLint("RecyclerView") final int i) {
 
         final CartHeaderListDTO headerListDTO = itemList.get(i);
         itemViewHolder.customerName.setText(headerListDTO.getCustomerName());
@@ -375,38 +376,85 @@ public class OrderConfirmationHeaderAdapter extends RecyclerView.Adapter<OrderCo
         }
     }
 
-    private String getStatus(CartHeaderListDTO headerListDTO) {
+    private String getStatus(CartHeaderListDTO headerListDTO){
 
-        if (headerListDTO.getIsApproved() == 1 && headerListDTO.getIsInActive() == 1) {
+        if(headerListDTO.getIsApproved()==1 && headerListDTO.getIsInActive()==1 ){
             return "In active Approval (In-Process)";
-        } else if (headerListDTO.getIsApproved() == 1 && headerListDTO.getIsCreditLimit() == 1) {
+        }
+        else if(headerListDTO.getIsApproved()==1 && headerListDTO.getIsCreditLimit()==1 ){
             return "Credit Limit Approval (In-Process)";
-        } else if (headerListDTO.getIsApproved() == 2 && headerListDTO.getIsInActive() == 1) {
+        }
+        else if(headerListDTO.getIsApproved()==1 && headerListDTO.getIsOpenPrice()==1 ){
+            return "Open Price Approval (In-Process)";
+        }
+        else if(headerListDTO.getIsApproved()==1 && headerListDTO.getIsStockNotAvailable().equals("1") ){
+            return "Stock not available SCM Approval (In-Process)";
+        }
+        else if(headerListDTO.getIsApproved()==2 && headerListDTO.getIsInActive()==1  ){
             return "In active Approval (Rejected)";
-        } else if (headerListDTO.getIsApproved() == 2 && headerListDTO.getIsCreditLimit() == 1) {
+        }
+        else if(headerListDTO.getIsApproved()==2 && headerListDTO.getIsCreditLimit()==1 ){
             return "Credit Limit Approval (Rejected)";
-        } else if (headerListDTO.getIsApproved() == 3 && headerListDTO.getIsInActive() == 1) {
+        }
+        else if(headerListDTO.getIsApproved()==2 && headerListDTO.getIsOpenPrice()==1 ){
+            return "Open Price Approval (Rejected)";
+        }
+        else if(headerListDTO.getIsApproved()==2 && headerListDTO.getIsStockNotAvailable().equals("1") ){
+            return "Stock not available SCM Approval (Rejected)";
+        }
+        else if(headerListDTO.getIsApproved()==3 && headerListDTO.getIsInActive()==1  ){
             return "In active Approval (Initiated)";
-        } else if (headerListDTO.getIsApproved() == 3 && headerListDTO.getIsCreditLimit() == 1) {
+        }
+        else if(headerListDTO.getIsApproved()==3 && headerListDTO.getIsCreditLimit()==1 ){
             return "Credit Limit Approval (Initiated)";
-        } else if (headerListDTO.getIsApproved() == 7 && headerListDTO.getIsInActive() == 1) {
+        }
+        else if(headerListDTO.getIsApproved()==3 && headerListDTO.getIsOpenPrice()==1 ){
+            return "Open Price Approval (Initiated)";
+        }
+        else if(headerListDTO.getIsApproved()==3 && headerListDTO.getIsStockNotAvailable().equals("1") ){
+            return "Stock not available SCM Approval (Initiated)";
+        }
+        else if(headerListDTO.getIsApproved()==5 && headerListDTO.getIsInActive()==1  ){
+            return "In active Approval (Cancelled)";
+        }
+        else if(headerListDTO.getIsApproved()==5 && headerListDTO.getIsCreditLimit()==1 ){
+            return "Credit Limit Approval (Cancelled)";
+        }
+        else if(headerListDTO.getIsApproved()==5 && headerListDTO.getIsOpenPrice()==1 ){
+            return "Open Price Approval (Cancelled)";
+        }
+        else if(headerListDTO.getIsApproved()==5 && headerListDTO.getIsStockNotAvailable().equals("1") ){
+            return "Stock not available SCM Approval (Cancelled)";
+        }
+        else if(headerListDTO.getIsApproved()==7 && headerListDTO.getIsInActive()==1  ){
             return "In active Approval (Escalated)";
-        } else if (headerListDTO.getIsApproved() == 7 && headerListDTO.getIsCreditLimit() == 1) {
+        }
+        else if(headerListDTO.getIsApproved()==7 && headerListDTO.getIsCreditLimit()==1 ){
             return "Credit Limit Approval (Escalated)";
-        } else if (headerListDTO.getIsApproved() == 0 && headerListDTO.getIsInActive() == 1) {
-            setBlink = true;
+        }
+        else if(headerListDTO.getIsApproved()==7 && headerListDTO.getIsOpenPrice()==1 ){
+            return "Open Price Approval (Escalated)";
+        }
+        else if(headerListDTO.getIsApproved()==7 && headerListDTO.getIsStockNotAvailable().equals("1") ){
+            return "Stock not available SCM Approval (Escalated)";
+        }
+        else if(headerListDTO.getIsApproved()==0 && headerListDTO.getIsInActive()==1 ){
             return "In active Approval Required";
-        } else if (headerListDTO.getIsApproved() == 0 && headerListDTO.getIsCreditLimit() == 1) {
-            setBlink = true;
+        }
+        else if(headerListDTO.getIsApproved()==0 && headerListDTO.getIsCreditLimit()==1 ){
             return "Credit Limit Approval Required";
-        } else if (headerListDTO.getIsApproved() == 0 && headerListDTO.getIsInActive() == 0 && headerListDTO.getIsCreditLimit() == 0) {
-            return "No Approvals Required";
-        } else if (headerListDTO.getIsApproved() == 6) {
+        }
+        else if(headerListDTO.getIsApproved()==0  && headerListDTO.getIsInActive()==0 && headerListDTO.getIsCreditLimit()==0){
+            return "Check For Fulfilment Options";
+        }
+        else if(headerListDTO.getIsApproved()==6){
             return "Auto closed";
-        } else if (headerListDTO.getIsApproved() == 4) {
+        }
+        else if(headerListDTO.getIsApproved()==4){
             return "Approved";
-        } else {
+        }else{
             return "";
         }
     }
+
 }

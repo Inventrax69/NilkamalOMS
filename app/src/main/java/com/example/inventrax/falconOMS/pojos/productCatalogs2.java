@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class productCatalogs {
+public class productCatalogs2 {
 
     @SerializedName("SearchString")
     private String SearchString;
 
     @SerializedName("CartHeaderID")
-    private int CartHeaderID;
+    private String CartHeaderIDS;
 
     @SerializedName("CartDetailsID")
     private String CartDetailsID;
@@ -70,11 +70,11 @@ public class productCatalogs {
 
 
 
-    public productCatalogs() {
+    public productCatalogs2() {
 
     }
 
-    public productCatalogs(Set<? extends Map.Entry<?, ?>> entries) {
+    public productCatalogs2(Set<? extends Map.Entry<?, ?>> entries) {
 
         for (Map.Entry<?, ?> entry : entries) {
 
@@ -130,13 +130,6 @@ public class productCatalogs {
         SearchString = searchString;
     }
 
-    public int getCartHeaderID() {
-        return CartHeaderID;
-    }
-
-    public void setCartHeaderID(int cartHeaderID) {
-        CartHeaderID = cartHeaderID;
-    }
 
     public String getUserID() {
         return UserID;
@@ -252,4 +245,11 @@ public class productCatalogs {
         CreatedOn = createdOn;
     }
 
+    public String getCartHeaderIDS() {
+        return CartHeaderIDS;
+    }
+
+    public void setCartHeaderIDS(String cartHeaderIDS) {
+        CartHeaderIDS = cartHeaderIDS;
+    }
 }

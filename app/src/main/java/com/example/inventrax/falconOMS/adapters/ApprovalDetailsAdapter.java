@@ -51,7 +51,7 @@ public class ApprovalDetailsAdapter extends RecyclerView.Adapter<ApprovalDetails
 
         viewHolder.txtItemName.setText(cartItemList.get(i).getMCode());
         viewHolder.txtQty.setText(cartItemList.get(i).getQuantity());
-        viewHolder.txtDeliveryDate.setText(cartItemList.get(i).getActualDeliveryDate());
+        viewHolder.txtSubTotal.setText(cartItemList.get(i).getSubTotal());
 
         if (NetworkUtils.isInternetAvailable(context)) {
             Picasso.with(context)
@@ -130,7 +130,7 @@ public class ApprovalDetailsAdapter extends RecyclerView.Adapter<ApprovalDetails
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtItemName, txtQty, txtDeliveryDate, isItemInactive;
+        private TextView txtItemName, txtQty, txtSubTotal, isItemInactive;
         private ImageView ivItem, ivDeleteItem, ivOffer;
         View view;
 
@@ -140,7 +140,7 @@ public class ApprovalDetailsAdapter extends RecyclerView.Adapter<ApprovalDetails
             // Initializing views
             txtItemName = (TextView) view.findViewById(R.id.txtItemName);
             txtQty = (TextView) view.findViewById(R.id.txtQty);
-            txtDeliveryDate = (TextView) view.findViewById(R.id.txtDeliveryDate);
+            txtSubTotal = (TextView) view.findViewById(R.id.txtSubTotal);
             ivItem = (ImageView) view.findViewById(R.id.ivItem);
             ivDeleteItem = (ImageView) view.findViewById(R.id.ivDeleteItem);
             ivOffer = (ImageView) view.findViewById(R.id.ivOffer);

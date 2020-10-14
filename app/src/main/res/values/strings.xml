@@ -310,6 +310,8 @@
     <string name="toolbar_customer">Change Customer</string>
     <string name="sync_cart">Sync Cart</string>
     <string name="toolbar_order_details_title">Order Details</string>
+    <string name="place_order_list">Place Order List</string>
+    <string name="sub_total">Sub Total</string>
 
 
 </resources>

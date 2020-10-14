@@ -650,11 +650,23 @@ public class SCMHeaderAdapter extends RecyclerView.Adapter<SCMHeaderAdapter.Item
         else if(headerListDTO.getIsApproved()==1 && headerListDTO.getIsCreditLimit()==1 ){
             return "Credit Limit Approval (In-Process)";
         }
+        else if(headerListDTO.getIsApproved()==1 && headerListDTO.getIsOpenPrice()==1 ){
+            return "Open Price Approval (In-Process)";
+        }
+        else if(headerListDTO.getIsApproved()==1 && headerListDTO.getIsStockNotAvailable().equals("1") ){
+            return "Stock not available SCM Approval (In-Process)";
+        }
         else if(headerListDTO.getIsApproved()==2 && headerListDTO.getIsInActive()==1  ){
             return "In active Approval (Rejected)";
         }
         else if(headerListDTO.getIsApproved()==2 && headerListDTO.getIsCreditLimit()==1 ){
             return "Credit Limit Approval (Rejected)";
+        }
+        else if(headerListDTO.getIsApproved()==2 && headerListDTO.getIsOpenPrice()==1 ){
+            return "Open Price Approval (Rejected)";
+        }
+        else if(headerListDTO.getIsApproved()==2 && headerListDTO.getIsStockNotAvailable().equals("1") ){
+            return "Stock not available SCM Approval (Rejected)";
         }
         else if(headerListDTO.getIsApproved()==3 && headerListDTO.getIsInActive()==1  ){
             return "In active Approval (Initiated)";
@@ -662,11 +674,35 @@ public class SCMHeaderAdapter extends RecyclerView.Adapter<SCMHeaderAdapter.Item
         else if(headerListDTO.getIsApproved()==3 && headerListDTO.getIsCreditLimit()==1 ){
             return "Credit Limit Approval (Initiated)";
         }
+        else if(headerListDTO.getIsApproved()==3 && headerListDTO.getIsOpenPrice()==1 ){
+            return "Open Price Approval (Initiated)";
+        }
+        else if(headerListDTO.getIsApproved()==3 && headerListDTO.getIsStockNotAvailable().equals("1") ){
+            return "Stock not available SCM Approval (Initiated)";
+        }
+        else if(headerListDTO.getIsApproved()==5 && headerListDTO.getIsInActive()==1  ){
+            return "In active Approval (Cancelled)";
+        }
+        else if(headerListDTO.getIsApproved()==5 && headerListDTO.getIsCreditLimit()==1 ){
+            return "Credit Limit Approval (Cancelled)";
+        }
+        else if(headerListDTO.getIsApproved()==5 && headerListDTO.getIsOpenPrice()==1 ){
+            return "Open Price Approval (Cancelled)";
+        }
+        else if(headerListDTO.getIsApproved()==5 && headerListDTO.getIsStockNotAvailable().equals("1") ){
+            return "Stock not available SCM Approval (Cancelled)";
+        }
         else if(headerListDTO.getIsApproved()==7 && headerListDTO.getIsInActive()==1  ){
             return "In active Approval (Escalated)";
         }
         else if(headerListDTO.getIsApproved()==7 && headerListDTO.getIsCreditLimit()==1 ){
             return "Credit Limit Approval (Escalated)";
+        }
+        else if(headerListDTO.getIsApproved()==7 && headerListDTO.getIsOpenPrice()==1 ){
+            return "Open Price Approval (Escalated)";
+        }
+        else if(headerListDTO.getIsApproved()==7 && headerListDTO.getIsStockNotAvailable().equals("1") ){
+            return "Stock not available SCM Approval (Escalated)";
         }
         else if(headerListDTO.getIsApproved()==0 && headerListDTO.getIsInActive()==1 ){
             return "In active Approval Required";

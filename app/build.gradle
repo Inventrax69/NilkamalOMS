@@ -63,7 +63,9 @@ android {
         exclude 'android/support/annotation/StyleRes.class'
     }
 
-    compileOptions { }
+    compileOptions {
+
+    }
 
 }
 
@@ -84,6 +86,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
     implementation 'com.google.code.gson:gson:2.8.5'
