@@ -98,6 +98,8 @@ public class SCMHeaderAdapter extends RecyclerView.Adapter<SCMHeaderAdapter.Item
 
         final CartHeaderListDTO headerListDTO = itemList.get(i);
         itemViewHolder.customerName.setText(headerListDTO.getCustomerName());
+        String placeOrderBefore = context.getString(R.string.place_order_before) +" ";
+        itemViewHolder.tv_placeOrderBefore.setText(placeOrderBefore +headerListDTO.getUserValidity());
         itemViewHolder.creditLimit.setText(String.valueOf((int) headerListDTO.getCreditLimit()));
 
         if (headerListDTO.getIsCreditLimit() > 0) {
@@ -387,7 +389,7 @@ public class SCMHeaderAdapter extends RecyclerView.Adapter<SCMHeaderAdapter.Item
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView customerName, creditLimit, tv_Status,tv_CreatedOn;
+        private TextView customerName, creditLimit, tv_Status,tv_CreatedOn,tv_placeOrderBefore;
         private TextView tv_Cancel,tv_Place;
         ExpandableListView expandableDeliveryDate;
         //private RecyclerView rvSubItem;
@@ -400,6 +402,7 @@ public class SCMHeaderAdapter extends RecyclerView.Adapter<SCMHeaderAdapter.Item
             tv_Place = itemView.findViewById(R.id.tv_Place);
             //rvSubItem = itemView.findViewById(R.id.rv_cartDetails);
             tv_Status = itemView.findViewById(R.id.tv_Status);
+            tv_placeOrderBefore = itemView.findViewById(R.id.tv_placeOrderBefore);
             tv_CreatedOn = itemView.findViewById(R.id.tv_CreatedOn);
             expandableDeliveryDate = itemView.findViewById(R.id.expandableDeliveryDate);
         }

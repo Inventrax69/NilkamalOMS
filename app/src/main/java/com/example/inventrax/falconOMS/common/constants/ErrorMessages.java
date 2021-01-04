@@ -57,6 +57,10 @@ public class ErrorMessages {
 
     public String EMC_0026 = "Please apply offers before proceeding further";
 
+    public String EMC_0027 = "Please enter remarks";
+
+    public String EMC_0028 = "Please enter credentials.";
+
 
 
 

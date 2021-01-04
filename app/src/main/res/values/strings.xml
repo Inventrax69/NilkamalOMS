@@ -79,7 +79,7 @@
     <string name="toolbar_approvals_list">Approvals List</string>
     <string name="toolbar_sad_list">S &amp; D  List</string>
     <string name="toolbar_approvals_details">Approvals Details</string>
-    <string name="toolbar_SandD">Schems &amp; Discounts</string>
+    <string name="toolbar_SandD">Schemes &amp; Discounts</string>
     <string name="toolbar_orderbooking">Order Booking</string>
     <string name="toolbar_orderhistory">Order History</string>
     <string name="toolbar_settings">Settings</string>
@@ -111,7 +111,7 @@
     <string name="order_fulfilment">Order Fulfillment</string>
     <string name="confirm_order">Confirm Order</string>
     <string name="multiple_deliveries">Multiple Deliveries</string>
-    <string name="single_delivery">Institutional deliveries</string>
+    <string name="single_delivery">Institutional Orders</string>
     <string name="select_delivery_date">Select delivery date</string>
     <string name="vehicle_type_preference">Vehicle Type Preference</string>
     <string name="blanket_order_for_phased_deliveries">Blanket Order (for phased deliveries)</string>
@@ -312,6 +312,8 @@
     <string name="toolbar_order_details_title">Order Details</string>
     <string name="place_order_list">Place Order List</string>
     <string name="sub_total">Sub Total</string>
+    <string name="place_order_before">Place order before</string>
+    <string name="wait_string">Please wait..</string>
 
 
 </resources>

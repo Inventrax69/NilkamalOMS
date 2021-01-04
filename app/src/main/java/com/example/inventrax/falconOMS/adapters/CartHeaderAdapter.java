@@ -104,7 +104,7 @@ public class CartHeaderAdapter extends RecyclerView.Adapter<CartHeaderAdapter.It
         final CartHeaderListDTO headerListDTO = itemList.get(i);
         final CartHeader cartHeader = db.cartHeaderDAO().getByCustomerIDCartHeaderID(headerListDTO.getCustomerID(), headerListDTO.getCartHeaderID());
         itemViewHolder.customerName.setText(headerListDTO.getCustomerName());
-        itemViewHolder.creditLimit.setText(String.valueOf((int) headerListDTO.getCreditLimit()));
+        itemViewHolder.creditLimit.setText("Rs." + " " + String.valueOf((int) headerListDTO.getCreditLimit()));
 
         String value = db.customerDAO().getAllCustomerCodeById(cartHeader.shipToPartyId);
         value = (value == null || value.isEmpty()) ? db.customerDAO().getAllCustomerCode(cartHeader.customerID) : value;

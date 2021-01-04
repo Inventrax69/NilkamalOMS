@@ -222,19 +222,19 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
                         int QtyCount = Integer.parseInt(viewHolder.etQtyCart.getText().toString());
                         if (QtyCount != 0) {
                             VariantTable selectedVariant = db.variantDAO().getMaterial(Integer.parseInt(item.getMaterialMasterID()));
-                            if ((Integer.parseInt(viewHolder.etQtyCart.getText().toString()) % (selectedVariant.stackSize)) == 0) {
-                                viewHolder.imageEdit.setImageDrawable(editDrawable);
-                                viewHolder.etQtyCart.setEnabled(false);
-                                isUpdatedBoolean.set(i, true);
-                                db.cartDetailsDAO().updateQantity(viewHolder.etQtyCart.getText().toString(), item.getMaterialMasterID(), String.valueOf(item.getCustomerID()), item.getCartHeaderID());
-                                cartItemList.get(i).setQuantity(viewHolder.etQtyCart.getText().toString());
-                                notifyItemChanged(i);
-                                notifyDataSetChanged();
-                            } else {
+                            /*if ((Integer.parseInt(viewHolder.etQtyCart.getText().toString()) % (selectedVariant.stackSize)) == 0) {*/
+                            viewHolder.imageEdit.setImageDrawable(editDrawable);
+                            viewHolder.etQtyCart.setEnabled(false);
+                            isUpdatedBoolean.set(i, true);
+                            db.cartDetailsDAO().updateQantity(viewHolder.etQtyCart.getText().toString(), item.getMaterialMasterID(), String.valueOf(item.getCustomerID()), item.getCartHeaderID());
+                            cartItemList.get(i).setQuantity(viewHolder.etQtyCart.getText().toString());
+                            notifyItemChanged(i);
+                            notifyDataSetChanged();
+/*                            } else {
                                 InputMethodManager imm = (InputMethodManager) context.getSystemService(Service.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(viewHolder.etQtyCart.getWindowToken(), 0);
                                 SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.coordinatorLayout), "Stack size is not correct please enter the mutiples of " + selectedVariant.stackSize + " Eg : " + stackSizeQty(Integer.parseInt((!viewHolder.etQtyCart.getText().toString().isEmpty()) ? viewHolder.etQtyCart.getText().toString() : "1"), selectedVariant.stackSize), ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
-                            }
+                            }*/
                         } else {
                             InputMethodManager imm = (InputMethodManager) context.getSystemService(Service.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(viewHolder.etQtyCart.getWindowToken(), 0);
@@ -317,7 +317,6 @@ public class CartDetailsAdapter extends RecyclerView.Adapter<CartDetailsAdapter.
             @Override
             public void onClick(View view) {
                 if (NetworkUtils.isInternetAvailable(context)) {
-
                     GetBOMDetails(cartItemList.get(i).getBOMHeaderID());
                 } else {
                     SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.coordinatorLayout), errorMessages.EMC_0007, ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);

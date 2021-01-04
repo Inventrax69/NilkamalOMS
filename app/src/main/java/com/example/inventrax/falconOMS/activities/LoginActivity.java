@@ -265,7 +265,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             txtVersionNumber = (TextView) findViewById(R.id.txtVersionNumber);
             txtReleaseDate = (TextView) findViewById(R.id.txtReleaseDate);
 
-            txtReleaseDate.setText(" 14-07-2020");
+            txtReleaseDate.setText(" 01-01-2021");
             txtVersionNumber.setText(" " + AndroidUtils.getVersionName().toString());
 
             settings = (ImageView) findViewById(R.id.ivSettings);
@@ -417,7 +417,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             sharedPreferencesUtils.savePreference(KeyValues.IS_REMEMBER_PASSWORD_CHECKED, true);
                         }
                     } else {
-
+                        Toast.makeText(this, errorMessages.EMC_0028, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     DialogUtils.showAlertDialog(LoginActivity.this, errorMessages.EMC_0017);
@@ -487,7 +487,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 _lstItem = (LinkedTreeMap<String, String>) core.getEntityObject();
 
                                 itemTables = new ArrayList<>();
-                                ItemListDTO itemList;
+                                final ItemListDTO itemList;
 
                                 try {
 
@@ -527,7 +527,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                                     variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
 
                                                         }
-
+                                                        Log.v("Items",""+itemTableList.size());
                                                     }
 
                                                     synchronized (this) {
@@ -542,6 +542,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                                     sharedPreferencesUtils.savePreference(KeyValues.IS_ITEM_LOADED, true);
                                                     sharedPreferencesUtils.savePreference(KeyValues.IS_CUSTOMER_LOADED, true);
+                                                    Log.v("itemmaster","hello,");
                                                     Date date = Calendar.getInstance().getTime();
                                                     //
                                                     // Display a date in day, month, year format
@@ -700,7 +701,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                 dd.getCustomerType(), dd.getCustomerTypeID(), dd.getDivision(), dd.getDivisionID().split("[.]")[0], dd.getConnectedDepot(), dd.getMobile(),
                                                 dd.getPrimaryID(), dd.getSalesDistrict(), dd.getZone(), dd.getCity()));
                                         lstserDivisionCustTables.add(new UserDivisionCustTable(dd.getCustomerID(), dd.getDivisionID().split("[.]")[0]));
-                                        Log.v("anil",""+i);
+                                        Log.v("Customer",""+i);
                                         // db.userDivisionCustDAO().insert(new UserDivisionCustTable(dd.getCustomerID(), dd.getDivisionID().split("[.]")[0]));
                                     }
 
@@ -842,6 +843,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 }*/
 
                                 ProgressDialogUtils.closeProgressDialog();
+                               // dialog.dismiss();
 
                             } catch (Exception ex) {
                                 ProgressDialogUtils.closeProgressDialog();

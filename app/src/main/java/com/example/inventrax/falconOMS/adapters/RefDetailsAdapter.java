@@ -103,7 +103,8 @@ public class RefDetailsAdapter extends RecyclerView.Adapter<RefDetailsAdapter.Vi
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!viewHolder.txtPrice.getText().toString().isEmpty() && ((int) Double.parseDouble(viewHolder.txtPrice.getText().toString())) != 0) {
+                //if (!viewHolder.txtPrice.getText().toString().isEmpty() && ((int) Double.parseDouble(viewHolder.txtPrice.getText().toString())) != 0) {
+                if (!viewHolder.txtPrice.getText().toString().isEmpty()) {
                     approvalListDTOS.get(i).setPrice(viewHolder.txtPrice.getText().toString());
                     approvalListDTOS.get(i).setCorrectValue(false);
                     onApprovalListener.onApprovalUpdate(approvalListDTOS);

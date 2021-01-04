@@ -172,8 +172,9 @@ public class CreditLimitDetailsFragment extends Fragment implements View.OnClick
             @Override
             public void onClick(View view) {
 
-                if (etRemarks.getText().toString().isEmpty()) {
-                    SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) getActivity()).findViewById(R.id.snack_bar_action_layout), "Please write remarks", ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
+
+                if (etRemarks.getText().toString().trim().isEmpty()) {
+                    SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) getActivity()).findViewById(R.id.snack_bar_action_layout), errorMessages.EMC_0027, ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
                     return;
                 }
 

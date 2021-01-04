@@ -159,7 +159,6 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
     List<String> mCodeName;
     List<String> discountDesc;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -171,7 +170,6 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         } catch (Exception e) {
 
         }
-
 
         return rootView;
     }
@@ -189,7 +187,6 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
         // result from Intelli-Search
         materialDivisionId = getArguments().getInt(KeyValues.MATERIAL_DIVISION_ID);
-
 
         varient = new ArrayList<>();
 
@@ -211,7 +208,6 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
         ivItem = (ImageView) rootView.findViewById(R.id.ivItem);
         availOffer = (ImageView) rootView.findViewById(R.id.availOffer);
-
 
         txtItemName = (TextView) rootView.findViewById(R.id.txtItemName);
         txtDiscount = (TextView) rootView.findViewById(R.id.txtDiscount);
@@ -368,7 +364,8 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         txtItemName.setText(variantTable.mCode);
         txtShortDesc.setText(variantTable.mDescription);
         txtDescreption.setText(variantTable.mDescriptionLong);
-        etQty.setText(String.valueOf(variantTable.stackSize));
+        //etQty.setText(String.valueOf(variantTable.stackSize));
+        etQty.setText("");
         txtPrice.setText(variantTable.price);
         materialId = variantTable.materialID;
         UserDivisionCustTable division;
@@ -501,7 +498,6 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
         return super.onOptionsItemSelected(item);
     }
-
 
     public void getPrice() {
 
@@ -836,8 +832,9 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
                             try {
 
                                 List<CartHeader> cartHeadersList = db.cartHeaderDAO().getCartHeadersForSTP();
-
-                                etQty.setText(String.valueOf(selectedVariant.stackSize));
+                                cartList.clear();
+                                //  etQty.setText(String.valueOf(selectedVariant.stackSize));
+                                etQty.setText("");
                                 db.cartDetailsDAO().deleteAll();
                                 db.cartHeaderDAO().deleteAll();
 
@@ -1056,11 +1053,11 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
 
                                     if (NetworkUtils.isInternetAvailable(getActivity())) {
                                         if (!price.equals("")) {
-                                            if ((Integer.parseInt(etQty.getText().toString()) % (selectedVariant.stackSize)) == 0) {
-                                                addToCart();
-                                            } else {
+                                            /* if ((Integer.parseInt(etQty.getText().toString()) % (selectedVariant.stackSize)) == 0) {*/
+                                            addToCart();
+                                           /* } else {
                                                 SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Stack size is not correct please enter the multiples of " + selectedVariant.stackSize + " Eg : " + stackSizeQty(Integer.parseInt((!etQty.getText().toString().isEmpty()) ? etQty.getText().toString() : "1"), selectedVariant.stackSize), ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);
-                                            }
+                                            }*/
                                         } else {
                                             SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, getString(R.string.PriceNotAvailable), ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);
                                         }
@@ -1406,7 +1403,6 @@ public class ProductDetailsFragment extends Fragment implements View.OnClickList
         });
 
         d.show();
-
 
     }
 

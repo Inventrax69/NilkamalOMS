@@ -133,8 +133,8 @@ public class SADListAdapter extends RecyclerView.Adapter<SADListAdapter.ViewHold
             @Override
             public void onClick(View view) {
 
-                if (etRemarks.getText().toString().isEmpty()) {
-                    SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.snack_bar_action_layout), "Please write remarks", ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
+                if (etRemarks.getText().toString().trim().isEmpty()) {
+                    SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.snack_bar_action_layout), errorMessages.EMC_0027, ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
                     return;
                 }
 
@@ -191,7 +191,27 @@ public class SADListAdapter extends RecyclerView.Adapter<SADListAdapter.ViewHold
             @Override
             public void onClick(View view) {
 
-                if (etRemarks.getText().toString().isEmpty()) {
+                if (discountDTOS.size() > 0) {
+                    List<DiscountDTO> discountDTOList = new ArrayList<>();
+                    DiscountDTO discountDTO;
+                    for (int i = 0; i < discountDTOS.size(); i++) {
+                        discountDTO = new DiscountDTO();
+                        if (checkBokItem.get(i)) {
+                            discountDTO.setWorkFlowtransactionID(discountDTOS.get(i).getWorkFlowtransactionID());
+                            discountDTO.setWorkFlowTypeId(discountDTOS.get(i).getWorkFlowTypeId());
+                            discountDTO.setCartHeaderID(String.valueOf(discountDTOS.get(i).getDiscountID()));
+                            discountDTO.setUserRoleID(discountDTOS.get(i).getUserRoleID());
+                            discountDTOList.add(discountDTO);
+                        }
+                    }
+
+                    if (discountDTOList.size() == 0) {
+                        SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.snack_bar_action_layout), "Please check atleast one item", ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
+                        return;
+                    }
+                }
+
+                if (etRemarks.getText().toString().trim().isEmpty()) {
                     SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) context).findViewById(R.id.snack_bar_action_layout), "Please write remarks", ContextCompat.getColor(context, R.color.dark_red), Snackbar.LENGTH_SHORT);
                     return;
                 }

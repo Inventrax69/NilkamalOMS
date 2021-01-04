@@ -1,17 +1,25 @@
 package com.example.inventrax.falconOMS.fragments;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.inventrax.falconOMS.R;
@@ -21,6 +29,8 @@ import com.example.inventrax.falconOMS.common.Common;
 import com.example.inventrax.falconOMS.common.constants.EndpointConstants;
 import com.example.inventrax.falconOMS.common.constants.ErrorMessages;
 import com.example.inventrax.falconOMS.interfaces.ApiInterface;
+import com.example.inventrax.falconOMS.model.KeyValues;
+import com.example.inventrax.falconOMS.pojos.ApprovalDTO;
 import com.example.inventrax.falconOMS.pojos.ApprovalListDTO;
 import com.example.inventrax.falconOMS.pojos.CartHeaderListDTO;
 import com.example.inventrax.falconOMS.pojos.OMSCoreMessage;
@@ -43,6 +53,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ApprovalsListFragment extends Fragment implements View.OnClickListener {
 
     private static final String classCode = "OMS_Android_ApprovalsListFragment";
@@ -57,6 +69,10 @@ public class ApprovalsListFragment extends Fragment implements View.OnClickListe
     LinearLayout linear_check;
     CheckBox checkBoxSelectAll;
     RelativeLayout noitemRelative, mainRelative;
+    AlertDialog dialog;
+
+    SharedPreferences sp;
+    String userRoleName = "";
 
     @Nullable
     @Override
@@ -77,6 +93,9 @@ public class ApprovalsListFragment extends Fragment implements View.OnClickListe
         if (getArguments().getString("type") != null) {
             type = getArguments().getString("type");
         }
+
+        sp = getContext().getSharedPreferences(KeyValues.MY_PREFS, MODE_PRIVATE);
+        userRoleName = sp.getString(KeyValues.USER_ROLE_NAME, "");
 
         common = new Common();
         restService = new RestService();
@@ -99,7 +118,11 @@ public class ApprovalsListFragment extends Fragment implements View.OnClickListe
         noitemRelative.setVisibility(View.GONE);
 
         if (type.equals("4") || type.equals("6") || type.equals("23")) {
-            ApprovalList(type);
+
+            /*if(userRoleName.equalsIgnoreCase(KeyValues.USER_ROLE_NAME_SUPPLY_CHAIN_MANAGER))
+                ApprovalList(type,"","");
+            else*/
+            ApprovalList(type,"0","0");
         }
         if (type.equals("5")) {
             ApprovalCreditLimitList(type);
@@ -122,16 +145,21 @@ public class ApprovalsListFragment extends Fragment implements View.OnClickListe
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayUseLogoEnabled(false);
     }
 
-    public void ApprovalList(final String type) {
+    public void ApprovalList(final String type, final String divisionId, String mGroupId) {
 
         OMSCoreMessage message = new OMSCoreMessage();
         message = common.SetAuthentication(EndpointConstants.Scalar, getActivity());
-        message.setEntityObject(type);
+        ApprovalDTO approvalDTO = new ApprovalDTO();
+        approvalDTO.setType(type);
+        approvalDTO.setDivisionID(divisionId);
+        approvalDTO.setMGroupID(mGroupId);
+        message.setEntityObject(approvalDTO);
 
         Call<OMSCoreMessage> call = null;
         ApiInterface apiService =
                 RestService.getClient().create(ApiInterface.class);
 
+        setProgressDialog();
         ProgressDialogUtils.showProgressDialog("Please wait..");
 
         call = apiService.ApprovalList(message);
@@ -156,7 +184,8 @@ public class ApprovalsListFragment extends Fragment implements View.OnClickListe
                                 ProgressDialogUtils.closeProgressDialog();
                                 common.showAlertType(omsExceptionMessage, getActivity(), getActivity());
                             }
-
+                            if(dialog!=null)
+                                dialog.cancel();
                             ProgressDialogUtils.closeProgressDialog();
 
                         } else {
@@ -186,15 +215,22 @@ public class ApprovalsListFragment extends Fragment implements View.OnClickListe
                                     });
 
                                     recyclerView.setAdapter(refListAdapter);
+                                    if(dialog!=null)
+                                        dialog.cancel();
 
                                 } else {
                                     mainRelative.setVisibility(View.GONE);
                                     noitemRelative.setVisibility(View.VISIBLE);
+                                    if(dialog!=null)
+                                        dialog.cancel();
                                 }
-
+                                if(dialog!=null)
+                                    dialog.cancel();
                                 ProgressDialogUtils.closeProgressDialog();
 
                             } catch (Exception ex) {
+                                if(dialog!=null)
+                                    dialog.cancel();
                                 ProgressDialogUtils.closeProgressDialog();
                             }
                         }
@@ -209,6 +245,8 @@ public class ApprovalsListFragment extends Fragment implements View.OnClickListe
                     } else {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
                     }
+                    if(dialog!=null)
+                        dialog.cancel();
                     ProgressDialogUtils.closeProgressDialog();
                 }
             });
@@ -218,6 +256,8 @@ public class ApprovalsListFragment extends Fragment implements View.OnClickListe
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            if(dialog!=null)
+                dialog.cancel();
             ProgressDialogUtils.closeProgressDialog();
             DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
         }
@@ -428,5 +468,53 @@ public class ApprovalsListFragment extends Fragment implements View.OnClickListe
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         etDatePicker.setText(sdf.format(myCalendar.getTime()));
     }*/
+
+
+    public void setProgressDialog() {
+
+        int llPadding = 30;
+        LinearLayout ll = new LinearLayout(getActivity());
+        ll.setOrientation(LinearLayout.HORIZONTAL);
+        ll.setPadding(llPadding, llPadding, llPadding, llPadding);
+        ll.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams llParam = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        llParam.gravity = Gravity.CENTER;
+        ll.setLayoutParams(llParam);
+
+        ProgressBar progressBar = new ProgressBar(getActivity());
+        progressBar.setIndeterminate(true);
+        progressBar.setPadding(0, 0, llPadding, 0);
+        progressBar.setLayoutParams(llParam);
+
+        llParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        llParam.gravity = Gravity.CENTER;
+        TextView tvText = new TextView(getActivity());
+        tvText.setText(getString(R.string.wait_string));
+        tvText.setTextColor(Color.parseColor("#000000"));
+        tvText.setTextSize(18);
+        tvText.setLayoutParams(llParam);
+
+        ll.addView(progressBar);
+        ll.addView(tvText);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(true);
+        builder.setView(ll);
+
+        dialog = builder.create();
+        dialog.show();
+        dialog.setCancelable(false);
+        Window window = dialog.getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+            layoutParams.copyFrom(dialog.getWindow().getAttributes());
+            layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            dialog.getWindow().setAttributes(layoutParams);
+        }
+    }
 
 }

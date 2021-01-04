@@ -1,5 +1,6 @@
 package com.example.inventrax.falconOMS.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,15 +14,22 @@ import com.example.inventrax.falconOMS.R;
 import com.example.inventrax.falconOMS.model.KeyValues;
 import com.example.inventrax.falconOMS.util.FragmentUtils;
 
+import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
+
 public class ApprovalsFragment extends Fragment implements View.OnClickListener {
 
     private static final String classCode = "OMS_Android_ApprovalsFragment";
     private View rootView;
     CardView cvOpenPrice, cvInActive, cvCreditLimit, cvSchemesAndDiscounts, cvSCMApproval;
-    String[] strings = {KeyValues.OPEN_PRICE_APPROVAL,KeyValues.IN_ACTIVE_APPROVAL,
-            KeyValues.CREDIT_LIMIT_APPROVAL,KeyValues.S_AND_D_APPROVAL,KeyValues.SCM_APPROVAL};
+    String[] strings = {KeyValues.OPEN_PRICE_APPROVAL, KeyValues.IN_ACTIVE_APPROVAL,
+            KeyValues.CREDIT_LIMIT_APPROVAL, KeyValues.S_AND_D_APPROVAL, KeyValues.SCM_APPROVAL};
     /*  String[] strings = {KeyValues.OPEN_PRICE_APPROVAL,KeyValues.IN_ACTIVE_APPROVAL,
                 KeyValues.CREDIT_LIMIT_APPROVAL,KeyValues.S_AND_D_APPROVAL};*/
+
+    SharedPreferences sp;
+    String userRoleName = "";
 
     @Nullable
     @Override
@@ -49,6 +57,44 @@ public class ApprovalsFragment extends Fragment implements View.OnClickListener 
         cvCreditLimit.setVisibility(View.GONE);
         cvSchemesAndDiscounts.setVisibility(View.GONE);
         cvSCMApproval.setVisibility(View.GONE);
+
+        sp = getContext().getSharedPreferences(KeyValues.MY_PREFS, MODE_PRIVATE);
+        userRoleName = sp.getString(KeyValues.USER_ROLE_NAME, "");
+
+        assert userRoleName != null;
+        switch (userRoleName) {
+
+            case KeyValues.USER_ROLE_NAME_CHANNEL_PARTNER:
+            case KeyValues.USER_ROLE_NAME_DTD:
+            case KeyValues.USER_ROLE_NAME_DPD:
+            case KeyValues.USER_ROLE_NAME_ASM:
+            case KeyValues.USER_ROLE_NAME_SO:
+            case KeyValues.USER_ROLE_NAME_BCO:
+            case KeyValues.USER_ROLE_NAME_PMH:
+                strings = new String[0];
+                break;
+
+            case KeyValues.USER_ROLE_NAME_HOD:
+            case KeyValues.USER_ROLE_NAME_ZM:
+            case KeyValues.USER_ROLE_NAME_SR_VP:
+            case KeyValues.USER_ROLE_NAME_GM_MFM:
+            case KeyValues.USER_ROLE_NAME_NSH:
+            case "GM&amp;MFM" :
+                strings = new String[]{KeyValues.S_AND_D_APPROVAL};
+                break;
+
+            case KeyValues.USER_ROLE_NAME_BRANCH_MANAGER:
+                strings = new String[]{KeyValues.OPEN_PRICE_APPROVAL, KeyValues.CREDIT_LIMIT_APPROVAL};
+                break;
+            case KeyValues.USER_ROLE_NAME_SUPPLY_CHAIN_MANAGER:
+                strings = new String[]{KeyValues.OPEN_PRICE_APPROVAL, KeyValues.IN_ACTIVE_APPROVAL, KeyValues.SCM_APPROVAL};
+                break;
+            case KeyValues.USER_ROLE_NAME_CC:
+                strings = new String[]{KeyValues.OPEN_PRICE_APPROVAL};
+                break;
+
+
+        }
 
         for (String s : strings) {
             if (s.equals(KeyValues.OPEN_PRICE_APPROVAL))

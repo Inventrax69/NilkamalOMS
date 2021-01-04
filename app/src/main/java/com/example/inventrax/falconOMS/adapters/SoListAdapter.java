@@ -76,19 +76,23 @@ public class SoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 switch (result.getStatus()) {
                     case "OPEN":
+                    case "Open":
                         itemListView.tvStatus.setTextColor(context.getResources().getColor(R.color.safron));
                         break;
 
                     case "INPROCESS":
+                    case "InProcess":
+                    case "In-process":
                         itemListView.tvStatus.setTextColor(context.getResources().getColor(R.color.green));
                         break;
 
                     case "REJECTED":
+                    case "Rejected":
                         itemListView.tvStatus.setTextColor(context.getResources().getColor(R.color.red));
                         break;
 
                     default:
-                        itemListView.tvStatus.setTextColor(context.getResources().getColor(R.color.yellow));
+                        itemListView.tvStatus.setTextColor(context.getResources().getColor(R.color.colorAccent));
                         break;
                 }
 

@@ -7,7 +7,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fbc80bb0b7fb199e594328c3d37b1b47/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fbc80bb0b7fb199e594328c3d37b1b47/res" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.yqritc/recyclerview-flexibledivider/1.2.4/6ae1c0d77d21c93d378bfbf1fff9421479f3ac16/recyclerview-flexibledivider-1.2.4-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.yqritc/recyclerview-flexibledivider/1.2.4/4a4d0f0399deca6c267c9810e8a6a8a4fea58433/recyclerview-flexibledivider-1.2.4-sources.jar!/" />
     </SOURCES>

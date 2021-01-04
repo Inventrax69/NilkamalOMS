@@ -38,7 +38,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -282,6 +284,27 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
             }
         });
 
+        etQtyBottom.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().length() == 1 && s.toString().startsWith("0")) {
+                    s.clear();
+                    etQtyBottom.setError("Zero not allowed");
+                }
+            }
+        });
+
 
         txtViewType = (CardView) rootView.findViewById(R.id.txtViewType);
         txtViewType.setOnClickListener(this);
@@ -499,37 +522,37 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 /*                                        new AsyncTask<Void, String, Integer>() {
                                             @Override
                                             protected Integer doInBackground(Void... voids) {*/
-                                                db.itemDAO().updateDiscount();
-                                                db.variantDAO().updateDiscount();
+                                        db.itemDAO().updateDiscount();
+                                        db.variantDAO().updateDiscount();
 
-                                                for (ModelDTO md : lstItem) {
+                                        for (ModelDTO md : lstItem) {
 
-                                                    if (db.itemDAO().getCountByModelID(md.getModelID()) == 0) {
-                                                        db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
-                                                                md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
-                                                    } else {
-                                                        db.itemDAO().updateByModelID(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
-                                                                md.getModelDescription(), md.getImgPath(), "", md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc(), "");
-                                                    }
+                                            if (db.itemDAO().getCountByModelID(md.getModelID()) == 0) {
+                                                db.itemDAO().insert(new ItemTable(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                        md.getModelDescription(), md.getImgPath(), md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc()));
+                                            } else {
+                                                db.itemDAO().updateByModelID(md.getModelID(), md.getDivisionID(), md.getSegmentID(), md.getModel(),
+                                                        md.getModelDescription(), md.getImgPath(), "", md.getDiscountCount(), md.getDiscountId(), md.getDiscountDesc(), "");
+                                            }
 
-                                                    for (VariantDTO variantDTO : md.getVarientList()) {
+                                            for (VariantDTO variantDTO : md.getVarientList()) {
 
-                                                        if (db.variantDAO().getCountByMaterialID(variantDTO.getMaterialID()) == 0) {
-                                                            db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
-                                                                    variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
-                                                                    variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
-                                                                    variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
-                                                                    variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
-                                                        } else {
-                                                            db.variantDAO().updateByMaterialID(md.getModelID(), md.getDivisionID(),
-                                                                    variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
-                                                                    variantDTO.getMcode(), variantDTO.getModelColor(), "",
-                                                                    variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(), variantDTO.getMaterialImgPath(),
-                                                                    variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(),
-                                                                    String.valueOf(variantDTO.getOpenPrice()), String.valueOf((int) Double.parseDouble(variantDTO.getStackSize())), "");
-                                                        }
-                                                    }
+                                                if (db.variantDAO().getCountByMaterialID(variantDTO.getMaterialID()) == 0) {
+                                                    db.variantDAO().insert(new VariantTable(md.getModelID(), md.getDivisionID(),
+                                                            variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                                                            variantDTO.getMcode(), variantDTO.getModelColor(), variantDTO.getMaterialImgPath(),
+                                                            variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(),
+                                                            variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(), variantDTO.getOpenPrice(), (int) Double.parseDouble(variantDTO.getStackSize())));
+                                                } else {
+                                                    db.variantDAO().updateByMaterialID(md.getModelID(), md.getDivisionID(),
+                                                            variantDTO.getMaterialID(), variantDTO.getMDescription(), variantDTO.getMDescriptionLong(),
+                                                            variantDTO.getMcode(), variantDTO.getModelColor(), "",
+                                                            variantDTO.getDiscountCount(), variantDTO.getDiscountId(), variantDTO.getDiscountDesc(), variantDTO.getMaterialImgPath(),
+                                                            variantDTO.getProductSpecification(), variantDTO.getProductCatalog(), variantDTO.getEBrochure(),
+                                                            String.valueOf(variantDTO.getOpenPrice()), String.valueOf((int) Double.parseDouble(variantDTO.getStackSize())), "");
                                                 }
+                                            }
+                                        }
 
 
 
@@ -814,6 +837,9 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                             }
 
                             cartList = new ArrayList<>();
+
+
+
                             if (!partnerId.isEmpty() || !partnerId.equalsIgnoreCase("")) {
 
                                 if (!etQtyBottom.getText().toString().isEmpty()) {
@@ -915,13 +941,13 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                                                 if (NetworkUtils.isInternetAvailable(getActivity())) {
 
                                                     if (!price.equals("")) {
-                                                        if ((Integer.parseInt(etQtyBottom.getText().toString()) % (selectedVariant.stackSize)) == 0) {
-                                                            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                                                            frame.setVisibility(View.GONE);
-                                                            addToCart();
-                                                        } else {
+                                                        /*if ((Integer.parseInt(etQtyBottom.getText().toString()) % (selectedVariant.stackSize)) == 0) {*/
+                                                        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                                                        frame.setVisibility(View.GONE);
+                                                        addToCart();
+                                                /*        } else {
                                                             SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, "Stack size is not correct please enter the multiples of " + selectedVariant.stackSize + " Eg : " + stackSizeQty(Integer.parseInt((!etQtyBottom.getText().toString().isEmpty()) ? etQtyBottom.getText().toString() : "1"), selectedVariant.stackSize), ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);
-                                                        }
+                                                        }*/
                                                     } else {
                                                         SnackbarUtils.showSnackbarLengthShort(coordinatorLayout, getString(R.string.PriceNotAvailable), ContextCompat.getColor(getActivity(), R.color.colorAccent), Snackbar.LENGTH_SHORT);
                                                     }
@@ -1143,7 +1169,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                             try {
 
 
-                                etQtyBottom.setText("1");
+                                etQtyBottom.setText("");
 
                                 List<CartHeader> cartHeadersList = db.cartHeaderDAO().getCartHeadersForSTP();
 
@@ -1484,8 +1510,8 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
 
         materialId = variantTable.materialID;
         stackSize = (variantTable.stackSize != NULL) ? variantTable.stackSize : 1;
-        etQtyBottom.setText("" + stackSize);
-
+        //  etQtyBottom.setText("" + stackSize);
+        etQtyBottom.setText("");
         cbPriority.setChecked(false);
         String isPriority = db.cartHeaderDetailsDao().getIsPriority(variantTable.materialID);
         if (isPriority.equals("1")) {
@@ -1806,7 +1832,7 @@ public class ProductCatalogFragment extends Fragment implements SearchView.OnQue
                     if (result.imgPath.equals("")) {
                         itemListView.ivItem.setImageResource(R.drawable.no_img);
                     } else {
-                         Picasso.with(context)
+                        Picasso.with(context)
                                 .load(result.imgPath)
                                 .placeholder(R.drawable.no_img)
                                 .into(itemListView.ivItem);

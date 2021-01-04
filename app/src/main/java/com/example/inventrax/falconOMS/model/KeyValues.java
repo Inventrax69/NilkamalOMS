@@ -70,7 +70,11 @@ public class KeyValues {
     public static final String USER_ROLE_NAME_BRANCH_MANAGER= "BM";
     public static final String USER_ROLE_NAME_SUPPLY_CHAIN_MANAGER = "SCM";
     public static final String USER_ROLE_NAME_BCO_RCO = "BCO/RCO";
+    public static final String USER_ROLE_NAME_BCO = "BCO";
+    public static final String USER_ROLE_NAME_RCO = "RCO";
+    public static final String USER_ROLE_NAME_PMH = "PMH";
     public static final String USER_ROLE_NAME_ZM_RM = "ZM/RM";
+    public static final String USER_ROLE_NAME_ZM = "ZM";
     public static final String USER_ROLE_NAME_DTD = "DTD";
     public static final String USER_ROLE_NAME_DPD = "DPD";
     public static final String USER_ROLE_NAME_CC = "CC";

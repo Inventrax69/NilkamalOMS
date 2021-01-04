@@ -18,12 +18,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +86,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
     RecyclerView scm_recycler;
     RefPopSCMApprovalAdapter refSCMDetailsAdapter;
     String CartHeaderID, CartRefNo, PartnerCode, PartnerName, WorkFlowTransactionID, WorkFlowTypeID, UserRoleID;
+    android.support.v7.app.AlertDialog progressDialog;
+
 
     @Nullable
     @Override
@@ -93,6 +98,7 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
             loadFormControls();
         } catch (Exception ex) {
             //
+            Log.d("",ex.toString());
         }
         return rootView;
     }
@@ -292,6 +298,7 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
         Call<OMSCoreMessage> call = null;
         ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
 
+        setProgressDialog();
         ProgressDialogUtils.showProgressDialog("Please wait..");
 
         call = apiService.ApprovalistSCMRF(message);
@@ -316,6 +323,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                                 ProgressDialogUtils.closeProgressDialog();
                                 common.showAlertType(omsExceptionMessage, getActivity(), getActivity());
                             }
+                            if(progressDialog!=null)
+                                progressDialog.cancel();
                             ProgressDialogUtils.closeProgressDialog();
 
                         } else {
@@ -396,10 +405,14 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                                     }
                                 });
 
+                                if(progressDialog!=null)
+                                    progressDialog.cancel();
                                 ProgressDialogUtils.closeProgressDialog();
                                 recyclerView.setAdapter(refListAdapter);
 
                             } catch (Exception ex) {
+                                if(progressDialog!=null)
+                                    progressDialog.cancel();
                                 ProgressDialogUtils.closeProgressDialog();
                                 SnackbarUtils.showSnackbarLengthShort((CoordinatorLayout) ((Activity) getActivity()).findViewById(R.id.snack_bar_action_layout), "Error while getting list of materials", ContextCompat.getColor(getActivity(), R.color.dark_red), Snackbar.LENGTH_SHORT);
                             }
@@ -415,6 +428,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                     } else {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
                     }
+                    if(progressDialog!=null)
+                        progressDialog.cancel();
                     ProgressDialogUtils.closeProgressDialog();
                 }
             });
@@ -424,6 +439,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            if(progressDialog!=null)
+                progressDialog.cancel();
             ProgressDialogUtils.closeProgressDialog();
             DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
         }
@@ -438,6 +455,7 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
         Call<OMSCoreMessage> call = null;
         ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
 
+        setProgressDialog();
         ProgressDialogUtils.showProgressDialog("Please wait..");
 
         call = apiService.ApprovelItemList(message);
@@ -462,6 +480,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                                 ProgressDialogUtils.closeProgressDialog();
                                 common.showAlertType(omsExceptionMessage, getActivity(), getActivity());
                             }
+                            if(progressDialog!=null)
+                                progressDialog.cancel();
                             ProgressDialogUtils.closeProgressDialog();
 
                         } else {
@@ -476,7 +496,7 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                                     return;
                                 }
 
-                                Log.v("ANIL", new Gson().toJson(core.getEntityObject()));
+                                Log.v("oRes", new Gson().toJson(core.getEntityObject()));
 
                                 txtCRef.setText((String) ((LinkedTreeMap) core.getEntityObject()).get("CartRefNo"));
                                 txtCCode.setText((String) ((LinkedTreeMap) core.getEntityObject()).get("PartnerCode"));
@@ -526,6 +546,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                                     }
                                 });
 
+                                if(progressDialog!=null)
+                                    progressDialog.cancel();
                                 ProgressDialogUtils.closeProgressDialog();
                                 recyclerView.setAdapter(refListAdapter);
 
@@ -545,6 +567,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                     } else {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
                     }
+                    if(progressDialog!=null)
+                        progressDialog.cancel();
                     ProgressDialogUtils.closeProgressDialog();
                 }
             });
@@ -554,6 +578,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            if(progressDialog!=null)
+                progressDialog.cancel();
             ProgressDialogUtils.closeProgressDialog();
             DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
         }
@@ -754,6 +780,53 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
             }
             ProgressDialogUtils.closeProgressDialog();
             DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
+        }
+    }
+
+    public void setProgressDialog() {
+
+        int llPadding = 30;
+        LinearLayout ll = new LinearLayout(getActivity());
+        ll.setOrientation(LinearLayout.HORIZONTAL);
+        ll.setPadding(llPadding, llPadding, llPadding, llPadding);
+        ll.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams llParam = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        llParam.gravity = Gravity.CENTER;
+        ll.setLayoutParams(llParam);
+
+        ProgressBar progressBar = new ProgressBar(getActivity());
+        progressBar.setIndeterminate(true);
+        progressBar.setPadding(0, 0, llPadding, 0);
+        progressBar.setLayoutParams(llParam);
+
+        llParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        llParam.gravity = Gravity.CENTER;
+        TextView tvText = new TextView(getActivity());
+        tvText.setText(getString(R.string.wait_string));
+        tvText.setTextColor(Color.parseColor("#000000"));
+        tvText.setTextSize(18);
+        tvText.setLayoutParams(llParam);
+
+        ll.addView(progressBar);
+        ll.addView(tvText);
+
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        builder.setCancelable(true);
+        builder.setView(ll);
+
+        progressDialog = builder.create();
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        Window window = progressDialog.getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+            layoutParams.copyFrom(progressDialog.getWindow().getAttributes());
+            layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            progressDialog.getWindow().setAttributes(layoutParams);
         }
     }
 

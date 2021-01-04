@@ -401,7 +401,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         message = common.SetAuthentication(EndpointConstants.LoginDTO, getContext());
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setUserID(userId);
-        loginDTO.setPassword(etPwd.getText().toString());
+        //loginDTO.setPassword(etPwd.getText().toString());
+        try {
+            loginDTO.setPassword(encryption.encryptData(etPwd.getText().toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         loginDTO.setNewPassword(encryptedNewPwd);
         message.setEntityObject(loginDTO);
 

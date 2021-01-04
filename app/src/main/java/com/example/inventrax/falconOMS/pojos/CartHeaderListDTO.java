@@ -68,6 +68,9 @@ public class CartHeaderListDTO implements Serializable,Cloneable  {
     @SerializedName("IsStockNotAvailable")
     private String IsStockNotAvailable;
 
+    @SerializedName("UserValidity")
+    private String UserValidity;
+
     private String ShipToPartyID;
 
     @SerializedName("DeliveryDate")
@@ -257,7 +260,11 @@ public class CartHeaderListDTO implements Serializable,Cloneable  {
         this.offerCartDetailsDTOList = offerCartDetailsDTOList;
     }
 
+    public String getUserValidity() {
+        return UserValidity;
+    }
 
-
-
+    public void setUserValidity(String userValidity) {
+        UserValidity = userValidity;
+    }
 }
