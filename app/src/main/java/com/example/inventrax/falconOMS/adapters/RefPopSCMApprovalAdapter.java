@@ -79,8 +79,9 @@ public class RefPopSCMApprovalAdapter extends RecyclerView.Adapter<RefPopSCMAppr
     Fragment fragment;
     int positionOfEditText;
     int position;
+    String type;
 
-    public RefPopSCMApprovalAdapter(Fragment fragment, int position, FragmentActivity fragmentActivity, Context applicationContext, List<ApprovalListDTO> approvalListDTOS, OnItemClickListener mlistener, Dialog dialog) {
+    public RefPopSCMApprovalAdapter(Fragment fragment, int position,String type, FragmentActivity fragmentActivity, Context applicationContext, List<ApprovalListDTO> approvalListDTOS, OnItemClickListener mlistener, Dialog dialog) {
 
         this.context = applicationContext;
         this.fragmentActivity = fragmentActivity;
@@ -89,6 +90,7 @@ public class RefPopSCMApprovalAdapter extends RecyclerView.Adapter<RefPopSCMAppr
         this.dialog = dialog;
         this.fragment = fragment;
         this.position = position;
+        this.type = type;
 
         common = new Common();
         restService = new RestService();
@@ -387,7 +389,12 @@ public class RefPopSCMApprovalAdapter extends RecyclerView.Adapter<RefPopSCMAppr
                             notifyItemInserted(approvalListDTOS.size() - 1);
                             //notifyDataSetChanged();
                         } else {
-                            UpsertSCMRFData();
+                            if(type.equalsIgnoreCase("6")){
+                                UpsertInActiveData();
+                            }else {
+                                UpsertSCMRFData();
+                            }
+
                         }
                     } else {
                         Toast.makeText(context, "Quantity is same or exceeded", Toast.LENGTH_SHORT).show();
@@ -428,6 +435,102 @@ public class RefPopSCMApprovalAdapter extends RecyclerView.Adapter<RefPopSCMAppr
 
 
         public void UpsertSCMRFData() {
+
+            btnSEND.setEnabled(false);
+
+            if (NetworkUtils.isInternetAvailable(context)) {
+            } else {
+                DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0007);
+                return;
+            }
+
+            OMSCoreMessage message = new OMSCoreMessage();
+            message = common.SetAuthentication(EndpointConstants.CreditLimitCommitment_DTO, context);
+            message.setEntityObject(approvalListDTOS);
+
+            Call<OMSCoreMessage> call = null;
+            ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
+
+            call = apiService.UpsertSCMRFData(message);
+            ProgressDialogUtils.showProgressDialog("Please Wait");
+
+            try {
+                //Getting response from the method
+                call.enqueue(new Callback<OMSCoreMessage>() {
+
+                    @Override
+                    public void onResponse(Call<OMSCoreMessage> call, Response<OMSCoreMessage> response) {
+                        if (response.body() != null) {
+
+                            core = response.body();
+
+                            if ((core.getType().toString().equals("Exception"))) {
+
+                                OMSExceptionMessage omsExceptionMessage = null;
+
+                                for (OMSExceptionMessage oms : core.getOMSMessages()) {
+
+                                    omsExceptionMessage = oms;
+                                    ProgressDialogUtils.closeProgressDialog();
+                                    common.showAlertType(omsExceptionMessage, (Activity) context, context);
+
+                                }
+                                btnSEND.setEnabled(true);
+                                ProgressDialogUtils.closeProgressDialog();
+
+                            } else {
+                                try {
+                                    btnSEND.setEnabled(true);
+                                    if (core.getEntityObject() != null && !core.getEntityObject().toString().isEmpty()) {
+                                        if (core.getEntityObject().equals("success")) {
+                                            MaterialDialogUtils.showUploadSuccessDialog(context, "Done");
+                                            listener.onItemClick(position);
+                                        } else {
+                                            MaterialDialogUtils.showUploadErrorDialog(context, "Failed");
+                                        }
+                                    } else {
+                                        MaterialDialogUtils.showUploadErrorDialog(context, "Failed");
+                                    }
+
+                                    dialog.dismiss();
+
+                                    ProgressDialogUtils.closeProgressDialog();
+
+                                } catch (Exception ex) {
+
+                                }
+                                ProgressDialogUtils.closeProgressDialog();
+                            }
+                        }
+                        ProgressDialogUtils.closeProgressDialog();
+                    }
+
+                    // response object fails
+                    @Override
+                    public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                        if (NetworkUtils.isInternetAvailable(context)) {
+                            DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0001);
+                        } else {
+                            DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0014);
+                        }
+                        ProgressDialogUtils.closeProgressDialog();
+                        btnSEND.setEnabled(true);
+                    }
+                });
+            } catch (Exception ex) {
+
+                try {
+                    ExceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001", context);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ProgressDialogUtils.closeProgressDialog();
+                DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0003);
+            }
+        }
+
+        public void UpsertInActiveData() {
 
             btnSEND.setEnabled(false);
 

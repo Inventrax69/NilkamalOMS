@@ -393,7 +393,7 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                                         layoutManager = new LinearLayoutManager(getActivity());
                                         scm_recycler.setLayoutManager(layoutManager);
 
-                                        refSCMDetailsAdapter = new RefPopSCMApprovalAdapter(new ApprovalsDetailsFragment(), pos, getActivity(), getActivity(), approvalListDTOS1, new RefPopSCMApprovalAdapter.OnItemClickListener() {
+                                        refSCMDetailsAdapter = new RefPopSCMApprovalAdapter(new ApprovalsDetailsFragment(),pos,type,  getActivity(), getActivity(), approvalListDTOS1, new RefPopSCMApprovalAdapter.OnItemClickListener() {
                                             @Override
                                             public void onItemClick(int pos1) {
                                                 approvalListDTOS.get(pos).setStatus(true);

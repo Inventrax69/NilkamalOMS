@@ -143,8 +143,7 @@ public interface ApiInterface {
     @POST("Orders/ApprovalistSCMRF")
     Call<OMSCoreMessage> ApprovalistSCMRF(@Body OMSCoreMessage oRequest);
 
-    @POST("Orders/UpsertSCMRFData")
-    Call<OMSCoreMessage> UpsertSCMRFData(@Body OMSCoreMessage oRequest);
+
 
     @POST("Orders/ApproveWorkflow")
     Call<OMSCoreMessage> ApproveWorkflow(@Body OMSCoreMessage oRequest);
@@ -222,7 +221,8 @@ public interface ApiInterface {
     @POST("Orders/UpsertInActiveData")
     Call<OMSCoreMessage> UpsertInActiveData(@Body OMSCoreMessage oRequest);
 
-
+    @POST("Orders/UpsertSCMRFData")
+    Call<OMSCoreMessage> UpsertSCMRFData(@Body OMSCoreMessage oRequest);
 
 
 
