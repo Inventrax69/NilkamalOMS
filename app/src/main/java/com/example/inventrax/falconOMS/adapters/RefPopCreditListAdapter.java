@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.Service;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
@@ -240,6 +241,7 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
                     }
                 }
             });
+            btnSEND.setEnabled(true);
 
             btnADD.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -364,6 +366,7 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
 
 
         public void InsertCreditLimitCommitments() {
+            btnSEND.setEnabled(false);
 
             if (NetworkUtils.isInternetAvailable(context)) {
             } else {
@@ -404,12 +407,11 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
                                     common.showAlertType(omsExceptionMessage, (Activity) context, context);
 
                                 }
-
+                                btnSEND.setEnabled(true);
                                 ProgressDialogUtils.closeProgressDialog();
 
                             } else {
                                 try {
-
                                     if (core.getEntityObject() != null && !core.getEntityObject().toString().isEmpty()) {
 
 
@@ -417,8 +419,11 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
 
                                             MaterialDialogUtils.showUploadSuccessDialog(context, "Approved");
 
+
                                             dialog.dismiss();
-                                            ((Activity) context).onBackPressed();
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+                                                ((Activity) context).onBackPressed();
+                                            }
 
                                         } else {
                                             MaterialDialogUtils.showUploadErrorDialog(context, "Failed");
@@ -454,12 +459,14 @@ public class RefPopCreditListAdapter extends RecyclerView.Adapter<RefPopCreditLi
                     // response object fails
                     @Override
                     public void onFailure(Call<OMSCoreMessage> call, Throwable throwable) {
+                        btnSEND.setEnabled(true);
                         if (NetworkUtils.isInternetAvailable(context)) {
                             DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0001);
                         } else {
                             DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0014);
                         }
                         ProgressDialogUtils.closeProgressDialog();
+                        ((Activity) context).onBackPressed();
                     }
                 });
             } catch (Exception ex) {

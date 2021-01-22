@@ -99,6 +99,7 @@ public class RefPopSCMApprovalAdapter extends RecyclerView.Adapter<RefPopSCMAppr
         this.btnSEND = dialog.findViewById(R.id.btnSEND);
 
         this.btnSEND.setText(context.getString(R.string.save));
+        this.btnSEND.setEnabled(true);
         this.btnCLEAR = dialog.findViewById(R.id.btnCLEAR);
         this.btnClOSE = dialog.findViewById(R.id.btnClOSE);
 
@@ -428,6 +429,8 @@ public class RefPopSCMApprovalAdapter extends RecyclerView.Adapter<RefPopSCMAppr
 
         public void UpsertSCMRFData() {
 
+            btnSEND.setEnabled(false);
+
             if (NetworkUtils.isInternetAvailable(context)) {
             } else {
                 DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0007);
@@ -441,7 +444,7 @@ public class RefPopSCMApprovalAdapter extends RecyclerView.Adapter<RefPopSCMAppr
             Call<OMSCoreMessage> call = null;
             ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
 
-            call = apiService.UpsertSCMRFData(message);
+            call = apiService.UpsertInActiveData(message);
             ProgressDialogUtils.showProgressDialog("Please Wait");
 
             try {
@@ -465,12 +468,12 @@ public class RefPopSCMApprovalAdapter extends RecyclerView.Adapter<RefPopSCMAppr
                                     common.showAlertType(omsExceptionMessage, (Activity) context, context);
 
                                 }
-
+                                btnSEND.setEnabled(true);
                                 ProgressDialogUtils.closeProgressDialog();
 
                             } else {
                                 try {
-
+                                    btnSEND.setEnabled(true);
                                     if (core.getEntityObject() != null && !core.getEntityObject().toString().isEmpty()) {
                                         if (core.getEntityObject().equals("success")) {
                                             MaterialDialogUtils.showUploadSuccessDialog(context, "Done");
@@ -504,6 +507,7 @@ public class RefPopSCMApprovalAdapter extends RecyclerView.Adapter<RefPopSCMAppr
                             DialogUtils.showAlertDialog((Activity) context, errorMessages.EMC_0014);
                         }
                         ProgressDialogUtils.closeProgressDialog();
+                        btnSEND.setEnabled(true);
                     }
                 });
             } catch (Exception ex) {

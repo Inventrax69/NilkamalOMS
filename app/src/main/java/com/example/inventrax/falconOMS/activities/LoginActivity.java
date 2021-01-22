@@ -265,7 +265,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             txtVersionNumber = (TextView) findViewById(R.id.txtVersionNumber);
             txtReleaseDate = (TextView) findViewById(R.id.txtReleaseDate);
 
-            txtReleaseDate.setText(" 01-01-2021");
+            txtReleaseDate.setText(" 22-01-2021");
             txtVersionNumber.setText(" " + AndroidUtils.getVersionName().toString());
 
             settings = (ImageView) findViewById(R.id.ivSettings);

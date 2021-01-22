@@ -219,6 +219,11 @@ public interface ApiInterface {
     @POST("Orders/GetBOMDetails")
     Call<OMSCoreMessage> GetBOMDetails(@Body OMSCoreMessage oRequest);
 
+    @POST("Orders/UpsertInActiveData")
+    Call<OMSCoreMessage> UpsertInActiveData(@Body OMSCoreMessage oRequest);
+
+
+
 
 
 }

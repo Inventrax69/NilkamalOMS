@@ -314,6 +314,7 @@
     <string name="sub_total">Sub Total</string>
     <string name="place_order_before">Place order before</string>
     <string name="wait_string">Please wait..</string>
+    <string name="add_details">Add Details</string>
 
 
 </resources>

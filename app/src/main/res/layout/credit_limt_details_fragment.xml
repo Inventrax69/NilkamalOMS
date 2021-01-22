@@ -307,7 +307,7 @@
                 <TextView
                     android:id="@+id/txtAccept"
                     android:layout_weight="1"
-                    android:text="@string/approve"
+                    android:text="@string/add_details"
                     android:gravity="center"
                     android:textStyle="bold|italic"
                     android:paddingLeft="@dimen/_10sdp"

@@ -597,6 +597,7 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
         ApiInterface apiService =
                 RestService.getClient().create(ApiInterface.class);
 
+        setProgressDialog();
         ProgressDialogUtils.showProgressDialog("Please wait..");
 
         call = apiService.UpdateApprovalCartList(message);
@@ -621,11 +622,13 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                                 ProgressDialogUtils.closeProgressDialog();
                                 common.showAlertType(omsExceptionMessage, getActivity(), getActivity());
                             }
-
+                            if(progressDialog!=null)
+                                progressDialog.cancel();
                             ProgressDialogUtils.closeProgressDialog();
 
                         } else {
-
+                            if(progressDialog!=null)
+                                progressDialog.cancel();
                             ProgressDialogUtils.closeProgressDialog();
 
                             try {
@@ -659,6 +662,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                                 }
                                 ///
                             } catch (Exception ex) {
+                                if(progressDialog!=null)
+                                    progressDialog.cancel();
                                 ProgressDialogUtils.closeProgressDialog();
                             }
                         }
@@ -673,6 +678,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                     } else {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
                     }
+                    if(progressDialog!=null)
+                        progressDialog.cancel();
                     ProgressDialogUtils.closeProgressDialog();
                 }
             });
@@ -682,6 +689,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            if(progressDialog!=null)
+                progressDialog.cancel();
             ProgressDialogUtils.closeProgressDialog();
             DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
         }
@@ -707,6 +716,7 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
         Call<OMSCoreMessage> call = null;
         ApiInterface apiService = RestService.getClient().create(ApiInterface.class);
 
+        setProgressDialog();
         ProgressDialogUtils.showProgressDialog("Please wait..");
 
         call = apiService.ApproveWorkflow(message);
@@ -731,10 +741,13 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                                 ProgressDialogUtils.closeProgressDialog();
                                 common.showAlertType(omsExceptionMessage, getActivity(), getActivity());
                             }
+                            if(progressDialog!=null)
+                                progressDialog.cancel();
                             ProgressDialogUtils.closeProgressDialog();
 
                         } else {
-
+                            if(progressDialog!=null)
+                                progressDialog.cancel();
                             try {
 
                                 if (core.getEntityObject().equals("Success") || core.getEntityObject().equals("Failure")) {
@@ -754,9 +767,12 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                                 FragmentUtils.replaceFragmentWithBackStackWithBundle(getActivity(), R.id.container, new ApprovalsListFragment(),bundle);
                                 */
                             } catch (Exception ex) {
+                                if(progressDialog!=null)
+                                    progressDialog.cancel();
                                 ProgressDialogUtils.closeProgressDialog();
                             }
-
+                            if(progressDialog!=null)
+                                progressDialog.cancel();
                             ProgressDialogUtils.closeProgressDialog();
 
                         }
@@ -771,6 +787,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
                     } else {
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0014);
                     }
+                    if(progressDialog!=null)
+                        progressDialog.cancel();
                     ProgressDialogUtils.closeProgressDialog();
                 }
             });
@@ -780,6 +798,8 @@ public class ApprovalsDetailsFragment extends Fragment implements View.OnClickLi
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            if(progressDialog!=null)
+                progressDialog.cancel();
             ProgressDialogUtils.closeProgressDialog();
             DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
         }
